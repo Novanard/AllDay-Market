@@ -36,7 +36,7 @@
   <!-- Header -->
       <header class="">
       <?php
-      $item=$_GET['id'];
+      $itemID=$_GET['id'];
 	session_start();
 	if(isset($_SESSION['email'])){
 		if($_SESSION['email'] === 'admin@allday.com'){
@@ -77,7 +77,7 @@
           <div class="col-md-8">
             <div class="contact-form">
               <form action="updateItem.php" method="POST">
-                <input type="hidden" name="id" value="<?php echo $item ?>">
+                <input type="hidden" name="id" value="<?php echo $itemID ?>">
                 <div class="row">
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
