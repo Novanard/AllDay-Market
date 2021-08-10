@@ -22,45 +22,7 @@
   </head>
 
   <body>
-<?php 
-		mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-		if (isset($_POST['submit'])) {
-			include 'db.php';
 
-			$pname = $_POST['name'];
-			$price = $_POST['price'];
-			$department = $_POST['department'];
-
-			$type = (explode('.', $_FILES['iPhoto']['name']));
-			$tmp_name = $_FILES['iPhoto']['tmp_name'];
-			$name = $_FILES['iPhoto']['name'];
-			$target_dir = 'assets/images/items';
-			$type = end($type);
-			$allowed = ['png','jpg'];
-
-			if(in_array($type, $allowed)){
-				$target_file = $target_dir . basename($_FILES["iPhoto"]["name"]);
-				move_uploaded_file($tmp_name, $target_file);
-				$sql = "INSERT INTO items (Name,Price,Department,img) VALUES (?,?,?,?);";
-				$stmt= mysqli_stmt_init($conn);
-			    mysqli_stmt_prepare($stmt,$sql);
-			    mysqli_stmt_bind_param($stmt,"ssss",$pname,$price,$department,$target_file);
-			    mysqli_stmt_execute($stmt);
-
-			}else{
-				$uploadError = 'This type isnt allowed!';
-			}
-		}else if (isset($_POST['delSubmit'])) {
-			include 'db.php';
-
-			$name = $_POST['name'];
-			$sql= "DELETE FROM items WHERE Name = ?;";
-			$stmt= mysqli_stmt_init($conn);
-			mysqli_stmt_prepare($stmt,$sql);
-			mysqli_stmt_bind_param($stmt,"s",$name);
-			mysqli_stmt_execute($stmt);	
-		}
-	?>
     <!-- ***** Preloader Start ***** -->
     <div id="preloader">
         <div class="jumper">
@@ -70,25 +32,30 @@
         </div>
     </div>  
     <!-- ***** Preloader End ***** -->
-    <!-- Header -->
-    <header class="">
+
+  <!-- Header -->
+      <header class="">
       <?php
+      $itemID=$_GET['id'];
 	session_start();
 	if(isset($_SESSION['email'])){
 		if($_SESSION['email'] === 'admin@allday.com'){
-			include 'navadmin.php';
+			$target_dir = 'navbars/navadmin.php';
+			include ($target_dir);
 		}
 		else{
-			include 'navuser.php';
+			$target_dir = 'navbars/navuser.php';
+			include ($target_dir);
 		}
 	}
 	else{
-		include 'nav.php';
+			$target_dir = 'navbars/navbar.php';
+			include ($target_dir);
 	}
 	
 ?>
 </header>
-   
+
     <!-- Page Content -->
     <div class="page-heading contact-heading header-text" style="background-image: url(assets/images/heading-4-1920x500.jpg);">
       <div class="container">
@@ -107,57 +74,41 @@
         <div class="row">
           <div class="col-md-12">
             <div class="section-heading">
-              <h2>Admin Panel ~ Upload An Item</h2>
+              <h2>Edit Item</h2>
             </div>
           </div>
           <div class="col-md-8">
             <div class="contact-form">
-              <form action="addItem.php" method="post" enctype="multipart/form-data">
-                      <div class="row">
+              <form action="updateItem.php" method="POST">
+                <input type="hidden" name="id" value="<?php echo $itemID ?>">
+                <div class="row">
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="name" type="text" class="form-control" id="name" placeholder="Item Name" required="">
+                      <input name="Name" type="text" class="form-control" id="name" placeholder="New Name" required="">
                     </fieldset>
                   </div>
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                       <input name="price" type="text" class="form-control" id="name" placeholder="Item Price" required="">
+                      <input name="Price" type="number" class="form-control" id="email" placeholder="New Price" required="">
                     </fieldset>
                   </div>
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                       <input name="department" type="text" class="form-control" id="name" placeholder="Item Department" required="">
-                    </fieldset>
-                  </div>
-                  <div class="col-lg-12 col-md-12 col-sm-12">
-                    <fieldset>
-                     	<input type="file" name="iPhoto" id="iPhoto" required="">
+                      <input name="Department" type="number" class="form-control" id="subject" placeholder="Department" required="">
                     </fieldset>
                   </div>
                   <div class="col-lg-12">
                     <fieldset>
-					<br>
-                      <button type="submit" name="submit" class="filled-button" value="Submit">Upload Item</button>
+                      <button name="itemEdit" type="submit" id="form-submit" class="filled-button">Edit Item</button>
                     </fieldset>
-					<br>
                   </div>
                 </div>
               </form>
             </div>
           </div>
-          <div class="col-md-4">
-              <div class="col-md-4">
-		  <br><br><br><br><br><br><br>
-			<a href="adminCp.php"><button class="btn btn-danger" type="submit">Back to Control Panel</button></a>
-			</h5>
-			<br>
-          </div>
-		<br>
-	</div>
-		  </div
         </div>
       </div>
-    </div> 
+    </div>
 
     <footer>
       <div class="container">

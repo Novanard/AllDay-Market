@@ -2,16 +2,16 @@
 	session_start();
 	if(isset($_SESSION['email'])){
 		if($_SESSION['email'] === 'admin@allday.com'){
-			$target_dir = 'navbar/navadmin.php';
+			$target_dir = 'navbars/navadmin.php';
 			include ($target_dir);
 		}
 		else{
-			$target_dir = 'navbar/navuser.php';
+			$target_dir = 'navbars/navuser.php';
 			include ($target_dir);
 		}
 	}
 	else{
-			$target_dir = 'navbar/navbar.php';
+			$target_dir = 'navbars/navbar.php';
 			include ($target_dir);
 	}
 	

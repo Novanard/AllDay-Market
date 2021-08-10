@@ -27,21 +27,21 @@
       <!-- Header -->
       <!-- Header -->
       <header class="">
-	  <?php
+         <?php
             session_start();
             if(isset($_SESSION['email'])){
             	if($_SESSION['email'] === 'admin@allday.com'){
-					$basedir = realpath(__DIR__);
+            $basedir = realpath(__DIR__);
             		include($basedir . '/navbars/navadmin.php');
             	}
             	else{
-					$basedir = realpath(__DIR__);
+            $basedir = realpath(__DIR__);
             		include($basedir . '/navbars/navuser.php');
             	}
             }
             else{
-				$basedir = realpath(__DIR__);
-				include($basedir . '/navbars/nav.php');
+            $basedir = realpath(__DIR__);
+            include($basedir . '/navbars/nav.php');
             }
             
             ?>
@@ -70,37 +70,38 @@
                $results=mysqli_stmt_get_result($stmt);
                
                if(isset($_SESSION['email'])){
-               if($_SESSION['email'] === 'admin@allday.com'){
-               while ($row=mysqli_fetch_assoc($results))
-               {
-               $ID = $row['Barcode'];
-               $name = $row['Name'];
-               $price = $row['Price'];
-               $img = $row['img'];
-               echo '
-               <div class="col-md-6">
-               <div class="product-item">
-               <a href="#"><img src="'.$img.'" alt=""></a>
-               <div class="down-content">
-               <a href="#"><h4>'.$name.'</h4></a>
-               
-               <h6><small><del> ₪4.20</del></small> ₪'.$price.'
-               <br><br>
-               
-               <a href="editItem.php?id='.$ID.'"><button class="btn btn-danger" name="itemEdit" type="button" class="filled-button" class="editBtn">Edit</button></a>
-			   <div>
-			   <form action="updateItem.php" method="post">
-			   <input type="hidden" name="id" value="'.$ID.'">
-			   <fieldset>
-			   <button type="submit" name="itemDel" id="form-submit" class="btn btn-danger">Delete</button>
-			   </fieldset>
-			   </form>
-			   </div>
-			   <p>Fresh Day to Day &nbsp;/&nbsp; Naturally Raised</p>
-               </div>
-               </div>
-               </div>
-               ';
+                  if($_SESSION['email'] === 'admin@allday.com'){
+                     while ($row=mysqli_fetch_assoc($results))
+                     {
+                     $ID = $row['Barcode'];
+                     $name = $row['Name'];
+                     $price = $row['Price'];
+                     $img = $row['img'];
+                     echo '
+                     <div class="col-md-6">
+                     <div class="product-item">
+                     <a href="#"><img src="'.$img.'" alt=""></a>
+                     <div class="down-content">
+                     <a href="#"><h4>'.$name.'</h4></a>
+                     
+                     <h6><small><del> ₪4.20</del></small> ₪'.$price.'
+                     <br><br>
+                     
+                     <a href="editItemForm.php?id='.$ID.'">
+                     <button class="btn btn-secondary" type="button" class="filled-button" class="editBtn">
+                     Edit</button>
+                     </a>
+                     <form action="updateItem.php" method="post">
+                     <input type="hidden" name="id" value="'.$ID.'">
+                     <fieldset>
+                     <button type="submit" name="itemDel" id="form-submit" class="btn btn-danger">Delete</button>
+                     </fieldset>
+                     </form>
+                     <p>Fresh Day to Day &nbsp;/&nbsp; Naturally Raised</p>
+                     </div>
+                     </div>
+                     </div>
+                     ';
                }
                }
                else{

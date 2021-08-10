@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" ) {
       mysqli_stmt_execute($stmt);
       header('Location:index.php');
     }
-  if(isset($_POST['itemDel'])){
+  elseif(isset($_POST['itemDel'])){
     include 'db.php';
     $Barcode =$_POST['id'];
     $sql = "DELETE FROM items WHERE Barcode = ?; ";
@@ -24,4 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" ) {
     mysqli_stmt_execute($stmt);
     header('Location:index.php');
   }
-} ?>
+  else
+  echo('Something else');
+  } ?>

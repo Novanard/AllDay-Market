@@ -31,17 +31,17 @@
             session_start();
             if(isset($_SESSION['email'])){
             	if($_SESSION['email'] === 'admin@allday.com'){
-					$basedir = realpath(__DIR__);
-            		include($basedir . '/navbars/navadmin.php');
+            		$target_dir = 'navbars/navadmin.php';
+            		include ($target_dir);
             	}
             	else{
-					$basedir = realpath(__DIR__);
-            		include($basedir . '/navbars/navuser.php');
+            		$target_dir = 'navbars/navuser.php';
+            		include ($target_dir);
             	}
             }
             else{
-				$basedir = realpath(__DIR__);
-				include($basedir . '/navbars/nav.php');
+            		$target_dir = 'navbars/navbar.php';
+            		include ($target_dir);
             }
             
             ?>
@@ -87,15 +87,17 @@
                <h6><small><del> ₪4.20</del></small> ₪'.$price.'
                <br><br>
                
-               <a href="./itemsPages/editItemForm.php?id='.$ID.'"><button class="btn btn-secondary" name="itemEdit" type="button" class="filled-button" class="editBtn">
-			   Edit</button></a>
-			   <form action="updateItem.php" method="post">
-			   <input type="hidden" name="id" value="'.$ID.'">
-			   <fieldset>
-			   <button type="submit" name="itemDel" id="form-submit" class="btn btn-danger">Delete</button>
-			   </fieldset>
-			   </form>
-			   <p>Fresh Day to Day &nbsp;/&nbsp; Naturally Raised</p>
+               <a href="editItemForm.php?id='.$ID.'">
+               <button class="btn btn-secondary" type="button" class="filled-button" class="editBtn">
+               Edit</button>
+               </a>
+               <form action="updateItem.php" method="post">
+               <input type="hidden" name="id" value="'.$ID.'">
+               <fieldset>
+               <button type="submit" name="itemDel" id="form-submit" class="btn btn-danger">Delete</button>
+               </fieldset>
+               </form>
+               <p>Fresh Day to Day &nbsp;/&nbsp; Naturally Raised</p>
                </div>
                </div>
                </div>
