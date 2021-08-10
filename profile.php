@@ -69,7 +69,7 @@
         </div>
       </div>
     </div>  
-
+<br><br>
 		<div class="container">
 				<?php 
 		include 'db.php';
@@ -87,23 +87,36 @@
 					$email = $row['email'];
 					$address = $row['address'];
 					$number = $row['number'];
-				echo '<div style="display: flex;align-items:center;"> 
-                       <div class="col-md-8">
-                          <h6>Full Name:<br>'.$name.'</h6>
-                          <h6>Email Address:<br>'.$email.'</h6>
-						  <h6>Address:<br> '.$address.'</h6>
-						  <h6>Phone Number<br>'.$number.'</h6> <br>                                                
-                        </div>
-                      </div>
-						<form action="logout.php" method="post">
-						<button class="btn btn-danger" type="submit">Log-Out</button>
-						</form>	';
-	        	echo "</div>";
+          $img = $row['avatar'];
+          echo '
+         <center> <div class="col-md-6">
+            <div class="product-item">
+            <a href="#"><img src="'.$img.'" alt=""></a>
+             <div class="down-content">
+            <center><strong>Hello &nbsp ~ &nbsp '.$name.'</center>
+             </div>
+              <br>
+              <div>
+              <ul>
+              <li><strong>Email:</strong>'.$email.'</li>
+              <li><strong>Phone No:</strong>'.$number.'</li>
+              <li><strong>Adress:</strong>'.$address.'<li>
+              </div>
+              <div>
 
-				
+              </div>
+              </div>
+            </div></center>
+            ';
+
 	        }
 	    }			
 ?> 	
+ <!-- 
+                     <a href="editProfileForm.php?id='.$ID.'"> 
+                  <button class="btn btn-secondary" type="button" class="filled-button" class="editBtn">Edit</button>
+                  </a>
+    -->
 </div>
 
 

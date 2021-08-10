@@ -43,7 +43,7 @@
                 }
                 if(is_null($avatar))
                 {
-                  $sql = "UPDATE employees set avatar = 'assets/images/employees/noPic.jpg' WHERE eID = ?; ";
+                  $sql = "UPDATE employees set avatar = 'assets/images/users/noPic.jpg' WHERE eID = ?; ";
                   $stmt= mysqli_stmt_init($conn);
                   mysqli_stmt_prepare($stmt,$sql);
                   mysqli_stmt_bind_param($stmt,"i",$eID);
@@ -101,7 +101,7 @@
                <div class="col-md-12">
                   <div class="text-content">
                      <h4>AllDay ~ Market</h4>
-                     <h2>Admin Panel Test</h2>
+                     <h2>Admin Panel</h2>
                   </div>
                </div>
             </div>
@@ -117,7 +117,7 @@
                </div>
                <div class="col-md-8">
                   <div class="contact-form">
-                     <form action="addEmployee.php" method="post" enctype="multipart/form-data">
+                     <form action="addEmployeeForm.php" method="post" enctype="multipart/form-data">
                         <div class="row">
                            <div class="col-lg-12 col-md-12 col-sm-12">
                               <fieldset>
