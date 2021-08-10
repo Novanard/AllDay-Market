@@ -15,55 +15,53 @@
       <link rel="stylesheet" href="assets/css/owl.css">
    </head>
    <body>
-      <?php 
+      <?php
          mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+            $uploadError = '';
          if (isset($_POST['submit'])) {
-         	include 'db.php';
-         	$eID = $_POST['eID'];
-         	$eFirstname = $_POST['eFirstname'];
-         	$eLastname = $_POST['eLastname'];
-         	$depNum = $_POST['depNum'];
-         	$PerHour = $_POST['PerHour'];
-         	$residence = $_POST['eResidence'];
-            $avatar;
-            $sql = "INSERT INTO employees (eID,firstname,lastname,depNum,perhour,residence) VALUES (?,?,?,?,?,?);";
-         		$stmt= mysqli_stmt_init($conn);
-         	    mysqli_stmt_prepare($stmt,$sql);
-         	    mysqli_stmt_bind_param($stmt,"issiis",$eID,$eFirstname,$eLastname,$depNum,$PerHour,$residence);
-         	    mysqli_stmt_execute($stmt);
-                $sql = "SELECT avatar FROM employees WHERE eID = ?";
-                $stmt= mysqli_stmt_init($conn);
-                mysqli_stmt_prepare($stmt,$sql);
-                mysqli_stmt_bind_param($stmt,"i",$eID);
-                mysqli_stmt_execute($stmt);
-                $results=mysqli_stmt_get_result($stmt);
-                while($row=mysqli_fetch_assoc($results))
-                {
-                   $avatar=$row['avatar'];
-                }
-                if(is_null($avatar))
-                {
-                  $sql = "UPDATE employees set avatar = 'assets/images/employees/noPic.jpg' WHERE eID = ?; ";
-                  $stmt= mysqli_stmt_init($conn);
-                  mysqli_stmt_prepare($stmt,$sql);
-                  mysqli_stmt_bind_param($stmt,"i",$eID);
-                  mysqli_stmt_execute($stmt);
-                  echo('executed');
-                
-                }
-               }
+         include 'db.php';
+         $sID = $_POST['sID'];
+         $sName = $_POST['sName'];
+         $company = $_POST['sCmp'];
+         $phone = $_POST['sNumber'];
+         $avatarr = NULL;
+         $sql = "INSERT INTO suppliers (sID,name,company,phone) VALUES (?,?,?,?);";
+          $stmt= mysqli_stmt_init($conn);
+           mysqli_stmt_prepare($stmt,$sql);
+           mysqli_stmt_bind_param($stmt,"issi",$sID,$sName,$company,$phone);
+           mysqli_stmt_execute($stmt);
+           $sql = "SELECT avatar FROM suppliers WHERE sID =? ";
+           $stmt= mysqli_stmt_init($conn);
+           mysqli_stmt_prepare($stmt,$sql);
+           mysqli_stmt_bind_param($stmt,"i",$eID);
+           mysqli_stmt_execute($stmt);
+           $results=mysqli_stmt_get_result($stmt);
+           while($row=mysqli_fetch_assoc($results))
+           {
+              $avatarr=$row['avatar'];
+           }
+           if(is_null($avatarr))
+           {
+             $sql = "UPDATE suppliers set avatar = 'assets/images/suppliers/noPic.jpg' WHERE sID = ?; ";
+             $stmt= mysqli_stmt_init($conn);
+             mysqli_stmt_prepare($stmt,$sql);
+             mysqli_stmt_bind_param($stmt,"i",$sID);
+             mysqli_stmt_execute($stmt);
+             echo('executed');
+           
+           }
+          }
+         
          else if (isset($_POST['delSubmit'])) {
-         	include 'db.php';
-         	$id = $_POST['eID'];
-         	$sql= "DELETE FROM employees WHERE eID = ?;";
-         	$stmt= mysqli_stmt_init($conn);
-         	mysqli_stmt_prepare($stmt,$sql);
-         	mysqli_stmt_bind_param($stmt,"i",$id);
-         	mysqli_stmt_execute($stmt);	
+            	include 'db.php';
+            	$name = $_POST['name'];
+            	$sql= "DELETE FROM suppliers WHERE name = ?;";
+            	$stmt= mysqli_stmt_init($conn);
+            	mysqli_stmt_prepare($stmt,$sql);
+            	mysqli_stmt_bind_param($stmt,"s",$name);
+            	mysqli_stmt_execute($stmt);	
             }
-         else
-         echo('something else');
-         ?>
+            ?>
       <!-- ***** Preloader Start ***** -->
       <div id="preloader">
          <div class="jumper">
@@ -101,7 +99,7 @@
                <div class="col-md-12">
                   <div class="text-content">
                      <h4>AllDay ~ Market</h4>
-                     <h2>Admin Panel Test</h2>
+                     <h2>Admin Panel</h2>
                   </div>
                </div>
             </div>
@@ -112,59 +110,42 @@
             <div class="row">
                <div class="col-md-12">
                   <div class="section-heading">
-                     <h2>Admin Panel ~ Add an Employee</h2>
+                     <h2>Admin Panel ~ Add a Supplier</h2>
                   </div>
                </div>
                <div class="col-md-8">
                   <div class="contact-form">
-                     <form action="addEmployee.php" method="post" enctype="multipart/form-data">
+                     <form action="addSupplier.php" method="post" enctype="multipart/form-data">
                         <div class="row">
                            <div class="col-lg-12 col-md-12 col-sm-12">
                               <fieldset>
-                                 <input name="eID" type="number" class="form-control" id="name" placeholder="Employee ID" required="">
+                                 <input name="sID" type="number" class="form-control" id="name" placeholder="Supplier ID" required="">
                               </fieldset>
                            </div>
                            <div class="col-lg-12 col-md-12 col-sm-12">
                               <fieldset>
-                                 <input name="eFirstname" type="text" class="form-control" id="name" placeholder="Employee Firstname" required="">
+                                 <input name="sName" type="text" class="form-control" id="name" placeholder="Supplier Name" required="">
                               </fieldset>
                            </div>
                            <div class="col-lg-12 col-md-12 col-sm-12">
                               <fieldset>
-                                 <input name="eLastname" type="text" class="form-control" id="name" placeholder="Employee Lastname" required="">
+                                 <input name="sCmp" type="text" class="form-control" id="name" placeholder="Company Name" required="">
                               </fieldset>
                            </div>
                            <div class="col-lg-12 col-md-12 col-sm-12">
                               <fieldset>
-                                 <input name="depNum" type="number" class="form-control" id="name" placeholder="Employee Department Number" required="">
-                              </fieldset>
-                           </div>
-                           <div class="col-lg-12 col-md-12 col-sm-12">
-                              <fieldset>
-                                 <input type="number" name="PerHour" id="perhour" placeholder="Employee PerHour" required="">
+                                 <input type="number" name="sNumber" id="perhour" placeholder="Phone Number" required="">
                               </fieldset>
                            </div>
                            <br><br>
-                           <div class="col-lg-12 col-md-12 col-sm-12">
-                              <fieldset>
-                                 <input name="eResidence" type="text" class="form-control" id="name" placeholder="Employee Residence" required="">
-                              </fieldset>
-                           </div>
                            <div class="col-lg-12">
                               <fieldset>
                                  <br>
-                                 <button type="submit" name="submit" class="filled-button" value="Submit">Add Employee</button>
+                                 <button type="submit" name="submit" class="filled-button" value="Submit">Add Supplier</button>
                               </fieldset>
                               <br>
                            </div>
                         </div>
-                     </form>
-                  </div>
-                  <div class="contact-form">
-                     <form action="addEmployee.php" method="post" enctype="multipart/form-data">
-                        <input type="text" name="name" placeholder="Employee I.D To Delete">
-                        <input  class="btn btn-danger"type="submit" name="delSubmit" value="Delete">
-                        <br>
                      </form>
                   </div>
                </div>
@@ -174,10 +155,9 @@
                   </h5>
                   <br>
                </div>
+               <br>
             </div>
-            <br>
          </div>
-         </div
       </div>
       </div>
       </div> 
