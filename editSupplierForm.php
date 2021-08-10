@@ -36,7 +36,7 @@
   <!-- Header -->
       <header class="">
       <?php
-      $supplierID=$_GET['id'];
+       $sID=$_GET['id'];
 	session_start();
 	if(isset($_SESSION['email'])){
 		if($_SESSION['email'] === 'admin@allday.com'){
@@ -74,32 +74,37 @@
         <div class="row">
           <div class="col-md-12">
             <div class="section-heading">
-              <h2>Edit Supplier</h2>
+            <h2>Edit Employee </h2>
             </div>
           </div>
           <div class="col-md-8">
             <div class="contact-form">
-              <form action="updateItem.php" method="POST">
-                <input type="hidden" name="id" value="<?php echo $supplierID ?>">
+              <form action="updateSupplier.php" method="POST">
+                <input type="hidden" name="id" value="<?php echo $sID ?>">
                 <div class="row">
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="Name" type="text" class="form-control" id="name" placeholder="New Name" required="">
+                      <input name="sID" type="number" class="form-control" id="sID" placeholder="New Supplier ID" required="">
                     </fieldset>
                   </div>
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="Price" type="number" class="form-control" id="email" placeholder="New Price" required="">
+                      <input name="name" type="text" class="form-control" id="sName" placeholder="New Supplier Name" required="">
                     </fieldset>
                   </div>
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="Department" type="number" class="form-control" id="subject" placeholder="Department" required="">
+                      <input name="company" type="text" class="form-control" id="company" placeholder="New Supplier Company" required="">
+                    </fieldset>
+                  </div>
+                  <div class="col-lg-12 col-md-12 col-sm-12">
+                    <fieldset>
+                      <input name="phone" type="number" class="form-control" id="phone" placeholder="New Supplier Phone Number" required="">
                     </fieldset>
                   </div>
                   <div class="col-lg-12">
                     <fieldset>
-                      <button name="itemEdit" type="submit" id="form-submit" class="filled-button">Edit Item</button>
+                      <button name="supplierEdit" type="submit" id="form-submit" class="filled-button">Edit Item</button>
                     </fieldset>
                   </div>
                 </div>
