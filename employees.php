@@ -60,7 +60,7 @@
           <div class="col-md-12">
             <div class="text-content">
               <h4>AllDay Market</h4>
-              <h2>Home Tools</h2>
+              <h2>Employees</h2>
             </div>
           </div>
         </div>
@@ -70,8 +70,9 @@
           <div class="col-md-9">
             <div class="row">
               <?php 
+				mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
                 include 'db.php';
-                $sql = "SELECT * FROM items WHERE Department = 2";
+                $sql = "SELECT * FROM employees";
                 $stmt= mysqli_stmt_init($conn);
                 mysqli_stmt_prepare($stmt,$sql);
                 mysqli_stmt_execute($stmt);
@@ -81,84 +82,43 @@
 					if($_SESSION['email'] === 'admin@allday.com'){
 						while ($row=mysqli_fetch_assoc($results))
 							{
-							  $ID = $row['Barcode'];
-							  $name = $row['Name'];
-							  $price = $row['Price'];
-							  $img = $row['img'];
+							  $ID = $row['id'];
+							  $eID=$row['eID'];
+							  $firstname = $row['firstname'];
+							  $lastname = $row['lastname'];
+							  $depNum=$row['depNum'];
+							  $perhour=$row['perhour'];
+							  $residence=$row['residence'];
+							  $img = $row['avatar'];
+							  
 							  echo '
 								<div class="col-md-6">
 								  <div class="product-item">
 									<a href="#"><img src="'.$img.'" alt=""></a>
 								   <div class="down-content">
-									  <a href="#"><h4>'.$name.'</h4></a>
-
-									  <h6><small><del> ₪4.20</del></small> ₪'.$price.'
-									  <br><br>
-								
-										<a href="editAdmin.php?id='.$ID.'"><button class="btn btn-danger" type="button" class="filled-button" class="editBtn">Edit</button></a>
-									  <p>Fresh Day to Day &nbsp;/&nbsp; Naturally Raised</p>
+									<center><strong>'.$firstname.' &nbsp '.$lastname.'</strong><small>('.$ID.')</small></center>
+									 </div>
+									  <br>
+									  <div>
+									  <ul>
+									  <li><strong>PerHour:</strong>₪'.$perhour.'</li>
+									  <li><strong>Residence:</strong>'.$residence.'</li>
+									  </div>
+									  <div>
+									<center><a href="editAdmin.php?id='.$ID.'"><button class="btn btn-danger" type="button" class="filled-button" class="editBtn">Edit</button></a></center>
 									</div>
 								  </div>
 								</div>
 							  ';
 							}
 					}
-					else{
-							while ($row=mysqli_fetch_assoc($results))
-							{
-							  $ID = $row['Barcode'];
-							  $name = $row['Name'];
-							  $price = $row['Price'];
-							  $img = $row['img'];
-							  echo '
-								<div class="col-md-6">
-								  <div class="product-item">
-									<a href="#"><img src="'.$img.'" alt=""></a>
-								   <div class="down-content">
-									  <a href="#"><h4>'.$name.'</h4></a>
 
-									  <h6><small><del> ₪4.20</del></small> ₪'.$price.'
-									  <br><br>
-									  <form id="qnt'.$ID.'">
-										<input type="text" placeholder="Enter Quantity in Kilo" name="qty" required>
-										<button class="btn btn-danger" type="button" onclick= add('.$ID.') class="filled-button" class="add2cart">Add To Cart</button></h6>
-									  </form>
-
-									  <p>Fresh Day to Day &nbsp;/&nbsp; Naturally Raised</p>
-									</div>
-								  </div>
-								</div>
-							  ';
-							}
-					}
 					}
 				else{
-							while ($row=mysqli_fetch_assoc($results))
-							{
-							  $id = $row['Barcode'];
-							  $name = $row['Name'];
-							  $price = $row['Price'];
-							  $img = $row['img'];
 							  echo '
-								<div class="col-md-6">
-								  <div class="product-item">
-									<a href="#"><img src="'.$img.'" alt=""></a>
-								   <div class="down-content">
-									  <a href="#"><h4>'.$name.'</h4></a>
-
-									  <h6> ₪'.$price.'
-									  <br><br>
-									  <form id="qnt'.$id.'">
-										<input type="text" placeholder="Enter Quantity in Kilo" name="qty" required>
-										<button class="btn btn-danger" type="button" onclick= add('.$id.') class="filled-button" class="add2cart">Add To Cart</button></h6>
-									  </form>
-
-									  <p>Fresh Day to Day &nbsp;/&nbsp; Naturally Raised</p>
-									</div>
-								  </div>
-								</div>
+								You cant see here
 							  ';
-							}
+							
 					}
 						  ?>
               
@@ -186,23 +146,6 @@
     <!-- Additional Scripts -->
     <script src="assets/js/custom.js"></script>
     <script src="assets/js/owl.js"></script>
-        <script type="text/javascript">
-      function add(id){
-        qnt = $('#qnt'+id).serialize();
-        $('#qnt'+id).trigger("reset");
-        $.ajax({
-          url:'add2cart.php',
-          method:'POST',
-          data:{
-          'id': id,
-          'qnt': qnt
-          },
-          success:function(data){
-            console.log(data);
-          }
-        });
-      }
-    </script>
   </body>
 
 </html>
