@@ -22,7 +22,45 @@
   </head>
 
   <body>
+<?php 
+		mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+		if (isset($_POST['submit'])) {
+			include 'db.php';
 
+			$pname = $_POST['name'];
+			$price = $_POST['price'];
+			$department = $_POST['department'];
+
+			$type = (explode('.', $_FILES['iPhoto']['name']));
+			$tmp_name = $_FILES['iPhoto']['tmp_name'];
+			$name = $_FILES['iPhoto']['name'];
+			$target_dir = 'assets/images/items';
+			$type = end($type);
+			$allowed = ['png','jpg'];
+
+			if(in_array($type, $allowed)){
+				$target_file = $target_dir . basename($_FILES["iPhoto"]["name"]);
+				move_uploaded_file($tmp_name, $target_file);
+				$sql = "INSERT INTO items (Name,Price,Department,img) VALUES (?,?,?,?);";
+				$stmt= mysqli_stmt_init($conn);
+			    mysqli_stmt_prepare($stmt,$sql);
+			    mysqli_stmt_bind_param($stmt,"ssss",$pname,$price,$department,$target_file);
+			    mysqli_stmt_execute($stmt);
+
+			}else{
+				$uploadError = 'This type isnt allowed!';
+			}
+		}else if (isset($_POST['delSubmit'])) {
+			include 'db.php';
+
+			$name = $_POST['name'];
+			$sql= "DELETE FROM items WHERE Name = ?;";
+			$stmt= mysqli_stmt_init($conn);
+			mysqli_stmt_prepare($stmt,$sql);
+			mysqli_stmt_bind_param($stmt,"s",$name);
+			mysqli_stmt_execute($stmt);	
+		}
+	?>
     <!-- ***** Preloader Start ***** -->
     <div id="preloader">
         <div class="jumper">
@@ -32,41 +70,28 @@
         </div>
     </div>  
     <!-- ***** Preloader End ***** -->
-
-  <!-- Header -->
+    <!-- Header -->
     <header class="">
-      <nav class="navbar navbar-expand-lg">
-        <div class="container">
-          <a class="navbar-brand" href="index.php"><h2>AllDay <em>Market</em></h2></a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php">Home
-                      <span class="sr-only">(current)</span>
-                    </a>
-                </li> 
-
-                                <li class="nav-item dropdown active">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Shop</a> 
-                    <div class="dropdown-menu">
-                      <a class="dropdown-item active" href="vegehtables.php">Vegehtables</a>
-                      <a class="dropdown-item" href="HomeTools.php">Home Tools</a>
-                      <a class="dropdown-item" href="Bakery.php">Bakery</a>
-                      <a class="dropdown-item" href="butchery.php">Butchery</a>
-                    </div>
-                </li>
-                
-                <li class="nav-item"><a class="nav-link" href="contact.php">Contact Us</a></li>
-								<li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-    </header>
-
+    <?php
+            session_start();
+            if(isset($_SESSION['email'])){
+            	if($_SESSION['email'] === 'admin@allday.com'){
+					$basedir = realpath(__DIR__);
+            		include($basedir . '/navbars/navadmin.php');
+            	}
+            	else{
+					$basedir = realpath(__DIR__);
+            		include($basedir . '/navbars/navuser.php');
+            	}
+            }
+            else{
+				$basedir = realpath(__DIR__);
+				include($basedir . '/navbars/nav.php');
+            }
+            
+            ?>
+</header>
+   
     <!-- Page Content -->
     <div class="page-heading contact-heading header-text" style="background-image: url(assets/images/heading-4-1920x500.jpg);">
       <div class="container">
@@ -74,7 +99,7 @@
           <div class="col-md-12">
             <div class="text-content">
               <h4>AllDay ~ Market</h4>
-              <h2>Contact Us</h2>
+              <h2>Admin Panel</h2>
             </div>
           </div>
         </div>
@@ -85,50 +110,57 @@
         <div class="row">
           <div class="col-md-12">
             <div class="section-heading">
-              <h2>Send us a Message // MAKE THIS AFTER LOGIN/REGISTER</h2>
+              <h2>Admin Panel ~ Upload An Item</h2>
             </div>
           </div>
           <div class="col-md-8">
             <div class="contact-form">
-              <form id="contact" action="" method="post">
-                <div class="row">
+              <form action="../itemsPages/addItemForm.php" method="post" enctype="multipart/form-data">
+                      <div class="row">
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="name" type="text" class="form-control" id="name" placeholder="Full Name" required="">
+                      <input name="name" type="text" class="form-control" id="name" placeholder="Item Name" required="">
                     </fieldset>
                   </div>
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="email" type="email" class="form-control" id="email" placeholder="E-Mail Address" required="">
+                       <input name="price" type="text" class="form-control" id="name" placeholder="Item Price" required="">
                     </fieldset>
                   </div>
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="subject" type="text" class="form-control" id="subject" placeholder="Subject" required="">
+                       <input name="department" type="text" class="form-control" id="name" placeholder="Item Department" required="">
+                    </fieldset>
+                  </div>
+                  <div class="col-lg-12 col-md-12 col-sm-12">
+                    <fieldset>
+                     	<input type="file" name="iPhoto" id="iPhoto" required="">
                     </fieldset>
                   </div>
                   <div class="col-lg-12">
                     <fieldset>
-                      <textarea name="message" rows="6" class="form-control" id="message" placeholder="Your Message" required=""></textarea>
+					<br>
+                      <button type="submit" name="submit" class="filled-button" value="Submit">Upload Item</button>
                     </fieldset>
-                  </div>
-                  <div class="col-lg-12">
-                    <fieldset>
-                      <button type="submit" id="form-submit" class="filled-button">Send Message</button>
-                    </fieldset>
+					<br>
                   </div>
                 </div>
               </form>
             </div>
           </div>
           <div class="col-md-4">
-            <img src="assets/images/adnan.jpeg" class="img-fluid" alt="">
-
-            <h5 class="text-center" style="margin-top: 15px;">Public Affairs Manager <br> Adnan Hourani</h5>
+              <div class="col-md-4">
+		  <br><br><br><br><br><br><br>
+			<a href="adminCp.php"><button class="btn btn-danger" type="submit">Back to Control Panel</button></a>
+			</h5>
+			<br>
           </div>
+		<br>
+	</div>
+		  </div
         </div>
       </div>
-    </div>
+    </div> 
 
     <footer>
       <div class="container">

@@ -75,18 +75,21 @@
       <!-- ***** Preloader End ***** -->
       <!-- Header -->
       <header class="">
-         <?php
+      <?php
             session_start();
             if(isset($_SESSION['email'])){
             	if($_SESSION['email'] === 'admin@allday.com'){
-            		include 'navadmin.php';
+					$basedir = realpath(__DIR__);
+            		include($basedir . '/navbars/navadmin.php');
             	}
             	else{
-            		include 'navuser.php';
+					$basedir = realpath(__DIR__);
+            		include($basedir . '/navbars/navuser.php');
             	}
             }
             else{
-            	include 'nav.php';
+				$basedir = realpath(__DIR__);
+				include($basedir . '/navbars/nav.php');
             }
             
             ?>

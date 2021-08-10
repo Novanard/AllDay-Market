@@ -37,18 +37,21 @@
       <header class="">
       <?php
       $employee=$_GET['id'];
-	session_start();
-	if(isset($_SESSION['email'])){
-		if($_SESSION['email'] === 'admin@allday.com'){
-			include 'navadmin.php';
-		}
-		else{
-			include 'navuser.php';
-		}
-	}
-	else{
-		include 'nav.php';
-	}
+      session_start();
+      if(isset($_SESSION['email'])){
+        if($_SESSION['email'] === 'admin@allday.com'){
+    $basedir = realpath(__DIR__);
+          include($basedir . '/navbars/navadmin.php');
+        }
+        else{
+    $basedir = realpath(__DIR__);
+          include($basedir . '/navbars/navuser.php');
+        }
+      }
+      else{
+  $basedir = realpath(__DIR__);
+  include($basedir . '/navbars/nav.php');
+      }
 	
 ?>
 </header>

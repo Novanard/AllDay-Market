@@ -31,14 +31,17 @@
             session_start();
             if(isset($_SESSION['email'])){
             	if($_SESSION['email'] === 'admin@allday.com'){
-            		include 'navadmin.php';
+					$basedir = realpath(__DIR__);
+            		include($basedir . '/navbars/navadmin.php');
             	}
             	else{
-            		include 'navuser.php';
+					$basedir = realpath(__DIR__);
+            		include($basedir . '/navbars/navuser.php');
             	}
             }
             else{
-            	include 'nav.php';
+				$basedir = realpath(__DIR__);
+				include($basedir . '/navbars/nav.php');
             }
             
             ?>
@@ -84,15 +87,14 @@
                <h6><small><del> ₪4.20</del></small> ₪'.$price.'
                <br><br>
                
-               <a href="editItem.php?id='.$ID.'"><button class="btn btn-danger" name="itemEdit" type="button" class="filled-button" class="editBtn">Edit</button></a>
-			   <div>
+               <a href="./itemsPages/editItemForm.php?id='.$ID.'"><button class="btn btn-secondary" name="itemEdit" type="button" class="filled-button" class="editBtn">
+			   Edit</button></a>
 			   <form action="updateItem.php" method="post">
 			   <input type="hidden" name="id" value="'.$ID.'">
 			   <fieldset>
 			   <button type="submit" name="itemDel" id="form-submit" class="btn btn-danger">Delete</button>
 			   </fieldset>
 			   </form>
-			   </div>
 			   <p>Fresh Day to Day &nbsp;/&nbsp; Naturally Raised</p>
                </div>
                </div>

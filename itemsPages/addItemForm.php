@@ -144,13 +144,6 @@
                 </div>
               </form>
             </div>
-						   <div class="contact-form">
-              <form action="addItem.php" method="post" enctype="multipart/form-data">
-			  						<input type="text" name="name" placeholder="Item Name To Delete">
-						<input  class="btn btn-danger"type="submit" name="delSubmit" value="Delete">
-						<br>
-						</form>
-						</div>
           </div>
           <div class="col-md-4">
               <div class="col-md-4">
