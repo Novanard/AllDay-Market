@@ -1,0 +1,3 @@
+LAST THING TO DO:
+
+EDIT SQL QUERIES in addEmployee
