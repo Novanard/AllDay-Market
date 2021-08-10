@@ -25,9 +25,25 @@
          	$depNum = $_POST['depNum'];
          	$PerHour = $_POST['PerHour'];
          	$residence = $_POST['eResidence'];
-         }else if (isset($_POST['delSubmit'])) {
+            $sql = "INSERT INTO employees (eID,firstname,lastname,depNum,perhour,residence) VALUES (?,?,?,?,?,?);";
+         		$stmt= mysqli_stmt_init($conn);
+         	    mysqli_stmt_prepare($stmt,$sql);
+         	    mysqli_stmt_bind_param($stmt,"issiis",$eID,$eFirstname,$eLastname,$depNum,$PerHour,$residence);
+         	    mysqli_stmt_execute($stmt);
+                $sql = "SELECT avatar FROM employees WHERE eID = ?";
+                $stmt= mysqli_stmt_init($conn);
+                mysqli_stmt_prepare($stmt,$sql);
+                mysqli_stmt_bind_param($stmt,"i",$eID);
+                mysqli_stmt_execute($stmt);
+                $results=mysqli_stmt_get_result($stmt);
+                while($row=mysqli_fetch_assoc($results))
+                {
+                   $avatar=$row['avatar'];
+                }
+               }
+                echo($avatar);
+         else (isset($_POST['delSubmit'])) {
          	include 'db.php';
-         
          	$id = $_POST['eID'];
          	$sql= "DELETE FROM employees WHERE eID = ?;";
          	$stmt= mysqli_stmt_init($conn);
@@ -70,7 +86,7 @@
                <div class="col-md-12">
                   <div class="text-content">
                      <h4>AllDay ~ Market</h4>
-                     <h2>Admin Panel</h2>
+                     <h2>Admin Panel Test</h2>
                   </div>
                </div>
             </div>
