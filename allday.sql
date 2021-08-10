@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 09, 2021 at 12:01 PM
+-- Generation Time: Aug 11, 2021 at 01:24 AM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 7.3.26
 
@@ -42,7 +42,6 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`id`, `userID`, `name`, `price`, `qnt`, `itemBarcode`, `img`) VALUES
-(12, 2, 'Oreo Cake', 250, 3, 33, 'assets/images/oreo.jpg'),
 (13, 2, 'Arabian Pita', 10, 2, 31, 'assets/images/Pita.jpg'),
 (14, 2, 'Cucmber', 4, 3, 12, 'assets/images/khear.png');
 
@@ -81,7 +80,7 @@ CREATE TABLE `employees` (
   `depNum` tinyint(1) NOT NULL,
   `perhour` int(11) NOT NULL,
   `residence` varchar(256) NOT NULL,
-  `avatar` varchar(50) NOT NULL DEFAULT 'assets/images/employees/noPic.jpg'
+  `avatar` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -89,7 +88,7 @@ CREATE TABLE `employees` (
 --
 
 INSERT INTO `employees` (`id`, `eID`, `firstname`, `lastname`, `depNum`, `perhour`, `residence`, `avatar`) VALUES
-(0, 322470303, 'Ameen', 'Assadi', 1, 50, 'Deir El Assad', 'assets/images/employeesnoPic.jpg');
+(1, 322470303, 'Ameen', 'Assadi', 3, 50, 'Deir El Assad', 'assets/images/employees/noPic.jpg');
 
 -- --------------------------------------------------------
 
@@ -121,7 +120,7 @@ INSERT INTO `items` (`Barcode`, `Name`, `Price`, `Department`, `img`, `quantity`
 (23, 'Heater', 800, 2, 'assets/images/items/heater.png', 100, 0),
 (24, 'Vaccum Cleaner', 450, 2, 'assets/images/items/sho2ev.png', 100, 0),
 (31, 'Arabian Pita', 10, 3, 'assets/images/items/Pita.jpg', 100, 0),
-(33, 'Oreo Cake', 290, 3, 'assets/images/items/oreo.jpg', 100, 0),
+(33, 'Oreo Cake', 150, 3, 'assets/images/items/oreo.jpg', 100, 0),
 (34, 'French Waffles', 30, 3, 'assets/images/items/waffle.jpg', 100, 0),
 (41, 'Sinta Meat', 110, 4, 'assets/images/items/sinta.jpg', 100, 0),
 (42, 'Tomhawk Steak', 300, 4, 'assets/images/items/Tomahawk.jpg', 100, 0),
@@ -167,10 +166,8 @@ CREATE TABLE `order_details` (
 --
 
 INSERT INTO `order_details` (`id`, `itemBarcode`, `quantity`, `order_id`) VALUES
-(8, 33, 3, 19),
 (9, 31, 2, 19),
 (10, 12, 3, 19),
-(12, 33, 3, 21),
 (13, 31, 2, 21),
 (14, 12, 3, 21);
 
@@ -182,11 +179,19 @@ INSERT INTO `order_details` (`id`, `itemBarcode`, `quantity`, `order_id`) VALUES
 
 CREATE TABLE `suppliers` (
   `id` int(11) NOT NULL,
+  `sID` int(11) NOT NULL,
   `name` varchar(256) NOT NULL,
   `company` varchar(256) NOT NULL,
   `phone` int(15) NOT NULL,
-  `avatar` varchar(256) NOT NULL DEFAULT 'assets/images/employees/noPic.jpg'
+  `avatar` varchar(256) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `suppliers`
+--
+
+INSERT INTO `suppliers` (`id`, `sID`, `name`, `company`, `phone`, `avatar`) VALUES
+(1, 325564, 'Meryam Natour', 'Hacker', 1231431, 'assets/images/suppliers/noPic.jpg');
 
 -- --------------------------------------------------------
 
@@ -222,8 +227,8 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `isAdmin`, `address`, `n
 --
 ALTER TABLE `cart`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `itemBarcode` (`itemBarcode`),
-  ADD KEY `userID_fk` (`userID`) USING BTREE;
+  ADD KEY `userID_fk` (`userID`) USING BTREE,
+  ADD KEY `itemBarcode` (`itemBarcode`);
 
 --
 -- Indexes for table `departments`
@@ -285,10 +290,16 @@ ALTER TABLE `cart`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
+-- AUTO_INCREMENT for table `employees`
+--
+ALTER TABLE `employees`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-  MODIFY `Barcode` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `Barcode` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT for table `orders_id`
@@ -306,7 +317,7 @@ ALTER TABLE `order_details`
 -- AUTO_INCREMENT for table `suppliers`
 --
 ALTER TABLE `suppliers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -322,7 +333,7 @@ ALTER TABLE `users`
 -- Constraints for table `cart`
 --
 ALTER TABLE `cart`
-  ADD CONSTRAINT `itemBarcode` FOREIGN KEY (`itemBarcode`) REFERENCES `items` (`Barcode`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`itemBarcode`) REFERENCES `items` (`Barcode`),
   ADD CONSTRAINT `userID_fk` FOREIGN KEY (`userID`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
@@ -347,8 +358,8 @@ ALTER TABLE `orders_id`
 -- Constraints for table `order_details`
 --
 ALTER TABLE `order_details`
-  ADD CONSTRAINT `itemID_fk` FOREIGN KEY (`itemBarcode`) REFERENCES `items` (`Barcode`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `orderID_fk` FOREIGN KEY (`order_id`) REFERENCES `orders_id` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `orderID_fk` FOREIGN KEY (`order_id`) REFERENCES `orders_id` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `order_details_ibfk_1` FOREIGN KEY (`itemBarcode`) REFERENCES `items` (`Barcode`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
