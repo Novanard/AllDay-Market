@@ -36,22 +36,22 @@
   <!-- Header -->
       <header class="">
       <?php
-      $employee=$_GET['id'];
-      session_start();
-      if(isset($_SESSION['email'])){
-        if($_SESSION['email'] === 'admin@allday.com'){
-    $basedir = realpath(__DIR__);
-          include($basedir . '/navbars/navadmin.php');
-        }
-        else{
-    $basedir = realpath(__DIR__);
-          include($basedir . '/navbars/navuser.php');
-        }
-      }
-      else{
-  $basedir = realpath(__DIR__);
-  include($basedir . '/navbars/nav.php');
-      }
+      $eID=$_GET['id'];
+	session_start();
+	if(isset($_SESSION['email'])){
+		if($_SESSION['email'] === 'admin@allday.com'){
+			$target_dir = 'navbars/navadmin.php';
+			include ($target_dir);
+		}
+		else{
+			$target_dir = 'navbars/navuser.php';
+			include ($target_dir);
+		}
+	}
+	else{
+			$target_dir = 'navbars/navbar.php';
+			include ($target_dir);
+	}
 	
 ?>
 </header>
@@ -74,62 +74,56 @@
         <div class="row">
           <div class="col-md-12">
             <div class="section-heading">
-              <h2>Edit Item</h2>
+              <h2>Edit Employee <?php echo($eID); ?></h2>
             </div>
           </div>
           <div class="col-md-8">
             <div class="contact-form">
-              <form action="addEmployeeForm.php" method="post" enctype="multipart/form-data">
-					 <input type="hidden" name="id" value="<?php echo $employee ?>">
-                      <div class="row">
-                  <div class="col-lg-12 col-md-12 col-sm-12">
+              <form action="updateEmployee.php" method="POST">
+                <input type="hidden" name="id" value="<?php echo $eID ?>">
+                <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                     <input name="eID" type="number" class="form-control" id="name" placeholder="Employee ID" required="">
+                      <input name="eID" type="text" class="form-control" id="eId" placeholder=" New Employee ID" required="">
                     </fieldset>
                   </div>
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                       <input name="eFirstname" type="text" class="form-control" id="name" placeholder="Employee Firstname" required="">
+                      <input name="firstname" type="text" class="form-control" id="name" placeholder="New FirstName" required="">
                     </fieldset>
                   </div>
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                       <input name="eLastname" type="text" class="form-control" id="name" placeholder="Employee Lastname" required="">
+                      <input name="lastname" type="text" class="form-control" id="email" placeholder="New Lastname" required="">
                     </fieldset>
                   </div>
-				   <div class="col-lg-12 col-md-12 col-sm-12">
-                    <fieldset>
-                       <input name="depNum" type="number" class="form-control" id="name" placeholder="Employee Department Number" required="">
-                    </fieldset>
-                  </div>
-				  
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-						<input type="number" name="PerHour" id="perhour" placeholder="Employee PerHour" required="">
+                      <input name="depNum" type="number" class="form-control" id="subject" placeholder="New Department Number" required="">
                     </fieldset>
                   </div>
-				  <br><br>
-				  <div class="col-lg-12 col-md-12 col-sm-12">
+                  <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                       <input name="eResidence" type="text" class="form-control" id="name" placeholder="Employee Residence" required="">
+                      <input name="perhour" type="number" class="form-control" id="subject" placeholder="New PerHour" required="">
                     </fieldset>
                   </div>
-					<div class="col-lg-12 col-md-12 col-sm-12">
+                  <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                     	<input type="file" name="ePhoto" id="Image">
+                      <input name="residence" type="text" class="form-control" id="subject" placeholder="New Residence" required="">
                     </fieldset>
                   </div>
                   <div class="col-lg-12">
                     <fieldset>
-					<br>
-                      <button type="submit" name="submit" class="filled-button" value="Submit">Update Employee</button>
+                      <button name="employeeEdit" type="submit" id="form-submit" class="filled-button">Edit Item</button>
                     </fieldset>
-					<br>
                   </div>
                 </div>
               </form>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
 
     <footer>
       <div class="container">
