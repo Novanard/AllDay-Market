@@ -15,56 +15,53 @@
       <link rel="stylesheet" href="assets/css/owl.css">
    </head>
    <body>
-   <?php
-      mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-         $uploadError = '';
-if (isset($_POST['submit'])) {
-    include 'db.php';
-    $sName = $_POST['sName'];
-    $company = $_POST['sCmp'];
-    $phone = $_POST['sNumber'];
-    $type = isset($_FILES['sPhoto']) ? (explode('.', $_FILES['sPhoto']['name'])) : null;
-    if (!empty($type)) { //a file was upload
-        $type = end($type); //get the extension
-        $allowed = ['png', 'jpg'];
-        if (in_array($type, $allowed)) { //type is allowed
-            $tmp_name = $_FILES['sPhoto']['tmp_name'];
-            $name = $_FILES['sPhoto']['name'];
-            $target_dir = 'assets/images/suppliers/';
-
-            //move the file to the target location
-            $target_file = $target_dir . basename($_FILES["sPhoto"]["name"]);
-            move_uploaded_file($tmp_name, $target_file);
-
-        }else { //not allowed so we set error message
-            $uploadError = 'This type isnt allowed!';
-            echo($uploadError);
-        }
-
-    }else { //no file was passed in so we let it continue to insert
-        $target_file = null;
-    }
-
-    if (empty($uploadError)) { //no errors, so we insert
-        $sql = "INSERT INTO suppliers (name,company,phone,avatar) VALUES (?,?,?,COALESCE(?, avatar, DEFAULT(avatar)));";
-        $stmt = mysqli_stmt_init($conn);
-        mysqli_stmt_prepare($stmt, $sql);
-        mysqli_stmt_bind_param($stmt, "ssis", $sName, $company, $phone, $target_file);
-        mysqli_stmt_execute($stmt);
-    }
-
-}
-   else if (isset($_POST['delSubmit'])) {
-         	include 'db.php';
+      <?php
+         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+            $uploadError = '';
+         if (isset($_POST['submit'])) {
+         include 'db.php';
+         $sID = $_POST['sID'];
+         $sName = $_POST['sName'];
+         $company = $_POST['sCmp'];
+         $phone = $_POST['sNumber'];
+         $avatarr = NULL;
+         $sql = "INSERT INTO suppliers (sID,name,company,phone) VALUES (?,?,?,?);";
+          $stmt= mysqli_stmt_init($conn);
+           mysqli_stmt_prepare($stmt,$sql);
+           mysqli_stmt_bind_param($stmt,"issi",$sID,$sName,$company,$phone);
+           mysqli_stmt_execute($stmt);
+           $sql = "SELECT avatar FROM suppliers WHERE sID =? ";
+           $stmt= mysqli_stmt_init($conn);
+           mysqli_stmt_prepare($stmt,$sql);
+           mysqli_stmt_bind_param($stmt,"i",$eID);
+           mysqli_stmt_execute($stmt);
+           $results=mysqli_stmt_get_result($stmt);
+           while($row=mysqli_fetch_assoc($results))
+           {
+              $avatarr=$row['avatar'];
+           }
+           if(is_null($avatarr))
+           {
+             $sql = "UPDATE suppliers set avatar = 'assets/images/suppliers/noPic.jpg' WHERE sID = ?; ";
+             $stmt= mysqli_stmt_init($conn);
+             mysqli_stmt_prepare($stmt,$sql);
+             mysqli_stmt_bind_param($stmt,"i",$sID);
+             mysqli_stmt_execute($stmt);
+             echo('executed');
+           
+           }
+          }
          
-         	$name = $_POST['name'];
-         	$sql= "DELETE FROM suppliers WHERE name = ?;";
-         	$stmt= mysqli_stmt_init($conn);
-         	mysqli_stmt_prepare($stmt,$sql);
-         	mysqli_stmt_bind_param($stmt,"s",$name);
-         	mysqli_stmt_execute($stmt);	
-         }
-         ?>
+         else if (isset($_POST['delSubmit'])) {
+            	include 'db.php';
+            	$name = $_POST['name'];
+            	$sql= "DELETE FROM suppliers WHERE name = ?;";
+            	$stmt= mysqli_stmt_init($conn);
+            	mysqli_stmt_prepare($stmt,$sql);
+            	mysqli_stmt_bind_param($stmt,"s",$name);
+            	mysqli_stmt_execute($stmt);	
+            }
+            ?>
       <!-- ***** Preloader Start ***** -->
       <div id="preloader">
          <div class="jumper">
@@ -119,6 +116,11 @@ if (isset($_POST['submit'])) {
                         <div class="row">
                            <div class="col-lg-12 col-md-12 col-sm-12">
                               <fieldset>
+                                 <input name="sID" type="number" class="form-control" id="name" placeholder="Supplier ID" required="">
+                              </fieldset>
+                           </div>
+                           <div class="col-lg-12 col-md-12 col-sm-12">
+                              <fieldset>
                                  <input name="sName" type="text" class="form-control" id="name" placeholder="Supplier Name" required="">
                               </fieldset>
                            </div>
@@ -133,11 +135,6 @@ if (isset($_POST['submit'])) {
                               </fieldset>
                            </div>
                            <br><br>
-                           <div class="col-lg-12 col-md-12 col-sm-12">
-                              <fieldset>
-                                 <input type="file" name="sPhoto" id="Image">
-                              </fieldset>
-                           </div>
                            <div class="col-lg-12">
                               <fieldset>
                                  <br>

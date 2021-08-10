@@ -25,6 +25,7 @@
          	$depNum = $_POST['depNum'];
          	$PerHour = $_POST['PerHour'];
          	$residence = $_POST['eResidence'];
+            $avatar;
             $sql = "INSERT INTO employees (eID,firstname,lastname,depNum,perhour,residence) VALUES (?,?,?,?,?,?);";
          		$stmt= mysqli_stmt_init($conn);
          	    mysqli_stmt_prepare($stmt,$sql);
@@ -40,9 +41,18 @@
                 {
                    $avatar=$row['avatar'];
                 }
+                if(is_null($avatar))
+                {
+                  $sql = "UPDATE employees set avatar = 'assets/images/employees/noPic.jpg' WHERE eID = ?; ";
+                  $stmt= mysqli_stmt_init($conn);
+                  mysqli_stmt_prepare($stmt,$sql);
+                  mysqli_stmt_bind_param($stmt,"i",$eID);
+                  mysqli_stmt_execute($stmt);
+                  echo('executed');
+                
+                }
                }
-                echo($avatar);
-         else (isset($_POST['delSubmit'])) {
+         else if (isset($_POST['delSubmit'])) {
          	include 'db.php';
          	$id = $_POST['eID'];
          	$sql= "DELETE FROM employees WHERE eID = ?;";
@@ -50,7 +60,9 @@
          	mysqli_stmt_prepare($stmt,$sql);
          	mysqli_stmt_bind_param($stmt,"i",$id);
          	mysqli_stmt_execute($stmt);	
-         }
+            }
+         else
+         echo('something else');
          ?>
       <!-- ***** Preloader Start ***** -->
       <div id="preloader">
