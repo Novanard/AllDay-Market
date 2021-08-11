@@ -68,7 +68,6 @@
                mysqli_stmt_prepare($stmt,$sql);
                mysqli_stmt_execute($stmt);
                $results=mysqli_stmt_get_result($stmt);
-               
                if(isset($_SESSION['email'])){
                if($_SESSION['email'] === 'admin@allday.com'){
                while ($row=mysqli_fetch_assoc($results))
