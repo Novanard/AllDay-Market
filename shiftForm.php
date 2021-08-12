@@ -20,6 +20,7 @@
          if (isset($_POST['submit']) && isset($_POST['checkIn'])) {
           include 'db.php';
          	$eID = $_POST['eID'];
+            // Checking if the entered eID is a valid eID
            $sql = "SELECT * FROM employees WHERE eID = ? LIMIT 1";
            $stmt= mysqli_stmt_init($conn);
            mysqli_stmt_prepare($stmt,$sql);
@@ -29,6 +30,7 @@
           $row=mysqli_fetch_assoc($results);
            if(isset($row['eID'])){
            $startTime = date("Y-m-d H:i:s");
+           // Checking if the employee is already checked-in
            $sql = "SELECT * FROM shift WHERE eID = ? LIMIT 1";
            $stmt= mysqli_stmt_init($conn);
            mysqli_stmt_prepare($stmt,$sql);
@@ -39,6 +41,7 @@
           if (isset($row['eID']))
             echo('Employee Already in their shift');
            else{
+              // If not checked in, it created a record.
             $sql = "INSERT INTO shift (eID,startTime) VALUES (?,?);";
          		$stmt= mysqli_stmt_init($conn);
          	    mysqli_stmt_prepare($stmt,$sql);
@@ -51,6 +54,7 @@
          else if (isset($_POST['submit']) && isset($_POST['checkOut'])) {
           include 'db.php';
          	$eID = $_POST['eID'];
+            // Checking if the entered ID is a valid employee ID
            $sql = "SELECT * FROM employees WHERE eID = ? LIMIT 1";
            $stmt= mysqli_stmt_init($conn);
            mysqli_stmt_prepare($stmt,$sql);
@@ -59,7 +63,9 @@
            $results=mysqli_stmt_get_result($stmt);
            $row =mysqli_fetch_assoc($results);
            if(isset($row['eID'])){
+            // If the employee is valid , we check if he checked-in before checking out  
            $sql = "SELECT * FROM shift WHERE eID = ? LIMIT 1";
+           $shiftID = $row['id'];
            $stmt= mysqli_stmt_init($conn);
            mysqli_stmt_prepare($stmt,$sql);
            mysqli_stmt_bind_param($stmt,"i",$eID);
@@ -69,63 +75,45 @@
            if(!isset($row['eID']))
             echo('You cant check-out before you check-in!');
            else{
-            $startTime=$row['startTime'];
+              // Checking out of the shift
+         $startTime=$row['startTime'];
           $endTime = date("Y-m-d H:i:s"); 
-           $sql = "UPDATE shift SET endtime = ? WHERE eID = ?";
+           $sql = "UPDATE shift SET endtime = ? WHERE id = ?";
            $stmt= mysqli_stmt_init($conn);
            mysqli_stmt_prepare($stmt,$sql);
-           mysqli_stmt_bind_param($stmt,"si",$endTime,$eID);
+           mysqli_stmt_bind_param($stmt,"si",$endTime,$shiftID);
            mysqli_stmt_execute($stmt);
            echo('Successfully check-out of your shift!');
+           $sql = "DELETE FROM shift SET WHERE id = ?";
+           $stmt= mysqli_stmt_init($conn);
+           mysqli_stmt_prepare($stmt,$sql);
+           mysqli_stmt_bind_param($stmt,"si",$endTime,$shiftID);
+           mysqli_stmt_execute($stmt);
+           echo('shift cleaned');
          }
          //Creating a payroll id NOTE: NEED TO MAKE THIS EVERY MONTH
-         $sql = "INSERT INTO payroll_ids (eID,month) VALUES (?,?);";
-         $month = date("Y-m-d");
+         $sql = "SELECT payMonth FROM payroll_ids WHERE eID = ? ";
+         $date = DATE("Y-m-d");
          $stmt= mysqli_stmt_init($conn);
-          mysqli_stmt_prepare($stmt,$sql);
-          mysqli_stmt_bind_param($stmt,"is",$eID,$month);
-          mysqli_stmt_execute($stmt);
-          echo('Payroll ID Executed');
-          //Getting the payroll id in order to insert it as the foreign key
-          $sql="SELECT id FROM payroll_ids WHERE eID = ?";
-          $stmt= mysqli_stmt_init($conn);
           mysqli_stmt_prepare($stmt,$sql);
           mysqli_stmt_bind_param($stmt,"i",$eID);
           mysqli_stmt_execute($stmt);
-          $results = mysqli_stmt_get_result($stmt);
-          $row = mysqli_fetch_assoc($results);
-          $payroll_id = $row['id'];
-          echo('Payroll ID GET successfully');
-          // Inserting the payroll details of the employee
-          $sql = "INSERT INTO payroll_details (startTime,endTime,totalTime,payroll_id) VALUES (?,?,?,?);";
-          $datetime1 = strtotime($startTime);
-          $datetime2 = strtotime($endTime);
-          $interval  = abs($datetime1 - $datetime2);
-          $totalHours = $interval;
-          $stmt= mysqli_stmt_init($conn);
-           mysqli_stmt_prepare($stmt,$sql);
-           mysqli_stmt_bind_param($stmt,"ssii",$startTime,$endTime,$totalHours,$payroll_id);
-           mysqli_stmt_execute($stmt);
-           echo('Payroll Details Executed');
-           // Getting the perhour from employee tables to calculate the payday
-           $sql="SELECT perhour FROM employees WHERE eID = ? LIMIT 1";
-           $stmt= mysqli_stmt_init($conn);
-           mysqli_stmt_prepare($stmt,$sql);
-           mysqli_stmt_bind_param($stmt,"i",$eID);
-           mysqli_stmt_execute($stmt);
-           $results = mysqli_stmt_get_result($stmt);
-           $row = mysqli_fetch_assoc($results);
-           $perhour = $row['perhour'];
-           $payday = $perhour * $totalHours ;
-           // UPDATING the payday column in the payroll_details
-           $sql="UPDATE payroll_details SET payday = ? WHERE payroll_id = ?";
-           $stmt= mysqli_stmt_init($conn);
-           mysqli_stmt_prepare($stmt,$sql);
-           mysqli_stmt_bind_param($stmt,"ii",$payday,$payroll_id);
-           mysqli_stmt_execute($stmt);
-
-      }
+         $results = mysqli_stmt_get_result($stmt);
+         $row = mysqli_fetch_assoc($results);
+         if(isset($row['payMonth'])){
+            if(MONTH($row['payMonth']) != MONTH($date)){
+               $sql = "INSERT INTO payroll_ids (eID,payMonth) VALUES (?,?);";
+               $stmt= mysqli_stmt_init($conn);
+                mysqli_stmt_prepare($stmt,$sql);
+                mysqli_stmt_bind_param($stmt,"is",$eID,$date);
+                mysqli_stmt_execute($stmt);
+                echo('Payroll ID Executed');
+            }
+            else  
+                echo('No need for extra payroll id');
          }
+      }
+   }
          ?>
       <!-- ***** Preloader Start ***** -->
       <div id="preloader">
