@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 12, 2021 at 03:50 PM
--- Server version: 10.4.19-MariaDB
--- PHP Version: 7.3.28
+-- Generation Time: Sep 13, 2021 at 12:20 AM
+-- Server version: 10.4.17-MariaDB
+-- PHP Version: 7.3.26
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -191,7 +191,9 @@ CREATE TABLE `payroll_details` (
 --
 
 INSERT INTO `payroll_details` (`id`, `startTime`, `endTime`, `totalTime`, `payday`, `payroll_id`) VALUES
-(0, '2021-08-12 12:48:06.000000', '2021-08-12 12:48:19.000000', 13, 650, 25);
+(17, '2021-08-12 18:25:14.000000', '2021-08-12 18:25:18.000000', 4, 200, 33),
+(18, '2021-08-12 18:25:34.000000', '2021-08-12 18:25:43.000000', 9, 450, 33),
+(20, '2021-09-12 18:26:46.000000', '2021-09-12 18:26:53.000000', 7, 350, 35);
 
 -- --------------------------------------------------------
 
@@ -202,15 +204,17 @@ INSERT INTO `payroll_details` (`id`, `startTime`, `endTime`, `totalTime`, `payda
 CREATE TABLE `payroll_ids` (
   `id` int(11) NOT NULL,
   `eID` int(11) NOT NULL,
-  `month` date DEFAULT NULL
+  `payMonth` date DEFAULT NULL,
+  `isFinished` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `payroll_ids`
 --
 
-INSERT INTO `payroll_ids` (`id`, `eID`, `month`) VALUES
-(25, 322470303, '2021-08-12');
+INSERT INTO `payroll_ids` (`id`, `eID`, `payMonth`, `isFinished`) VALUES
+(33, 322470303, '2021-08-12', 1),
+(35, 322470303, '2021-09-12', 0);
 
 -- --------------------------------------------------------
 
@@ -225,13 +229,6 @@ CREATE TABLE `shift` (
   `endTime` timestamp(6) NULL DEFAULT NULL,
   `isWeekend` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `shift`
---
-
-INSERT INTO `shift` (`id`, `eID`, `startTime`, `endTime`, `isWeekend`) VALUES
-(21, 322470303, '2021-08-12 12:48:06.000000', '2021-08-12 12:48:19.000000', 0);
 
 -- --------------------------------------------------------
 
@@ -390,16 +387,22 @@ ALTER TABLE `order_details`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
+-- AUTO_INCREMENT for table `payroll_details`
+--
+ALTER TABLE `payroll_details`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
 -- AUTO_INCREMENT for table `payroll_ids`
 --
 ALTER TABLE `payroll_ids`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `shift`
 --
 ALTER TABLE `shift`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `suppliers`
