@@ -26,7 +26,8 @@
                 </li>
 
                 
-                <li class="nav-item"><a class="nav-link" href="cart.php">Cart</a></li>
+        <li class="nav-item"><a class="nav-link" href="cart.php">Cart</a></li>
+        <li class="nav-item"><a class="nav-link" href="employeeLogin.php">Employee</a></li>
 				<li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
             </ul>
           </div>

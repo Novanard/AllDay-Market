@@ -58,7 +58,7 @@
     <!-- Page Content -->
   
     <div>
-		<center><img src="assets/images/11.png"></center>
+		<center><img src="assets/images/items/11.png"></center>
     </div>
 	<hr>
 	<hr>
