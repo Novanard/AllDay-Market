@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" ) {
     $sql = "DELETE FROM employees WHERE id = ?; ";
     $stmt= mysqli_stmt_init($conn);
     mysqli_stmt_prepare($stmt,$sql);
-    mysqli_stmt_bind_param($stmt,"i",$Barcode);
+    mysqli_stmt_bind_param($stmt,"i",$id);
     mysqli_stmt_execute($stmt);
     header('Location:employees.php');
   }

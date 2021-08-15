@@ -80,7 +80,7 @@
           <div class="col-md-8">
             <div class="contact-form">
               <form action="updateEmployee.php" method="POST">
-                <input type="hidden" name="id" value="<?php echo $eID ?>">
+                <input type="hidden" name="id" value="<?php echo $ID ?>">
                 <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
