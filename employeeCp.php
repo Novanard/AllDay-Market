@@ -63,7 +63,7 @@
                <div class="col-md-8">
                   <br><br><br><br><br>
                   <a href="#"><input  class="btn btn-danger"type="submit"  value="Employee Status"></a>
-                  <a href="#"><input  class="btn btn-danger"type="submit"  value="View Orders"></a>
+                  <a href="employeeOrders.php"><input  class="btn btn-danger"type="submit"  value="View Orders"></a>
                   <a href="shiftForm.php"><input  class="btn btn-danger"type="submit"  value="Shift Controls"></a>
                </div>
                <div class="col-md-4">
