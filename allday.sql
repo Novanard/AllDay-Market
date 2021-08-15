@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 13, 2021 at 12:20 AM
+-- Generation Time: Aug 15, 2021 at 05:05 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 7.3.26
 
@@ -75,6 +75,7 @@ INSERT INTO `departments` (`Num`, `Name`) VALUES
 CREATE TABLE `employees` (
   `id` int(11) NOT NULL,
   `eID` int(9) NOT NULL,
+  `PIN` varchar(4) DEFAULT NULL,
   `firstname` varchar(50) NOT NULL,
   `lastname` varchar(50) NOT NULL,
   `depNum` tinyint(1) NOT NULL,
@@ -87,8 +88,8 @@ CREATE TABLE `employees` (
 -- Dumping data for table `employees`
 --
 
-INSERT INTO `employees` (`id`, `eID`, `firstname`, `lastname`, `depNum`, `perhour`, `residence`, `avatar`) VALUES
-(1, 322470303, 'Ameen', 'Assadi', 3, 50, 'Deir El Assad', 'assets/images/employees/noPic.jpg');
+INSERT INTO `employees` (`id`, `eID`, `PIN`, `firstname`, `lastname`, `depNum`, `perhour`, `residence`, `avatar`) VALUES
+(1, 322470303, '2109', 'Ameen', 'Assadi', 2, 60, 'Deir El Assad', 'assets/images/employees/noPic.jpg');
 
 -- --------------------------------------------------------
 
@@ -161,16 +162,6 @@ CREATE TABLE `order_details` (
   `order_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `order_details`
---
-
-INSERT INTO `order_details` (`id`, `itemBarcode`, `quantity`, `order_id`) VALUES
-(9, 31, 2, 19),
-(10, 12, 3, 19),
-(13, 31, 2, 21),
-(14, 12, 3, 21);
-
 -- --------------------------------------------------------
 
 --
@@ -185,15 +176,6 @@ CREATE TABLE `payroll_details` (
   `payday` int(11) DEFAULT NULL,
   `payroll_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `payroll_details`
---
-
-INSERT INTO `payroll_details` (`id`, `startTime`, `endTime`, `totalTime`, `payday`, `payroll_id`) VALUES
-(17, '2021-08-12 18:25:14.000000', '2021-08-12 18:25:18.000000', 4, 200, 33),
-(18, '2021-08-12 18:25:34.000000', '2021-08-12 18:25:43.000000', 9, 450, 33),
-(20, '2021-09-12 18:26:46.000000', '2021-09-12 18:26:53.000000', 7, 350, 35);
 
 -- --------------------------------------------------------
 
@@ -256,7 +238,7 @@ CREATE TABLE `users` (
   `name` varchar(256) NOT NULL,
   `email` varchar(256) NOT NULL,
   `password` varchar(256) NOT NULL,
-  `isAdmin` tinyint(1) NOT NULL DEFAULT 0,
+  `userType` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0 = User\r\n1 = Admin\r\n',
   `address` varchar(200) NOT NULL,
   `number` int(15) NOT NULL,
   `avatar` varchar(256) DEFAULT NULL
@@ -266,9 +248,10 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `password`, `isAdmin`, `address`, `number`, `avatar`) VALUES
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `userType`, `address`, `number`, `avatar`) VALUES
 (1, 'Admin', 'admin@allday.com', '$2y$10$cPByNDa2Y9rRx.ZIUlsBjeKjb5f0jGHNxiqWsmT9c1hmViNOpn6/C', 1, 'N/A', 0, 'assets/images/employeesnoPic.jpg'),
-(2, 'Ameen Assadi', 'ameen@test.com', '$2y$10$8woN32cf4VvFST1WrG9JquyIAEJNH1EGU6isbb8l.C2WOYz4F4uDG', 0, 'Deir El Assad', 542029200, 'assets/images/users/noPic.jpg');
+(2, 'Ameen Assadi', 'ameen@test.com', '$2y$10$8woN32cf4VvFST1WrG9JquyIAEJNH1EGU6isbb8l.C2WOYz4F4uDG', 0, 'Deir El Assad', 542029200, 'assets/images/users/noPic.jpg'),
+(3, 'Another Test', 'test@test1.com', '$2y$10$Gb82DJfxcrwEX5rz3Ib4tuFB76zKueTWDFoWwF5nBiPonY3dstLgy', 0, 'test', 12345, NULL);
 
 --
 -- Indexes for dumped tables
@@ -366,7 +349,7 @@ ALTER TABLE `cart`
 -- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `items`
@@ -390,7 +373,7 @@ ALTER TABLE `order_details`
 -- AUTO_INCREMENT for table `payroll_details`
 --
 ALTER TABLE `payroll_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `payroll_ids`
@@ -402,7 +385,7 @@ ALTER TABLE `payroll_ids`
 -- AUTO_INCREMENT for table `shift`
 --
 ALTER TABLE `shift`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `suppliers`
@@ -414,7 +397,7 @@ ALTER TABLE `suppliers`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
