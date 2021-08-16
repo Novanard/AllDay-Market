@@ -11,7 +11,7 @@
                       <span class="sr-only">(current)</span>
                     </a>
                 </li>     
-				<li class="nav-item"><a class="nav-link" href="profile.php">Control Panel</a></li>
+				<li class="nav-item"><a class="nav-link" href="employeeCp.php">Control Panel</a></li>
             </ul>
           </div>
         </div>

@@ -86,8 +86,8 @@
                                <h6><small>ItemBarcode: '.$itemBarcode.'<br></small>
                                <h6><small> Quantity:'.$quantity.'</small>
                                <br><br>
-                               <form action="updateItem.php" method="post">
-                               <input type="hidden" name="id" value="'.$itemBarcode.'">
+                               <form action="updateOrder.php" method="post">
+                               <input type="hidden" name="barcode" value="'.$itemBarcode.'">
                                <fieldset>
                                <button type="submit" name="isDone" id="form-submit" class="btn btn-success">isDone</button>
                                </fieldset>
