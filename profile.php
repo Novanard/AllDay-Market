@@ -101,6 +101,11 @@
               <li><strong>Email:</strong>'.$email.'</li>
               <li><strong>Phone No:</strong>'.$number.'</li>
               <li><strong>Adress:</strong>'.$address.'<li>
+              <form action="logout.php">
+              <fieldset>
+              <button type="submit" name="logout" id="form-submit" class="btn btn-danger">Logout</button>
+              </fieldset>
+              </form>
               </div>
               <div>
 

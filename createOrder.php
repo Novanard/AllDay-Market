@@ -7,6 +7,7 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 		if(isset($_SESSION['email'])){
 		$userID=$_SESSION['id'];
 		$timestamp = date('Y-m-d H:i:s');
+		//Creating
 		$sql = "INSERT INTO orders_id (userID,date) VALUES (?,?);";
         $stmt= mysqli_stmt_init($conn);
         mysqli_stmt_prepare($stmt,$sql);
@@ -32,10 +33,12 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 		$itemBarcode=$row['itemBarcode'];
 		$itemName=$row['name'];
 		$quantity=$row['qnt'];
-		$sql = "INSERT INTO order_details (itemBarcode,quantity,order_id) VALUES (?,?,?);";
+		$depNum =$row['depNum'];
+		$img = $row['img'];
+		$sql = "INSERT INTO order_details (itemBarcode,depNum,quantity,order_id,img) VALUES (?,?,?,?,?);";
         $stmt= mysqli_stmt_init($conn);
         mysqli_stmt_prepare($stmt,$sql);
-        mysqli_stmt_bind_param($stmt,"iii",$itemBarcode,$quantity,$order_id);
+        mysqli_stmt_bind_param($stmt,"iiiis",$itemBarcode,$depNum,$quantity,$order_id,$img);
         mysqli_stmt_execute($stmt);
 		}
         header('Location:finishOrder.php');

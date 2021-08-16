@@ -2,6 +2,7 @@
 
 	include 'db.php';
 	session_start();
+	mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);s
 	if(isset($_SESSION['email'])){
 		$user = $_SESSION['email'];
 		$userID=$_SESSION['id'];
@@ -17,11 +18,13 @@
 		$name = $row['Name'];
 		$price = $row['Price'];
 		$img = $row['img'];
-		$sql = "INSERT INTO cart (userID,name,price,qnt,img) VALUES (?,?,?,?,?);";
+		$depNum = $row['Department'];
+		$sql = "INSERT INTO cart (userID,name,price,qnt,itemBarcode,depNum,img) VALUES (?,?,?,?,?,?,?);";
 		$stmt= mysqli_stmt_init($conn);
 		mysqli_stmt_prepare($stmt,$sql);
-		mysqli_stmt_bind_param($stmt,"issss",$userID,$name,$price,$qnt,$img);
+		mysqli_stmt_bind_param($stmt,"isssiis",$userID,$name,$price,$qnt,$id,$depNum,$img);
 		mysqli_stmt_execute($stmt);
+		echo('Executed Add2Cart');
 	}
 
 ?>

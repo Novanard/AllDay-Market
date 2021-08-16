@@ -27,19 +27,13 @@
       <!-- Header -->
       <header class="">
       <?php
-            session_start();
-            if(isset($_SESSION['eID'])){
-                $basedir = realpath(__DIR__);
-                include($basedir . '/navbars/navEmployee.php');
-            }
-            else{
-                header('Location:index.php');
-            }
-            
+                  session_start();
+            $basedir = realpath(__DIR__);
+            include($basedir . '/navbars/navEmployee.php');
             ?>
       </header>
       <!-- Page Content -->
-      <div class="page-heading about-heading header-text" style="background-image: url(assets/images/veghs.png);">
+      <div class="page-heading about-heading header-text" style="background-image: url(assets/images/items/veghs.png);">
          <div class="container">
             <div class="row">
                <div class="col-md-12">
@@ -57,72 +51,58 @@
 
                mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
                if(isset($_SESSION['eID'])){
+                  $eID = $_SESSION['eID'];
                            include 'db.php';
                            // To get the department number of the current employee
                            $sql = "SELECT depNum FROM employees WHERE eID = ? LIMIT 1";
                            $stmt= mysqli_stmt_init($conn);
                            mysqli_stmt_prepare($stmt,$sql);
-                           mysqli_stmt_bind_param($stmt,"i",$_SESSION['eID']);
+                           mysqli_stmt_bind_param($stmt,"i",$eID);
                            mysqli_stmt_execute($stmt);
                            $results=mysqli_stmt_get_result($stmt);
                             $row = mysqli_fetch_assoc($results);
                             $depNum = $row['depNum'];
-                            //Selecting only orders that match the employee department with group by id
-                           $sql = " SELECT * from order_details WHERE depNum =? GROUP BY order_id";
-                           $stmt= mysqli_stmt_init($conn);
-                           mysqli_stmt_prepare($stmt,$sql);
-                           mysqli_stmt_bind_param($stmt,"i",$depNum);
-                           mysqli_stmt_execute($stmt);
-                           $results=mysqli_stmt_get_result($stmt);
-                           
+                            //Getting all records where depNum matches the employee Dep
+                            //And the state of the order item is not finished
+                            $sql = "SELECT * FROM order_details WHERE depNum = ? AND isDone =0 ";
+                            $stmt= mysqli_stmt_init($conn);
+                            mysqli_stmt_prepare($stmt,$sql);
+                            mysqli_stmt_bind_param($stmt,"i",$depNum);
+                            mysqli_stmt_execute($stmt);
+                            $results=mysqli_stmt_get_result($stmt);
+                            while($row = mysqli_fetch_assoc($results))
+                            {
+                               $orderID = $row['order_id'];
+                               $itemBarcode = $row['itemBarcode'];
+                               $quantity = $row['quantity'];
+                               $img = $row['img'];
+                               echo '
+                               <div class="col-md-6">
+                               <div class="product-item">
+                               <a href="#"><img src="'.$img.'" alt=""></a>
+                               <div class="down-content">
+                               <a href="#"><h4>OrderID ~'.$orderID.'</h4></a>
+                               
+                               <h6><small>ItemBarcode: '.$itemBarcode.'<br></small>
+                               <h6><small> Quantity:'.$quantity.'</small>
+                               <br><br>
+                               <form action="updateItem.php" method="post">
+                               <input type="hidden" name="id" value="'.$itemBarcode.'">
+                               <fieldset>
+                               <button type="submit" name="isDone" id="form-submit" class="btn btn-success">isDone</button>
+                               </fieldset>
+                               </form>
+                               </div>
+                               </div>
+                               </div>
+                               ';
+                               }
 
-               		while ($row=mysqli_fetch_assoc($results))
-               			{
-               			  $ID = $row['id'];
-               			  $itemBarcode=$row['itemBarcode'];
-               			  $depNum = $row['depNum'];
-               			  $qnt = $row['quantity'];
-               			  $order_id=$row['order_id'];
-               			  $perhour=$row['perhour'];
-               			  $residence=$row['residence'];
-                             $sql = " SELECT img from items WHERE Barcode = ?LIMIT 1";
-                             $stmt= mysqli_stmt_init($conn);
-                             mysqli_stmt_prepare($stmt,$sql);
-                             mysqli_stmt_bind_param($stmt,"i",$depNum);
-                             mysqli_stmt_execute($stmt);
-                             $result=mysqli_stmt_get_result($stmt);
-                             $row = mysqli_fetch_assoc($result);
-                             $img = $row['img'];
-               			  
-               			  echo '
-               				<div class="col-md-6">
-               				  <div class="product-item">
-               					<a href="#"><img src="'.$img.'" alt=""></a>
-               				   <div class="down-content">
-               					<center><strong>('.$order_id.') <br>'.'</strong><small>('.$itemBarcode.')</small></center>
-               					 </div>
-               					  <br>
-               					  <div>
-               					  <ul>
-               					  <li><strong>Quantity:</strong>₪'.$qnt.'</li>
-                                    </ul>
-               					  </div>
-               					  <div>
-                             <form action="updateOrder.php" method="post">
-                             <input type="hidden" name="id" value="'.$ID.'">
-                             <fieldset>
-                             <button type="submit" name="" id="form-submit" class="btn btn-primary">isDone</button>
-                             </fieldset>
-                             </form>
-               					</div>
-               				  </div>
-               				</div>
-               			  ';
+
                			}
-               	}
-               
+                        
                else
-               			  echo 'You cant see here ';
+               			  echo 'Incorrect Session Details ';
                		  ?>
          </div>
       </div>
