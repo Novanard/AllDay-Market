@@ -37,21 +37,14 @@
       <header class="">
       <?php
       $supplierID=$_GET['id'];
-	session_start();
-	if(isset($_SESSION['email'])){
-		if($_SESSION['email'] === 'admin@allday.com'){
-			$target_dir = 'navbars/navadmin.php';
-			include ($target_dir);
-		}
-		else{
-			$target_dir = 'navbars/navuser.php';
-			include ($target_dir);
-		}
-	}
-	else{
-			$target_dir = 'navbars/navbar.php';
-			include ($target_dir);
-	}
+      session_start();
+      if(isset($_SESSION['email'])&& $_SESSION['userType']== 1){
+        $target_dir = 'navbars/navadmin.php';
+        include ($target_dir);
+      }
+      else{
+        header('Location:index.php');
+      }
 	
 ?>
 </header>

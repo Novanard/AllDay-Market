@@ -94,7 +94,7 @@
       </header>
       <!-- Page Content -->
       <?php
-      if(isset($_SESSION['email'])&& $_SESSION['email']=== 'admin@allday.com'){
+     if(isset($_SESSION['email'])&& $_SESSION['userType']== 1){
          echo '
          <div class="page-heading contact-heading header-text" style="background-image: url(assets/images/heading-4-1920x500.jpg);">
          <div class="container">

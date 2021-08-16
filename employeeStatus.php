@@ -45,7 +45,7 @@
                <div class="col-md-12">
                   <div class="text-content">
                      <h4>AllDay Market</h4>
-                     <h2>Employee Orders</h2>
+                     <h2>Employee Status</h2>
                   </div>
                </div>
             </div>
@@ -60,49 +60,80 @@
                   $eID = $_SESSION['eID'];
                            include 'db.php';
                            // To get the department number of the current employee
-                           $sql = "SELECT depNum FROM employees WHERE eID = ? LIMIT 1";
+                           $sql = "SELECT id FROM payroll_ids WHERE eID = ? AND isFinished = 0 LIMIT 1";
                            $stmt= mysqli_stmt_init($conn);
                            mysqli_stmt_prepare($stmt,$sql);
                            mysqli_stmt_bind_param($stmt,"i",$eID);
                            mysqli_stmt_execute($stmt);
                            $results=mysqli_stmt_get_result($stmt);
                             $row = mysqli_fetch_assoc($results);
-                            $depNum = $row['depNum'];
-                            //Getting all records where depNum matches the employee Dep
-                            //And the state of the order item is not finished
-                            $sql = "SELECT * FROM order_details WHERE depNum = ? AND isDone =0 ";
+                            $payroll_id = $row['id'];
+                            //Getting all the working days of the current payroll_id
+                            $sql = "SELECT * FROM payroll_details WHERE payroll_id = ? ";
                             $stmt= mysqli_stmt_init($conn);
                             mysqli_stmt_prepare($stmt,$sql);
-                            mysqli_stmt_bind_param($stmt,"i",$depNum);
+                            mysqli_stmt_bind_param($stmt,"i",$payroll_id);
                             mysqli_stmt_execute($stmt);
                             $results=mysqli_stmt_get_result($stmt);
+                            $day = 1;
                             while($row = mysqli_fetch_assoc($results))
                             {
-                               $orderID = $row['order_id'];
-                               $itemBarcode = $row['itemBarcode'];
-                               $quantity = $row['quantity'];
-                               $img = $row['img'];
+                               $id = $row['id'];
+                               $startTime = $row['startTime'];
+                               $endTime = $row['endTime'];
+                               $totalTime = $row['totalTime'];
+                               $payday = $row['payday'];
                                echo '
                                <div class="col-md-6">
                                <div class="product-item">
-                               <a href="#"><img src="'.$img.'" alt=""></a>
                                <div class="down-content">
-                               <a href="#"><h4>OrderID ~'.$orderID.'</h4></a>
+                               <a href="#"><h4>Day~'.$day.'</h4></a>
                                
-                               <h6><small>ItemBarcode: '.$itemBarcode.'<br></small>
-                               <h6><small> Quantity:'.$quantity.'</small>
-                               <br><br>
-                               <form action="updateOrder.php" method="post">
-                               <input type="hidden" name="barcode" value="'.$itemBarcode.'">
-                               <fieldset>
-                               <button type="submit" name="isDone" id="form-submit" class="btn btn-success">isDone</button>
-                               </fieldset>
-                               </form>
+                               <ol><li>StartTime: '.$startTime.'<br>
+                               <li>endTime: '.$endTime.'<br>
+                               <li>TotalTime: '.$totalTime.'<br>
+                               <li>Payday: '.$payday.'<br>
+
                                </div>
                                </div>
                                </div>
                                ';
-                               }
+                               $day+=1;
+                            }
+                               // Making sum of all current working days
+                               $sql = "SELECT SUM(payday) as totalPayday FROM payroll_details WHERE payroll_id = ? ";
+                               $stmt= mysqli_stmt_init($conn);
+                               mysqli_stmt_prepare($stmt,$sql);
+                               mysqli_stmt_bind_param($stmt,"i",$payroll_id);
+                               mysqli_stmt_execute($stmt);
+                               $results=mysqli_stmt_get_result($stmt);
+                               $row = mysqli_fetch_assoc($results);
+                               $totalPayday = $row['totalPayday'];
+                               // Making count of all working days
+                               $sql = "SELECT COUNT(payday) as totalDays FROM payroll_details WHERE payroll_id = ? ";
+                               $stmt= mysqli_stmt_init($conn);
+                               mysqli_stmt_prepare($stmt,$sql);
+                               mysqli_stmt_bind_param($stmt,"i",$payroll_id);
+                               mysqli_stmt_execute($stmt);
+                               $results=mysqli_stmt_get_result($stmt);
+                               $row = mysqli_fetch_assoc($results);
+                               $totalDays = $row['totalDays'];
+                               echo '
+                               <div class="col-md-6">
+                               <div class="product-item">
+                               <div class="down-content">
+                               <a href="#"><h4>Summary:</h4></a>
+                               <br>
+                               Total Work Days: '.$totalDays.'<br>
+                               Total Payday: '.$totalPayday.'
+
+
+
+                               </div>
+                               </div>
+                               </div>
+                               ';
+                               
 
 
                			}

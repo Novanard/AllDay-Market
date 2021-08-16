@@ -43,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     		session_start();
         $_SESSION['id']=$row['id'];
     		$_SESSION['email']=$row['email'];
+        $_SESSION['userType']=$row['userType'];
     		 header('Location:index.php');
     	}
     	else{
