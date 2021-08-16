@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.4
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 15, 2021 at 05:05 PM
--- Server version: 10.4.17-MariaDB
--- PHP Version: 7.3.26
+-- Generation Time: Aug 17, 2021 at 12:00 AM
+-- Server version: 10.4.19-MariaDB
+-- PHP Version: 7.3.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -34,16 +34,18 @@ CREATE TABLE `cart` (
   `price` int(11) NOT NULL,
   `qnt` int(11) NOT NULL,
   `itemBarcode` int(11) NOT NULL,
-  `img` varchar(256) NOT NULL
+  `depNum` tinyint(1) NOT NULL,
+  `img` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `cart`
 --
 
-INSERT INTO `cart` (`id`, `userID`, `name`, `price`, `qnt`, `itemBarcode`, `img`) VALUES
-(13, 2, 'Arabian Pita', 10, 2, 31, 'assets/images/Pita.jpg'),
-(14, 2, 'Cucmber', 4, 3, 12, 'assets/images/khear.png');
+INSERT INTO `cart` (`id`, `userID`, `name`, `price`, `qnt`, `itemBarcode`, `depNum`, `img`) VALUES
+(15, 2, 'Tomatoes', 4, 1, 11, 1, 'assets/images/items/bandora.png'),
+(16, 2, 'ChilliPepper', 5, 3, 14, 1, 'assets/images/items/pepper.png'),
+(17, 2, 'Oreo Cake', 150, 2, 33, 3, 'assets/images/items/oreo.jpg');
 
 -- --------------------------------------------------------
 
@@ -89,7 +91,7 @@ CREATE TABLE `employees` (
 --
 
 INSERT INTO `employees` (`id`, `eID`, `PIN`, `firstname`, `lastname`, `depNum`, `perhour`, `residence`, `avatar`) VALUES
-(1, 322470303, '2109', 'Ameen', 'Assadi', 2, 60, 'Deir El Assad', 'assets/images/employees/noPic.jpg');
+(1, 322470303, '2109', 'Ameen', 'Assadi', 1, 60, 'Deir El Assad', 'assets/images/employees/noPic.jpg');
 
 -- --------------------------------------------------------
 
@@ -146,8 +148,8 @@ CREATE TABLE `orders_id` (
 --
 
 INSERT INTO `orders_id` (`id`, `userID`, `date`) VALUES
-(19, 2, '2021-08-08 11:49:16'),
-(21, 2, '2021-08-08 12:17:36');
+(34, 2, '2021-08-16 10:24:45'),
+(35, 2, '2021-08-16 11:00:47');
 
 -- --------------------------------------------------------
 
@@ -158,9 +160,23 @@ INSERT INTO `orders_id` (`id`, `userID`, `date`) VALUES
 CREATE TABLE `order_details` (
   `id` int(11) NOT NULL,
   `itemBarcode` int(11) NOT NULL,
+  `depNum` tinyint(1) NOT NULL,
   `quantity` int(11) NOT NULL,
-  `order_id` int(11) NOT NULL
+  `order_id` int(11) NOT NULL,
+  `isDone` tinyint(1) DEFAULT 0,
+  `img` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `order_details`
+--
+
+INSERT INTO `order_details` (`id`, `itemBarcode`, `depNum`, `quantity`, `order_id`, `isDone`, `img`) VALUES
+(11, 14, 1, 2, 34, 1, 'assets/images/items/pepper.png'),
+(12, 13, 1, 3, 34, 1, 'assets/images/items/garlic.png'),
+(13, 11, 1, 1, 35, 0, 'assets/images/items/bandora.png'),
+(14, 14, 1, 3, 35, 0, 'assets/images/items/pepper.png'),
+(15, 33, 3, 2, 35, 0, 'assets/images/items/oreo.jpg');
 
 -- --------------------------------------------------------
 
@@ -176,6 +192,14 @@ CREATE TABLE `payroll_details` (
   `payday` int(11) DEFAULT NULL,
   `payroll_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `payroll_details`
+--
+
+INSERT INTO `payroll_details` (`id`, `startTime`, `endTime`, `totalTime`, `payday`, `payroll_id`) VALUES
+(22, '2021-08-15 20:06:27.000000', '2021-08-15 20:06:36.000000', 9, 540, 36),
+(23, '2021-08-16 09:10:34.000000', '2021-08-16 09:10:44.000000', 10, 600, 36);
 
 -- --------------------------------------------------------
 
@@ -195,8 +219,7 @@ CREATE TABLE `payroll_ids` (
 --
 
 INSERT INTO `payroll_ids` (`id`, `eID`, `payMonth`, `isFinished`) VALUES
-(33, 322470303, '2021-08-12', 1),
-(35, 322470303, '2021-09-12', 0);
+(36, 322470303, '2021-08-15', 0);
 
 -- --------------------------------------------------------
 
@@ -263,7 +286,8 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `userType`, `address`, `
 ALTER TABLE `cart`
   ADD PRIMARY KEY (`id`),
   ADD KEY `userID_fk` (`userID`) USING BTREE,
-  ADD KEY `itemBarcode` (`itemBarcode`);
+  ADD KEY `itemBarcode` (`itemBarcode`),
+  ADD KEY `depNum` (`depNum`);
 
 --
 -- Indexes for table `departments`
@@ -300,7 +324,8 @@ ALTER TABLE `orders_id`
 ALTER TABLE `order_details`
   ADD PRIMARY KEY (`id`),
   ADD KEY `orderID_fk` (`order_id`) USING BTREE,
-  ADD KEY `itemID_fk` (`itemBarcode`) USING BTREE;
+  ADD KEY `itemID_fk` (`itemBarcode`) USING BTREE,
+  ADD KEY `depNumForeign` (`depNum`);
 
 --
 -- Indexes for table `payroll_details`
@@ -343,7 +368,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `employees`
@@ -361,31 +386,31 @@ ALTER TABLE `items`
 -- AUTO_INCREMENT for table `orders_id`
 --
 ALTER TABLE `orders_id`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `order_details`
 --
 ALTER TABLE `order_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `payroll_details`
 --
 ALTER TABLE `payroll_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `payroll_ids`
 --
 ALTER TABLE `payroll_ids`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `shift`
 --
 ALTER TABLE `shift`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `suppliers`
@@ -407,8 +432,8 @@ ALTER TABLE `users`
 -- Constraints for table `cart`
 --
 ALTER TABLE `cart`
-  ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`itemBarcode`) REFERENCES `items` (`Barcode`),
-  ADD CONSTRAINT `userID_fk` FOREIGN KEY (`userID`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`itemBarcode`) REFERENCES `items` (`Barcode`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`depNum`) REFERENCES `departments` (`Num`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `employees`
@@ -432,8 +457,9 @@ ALTER TABLE `orders_id`
 -- Constraints for table `order_details`
 --
 ALTER TABLE `order_details`
+  ADD CONSTRAINT `depNumForeign` FOREIGN KEY (`depNum`) REFERENCES `departments` (`Num`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `orderID_fk` FOREIGN KEY (`order_id`) REFERENCES `orders_id` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `order_details_ibfk_1` FOREIGN KEY (`itemBarcode`) REFERENCES `items` (`Barcode`);
+  ADD CONSTRAINT `order_details_ibfk_1` FOREIGN KEY (`itemBarcode`) REFERENCES `items` (`Barcode`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `payroll_details`
