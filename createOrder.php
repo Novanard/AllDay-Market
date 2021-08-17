@@ -53,12 +53,29 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
         mysqli_stmt_prepare($stmt,$sql);
         mysqli_stmt_bind_param($stmt,"iiiis",$itemBarcode,$depNum,$quantity,$order_id,$img);
         mysqli_stmt_execute($stmt);
-		// Updating the quantity in the inventory
+		// Updating the quantity in the inventory 
 		$sql ="UPDATE items SET quantity = ? WHERE Barcode = ?";
 		$stmt = mysqli_stmt_init($conn);
 		mysqli_stmt_prepare($stmt,$sql);
 		$newQ = $qnt - $quantity;
 		mysqli_stmt_bind_param($stmt,"ii",$newQ,$itemBarcode);
+		mysqli_stmt_execute($stmt);
+		//Getting the current sellCount in order to increase it
+		$sql ="SELECT sellCount FROM items WHERE Barcode = ? LIMIT 1";
+		$stmt = mysqli_stmt_init($conn);
+		mysqli_stmt_prepare($stmt,$sql);
+		$newQ = $qnt - $quantity;
+		mysqli_stmt_bind_param($stmt,"i",$itemBarcode);
+		mysqli_stmt_execute($stmt);
+		$result = mysqli_stmt_get_result($stmt);
+		$row = mysqli_fetch_assoc($result);
+		$sellCount = $row['sellCount'];
+		//Updating the sellCount to the new one
+		$sellCount += $quantity;
+		$sql = "UPDATE items SET sellCount = ? WHERE Barcode = ?";
+		$stmt = mysqli_stmt_init($conn);
+		mysqli_stmt_prepare($stmt,$sql);
+		mysqli_stmt_bind_param($stmt,"ii",$sellCount,$itemBarcode);
 		mysqli_stmt_execute($stmt);
 		}
 		header('Location:finishOrder.php');

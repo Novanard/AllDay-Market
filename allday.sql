@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 17, 2021 at 12:00 AM
+-- Generation Time: Aug 17, 2021 at 04:30 PM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 7.3.28
 
@@ -44,8 +44,7 @@ CREATE TABLE `cart` (
 
 INSERT INTO `cart` (`id`, `userID`, `name`, `price`, `qnt`, `itemBarcode`, `depNum`, `img`) VALUES
 (15, 2, 'Tomatoes', 4, 1, 11, 1, 'assets/images/items/bandora.png'),
-(16, 2, 'ChilliPepper', 5, 3, 14, 1, 'assets/images/items/pepper.png'),
-(17, 2, 'Oreo Cake', 150, 2, 33, 3, 'assets/images/items/oreo.jpg');
+(16, 2, 'ChilliPepper', 5, 3, 14, 1, 'assets/images/items/pepper.png');
 
 -- --------------------------------------------------------
 
@@ -91,7 +90,8 @@ CREATE TABLE `employees` (
 --
 
 INSERT INTO `employees` (`id`, `eID`, `PIN`, `firstname`, `lastname`, `depNum`, `perhour`, `residence`, `avatar`) VALUES
-(1, 322470303, '2109', 'Ameen', 'Assadi', 1, 60, 'Deir El Assad', 'assets/images/employees/noPic.jpg');
+(1, 322470303, '2109', 'Ameen', 'Assadi', 1, 60, 'Deir El Assad', 'assets/images/employees/noPic.jpg'),
+(4, 450450450, NULL, 'Lionel ', 'Messi', 2, 50, 'Paris', 'assets/images/users/noPic.jpg');
 
 -- --------------------------------------------------------
 
@@ -106,30 +106,31 @@ CREATE TABLE `items` (
   `Department` tinyint(1) NOT NULL,
   `img` varchar(35) NOT NULL,
   `quantity` int(11) NOT NULL,
-  `supplierID` int(11) NOT NULL
+  `supplierID` int(11) NOT NULL,
+  `sellCount` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `items`
 --
 
-INSERT INTO `items` (`Barcode`, `Name`, `Price`, `Department`, `img`, `quantity`, `supplierID`) VALUES
-(11, 'Tomatoes', 4, 1, 'assets/images/items/bandora.png', 100, 0),
-(12, 'Cucmber', 4, 1, 'assets/images/items/khear.png', 100, 0),
-(13, 'Garlic', 4, 1, 'assets/images/items/garlic.png', 100, 0),
-(14, 'ChilliPepper', 5, 1, 'assets/images/items/pepper.png', 100, 0),
-(21, 'Laundry Machine', 1200, 2, 'assets/images/items/ghsale.png', 100, 0),
-(22, 'Small Heater', 600, 2, 'assets/images/items/sheater.png', 100, 0),
-(23, 'Heater', 800, 2, 'assets/images/items/heater.png', 100, 0),
-(24, 'Vaccum Cleaner', 450, 2, 'assets/images/items/sho2ev.png', 100, 0),
-(31, 'Arabian Pita', 10, 3, 'assets/images/items/Pita.jpg', 100, 0),
-(33, 'Oreo Cake', 150, 3, 'assets/images/items/oreo.jpg', 100, 0),
-(34, 'French Waffles', 30, 3, 'assets/images/items/waffle.jpg', 100, 0),
-(41, 'Sinta Meat', 110, 4, 'assets/images/items/sinta.jpg', 100, 0),
-(42, 'Tomhawk Steak', 300, 4, 'assets/images/items/Tomahawk.jpg', 100, 0),
-(43, 'Sheep Shoulder', 45, 4, 'assets/images/items/shoulder.jpg', 100, 0),
-(44, 'Entrecote Steak ', 50, 4, 'assets/images/items/entrecote.jpg', 100, 0),
-(52, 'Jewish Bread', 4, 3, 'assets/images/items/bread.jpg', 100, 0);
+INSERT INTO `items` (`Barcode`, `Name`, `Price`, `Department`, `img`, `quantity`, `supplierID`, `sellCount`) VALUES
+(11, 'Tomatoes', 4, 1, 'assets/images/items/bandora.png', 199, 0, 10),
+(12, 'Cucmber', 4, 1, 'assets/images/items/khear.png', 200, 0, 1),
+(13, 'Garlic', 4, 1, 'assets/images/items/garlic.png', 200, 0, 0),
+(14, 'ChilliPepper', 5, 1, 'assets/images/items/pepper.png', 197, 0, 5),
+(21, 'Laundry Machine', 1200, 2, 'assets/images/items/ghsale.png', 200, 0, 9),
+(22, 'Small Heater', 600, 2, 'assets/images/items/sheater.png', 200, 0, 1),
+(23, 'Heater', 800, 2, 'assets/images/items/heater.png', 200, 0, 3),
+(24, 'Vaccum Cleaner', 450, 2, 'assets/images/items/sho2ev.png', 200, 0, 2),
+(31, 'Arabian Pita', 10, 3, 'assets/images/items/Pita.jpg', 200, 0, 0),
+(33, 'Oreo Cake', 150, 3, 'assets/images/items/oreo.jpg', 200, 0, 0),
+(34, 'French Waffles', 30, 3, 'assets/images/items/waffle.jpg', 200, 0, 0),
+(41, 'Sinta Meat', 110, 4, 'assets/images/items/sinta.jpg', 200, 0, 0),
+(42, 'Tomhawk Steak', 300, 4, 'assets/images/items/Tomahawk.jpg', 200, 0, 0),
+(43, 'Sheep Shoulder', 45, 4, 'assets/images/items/shoulder.jpg', 200, 0, 0),
+(44, 'Entrecote Steak ', 50, 4, 'assets/images/items/entrecote.jpg', 200, 0, 0),
+(52, 'Jewish Bread', 4, 3, 'assets/images/items/bread.jpg', 200, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -148,8 +149,7 @@ CREATE TABLE `orders_id` (
 --
 
 INSERT INTO `orders_id` (`id`, `userID`, `date`) VALUES
-(34, 2, '2021-08-16 10:24:45'),
-(35, 2, '2021-08-16 11:00:47');
+(40, 2, '2021-08-17 11:30:52');
 
 -- --------------------------------------------------------
 
@@ -172,11 +172,8 @@ CREATE TABLE `order_details` (
 --
 
 INSERT INTO `order_details` (`id`, `itemBarcode`, `depNum`, `quantity`, `order_id`, `isDone`, `img`) VALUES
-(11, 14, 1, 2, 34, 1, 'assets/images/items/pepper.png'),
-(12, 13, 1, 3, 34, 1, 'assets/images/items/garlic.png'),
-(13, 11, 1, 1, 35, 0, 'assets/images/items/bandora.png'),
-(14, 14, 1, 3, 35, 0, 'assets/images/items/pepper.png'),
-(15, 33, 3, 2, 35, 0, 'assets/images/items/oreo.jpg');
+(24, 11, 1, 1, 40, 0, 'assets/images/items/bandora.png'),
+(25, 14, 1, 3, 40, 0, 'assets/images/items/pepper.png');
 
 -- --------------------------------------------------------
 
@@ -199,7 +196,8 @@ CREATE TABLE `payroll_details` (
 
 INSERT INTO `payroll_details` (`id`, `startTime`, `endTime`, `totalTime`, `payday`, `payroll_id`) VALUES
 (22, '2021-08-15 20:06:27.000000', '2021-08-15 20:06:36.000000', 9, 540, 36),
-(23, '2021-08-16 09:10:34.000000', '2021-08-16 09:10:44.000000', 10, 600, 36);
+(23, '2021-08-16 09:10:34.000000', '2021-08-16 09:10:44.000000', 10, 600, 36),
+(24, '2021-08-17 09:13:36.000000', '2021-08-17 09:13:43.000000', 7, 420, 36);
 
 -- --------------------------------------------------------
 
@@ -374,7 +372,7 @@ ALTER TABLE `cart`
 -- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `items`
@@ -386,19 +384,19 @@ ALTER TABLE `items`
 -- AUTO_INCREMENT for table `orders_id`
 --
 ALTER TABLE `orders_id`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `order_details`
 --
 ALTER TABLE `order_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `payroll_details`
 --
 ALTER TABLE `payroll_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `payroll_ids`
@@ -410,7 +408,7 @@ ALTER TABLE `payroll_ids`
 -- AUTO_INCREMENT for table `shift`
 --
 ALTER TABLE `shift`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `suppliers`
@@ -478,6 +476,14 @@ ALTER TABLE `payroll_ids`
 --
 ALTER TABLE `shift`
   ADD CONSTRAINT `shift_ibfk_1` FOREIGN KEY (`eID`) REFERENCES `employees` (`eID`);
+
+DELIMITER $$
+--
+-- Events
+--
+CREATE DEFINER=`root`@`localhost` EVENT `update_sellcount` ON SCHEDULE EVERY 7 DAY STARTS '2021-08-17 14:27:59' ON COMPLETION NOT PRESERVE ENABLE DO UPDATE items SET sellCount =0$$
+
+DELIMITER ;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
