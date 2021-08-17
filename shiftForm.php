@@ -196,21 +196,14 @@
       <!-- ***** Preloader End ***** -->
       <!-- Header -->
       <header class="">
-         <?php
+      <?php
             session_start();
-            if(isset($_SESSION['email'])){
-            	if($_SESSION['email'] === 'admin@allday.com'){
-            $basedir = realpath(__DIR__);
-            		include($basedir . '/navbars/navadmin.php');
-            	}
-            	else{
-            $basedir = realpath(__DIR__);
-            		include($basedir . '/navbars/navuser.php');
-            	}
+            if(isset($_SESSION['eID'])){
+                $basedir = realpath(__DIR__);
+                include($basedir . '/navbars/navEmployee.php');
             }
             else{
-            $basedir = realpath(__DIR__);
-            include($basedir . '/navbars/nav.php');
+                header('Location:index.php');
             }
             
             ?>

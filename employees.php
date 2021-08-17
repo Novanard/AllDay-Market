@@ -52,7 +52,7 @@
                <div class="col-md-12">
                   <div class="text-content">
                      <h4>AllDay Market</h4>
-                     <h2>Employees</h2>
+                     <h2>Employees ~ MAKE SETPIN btn</h2>
                   </div>
                </div>
             </div>
