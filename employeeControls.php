@@ -66,25 +66,21 @@
             <div class="row">
                <div class="col-md-12">
                   <div class="section-heading">
-                     <h2>Admin Control Panel </h2>
+                     <h2>Admin Panel ~ Employee Controls </h2>
                   </div>
                </div>
                <div class="col-md-8">
                   <br><br><br>
-                  <a href="itemControls.php"><input  class="btn btn-danger"type="submit" value="Items Controls"></a>
-                  <a href="employeeControls.php"><input  class="btn btn-danger"type="submit" value="Employees Controls"></a>
-                  <a href="addSupplierForm.php"><input  class="btn btn-danger"type="submit" value="Supplier Controls"></a>
+                  <a href="addEmployeeForm.php"><input  class="btn btn-danger"type="submit" value="Add Employee"></a>
+                  <a href="employeeStatics.php"><input  class="btn btn-danger"type="submit" value="Employee Statics"></a>
                </div>
                <div class="col-md-4">
-                  <img src="assets/images/adnan.jpeg" class="img-fluid" alt="">
-                  <h5 class="text-center" style="margin-top: 15px;">
-                     Website Manager <br> Adnan Hourani<br><br>
-                     <form action="logout.php" method="post">
-                        <button class="btn btn-danger" type="submit">Log-Out</button>
-                     </form>
-                  </h5>
-                  <br>
-               </div>
+
+       <br><br><br>
+       <a href="adminCp.php"><button class="btn btn-danger" type="submit">Back to Control Panel</button></a>
+       </h5>
+       <br>
+           </div>
             </div>
          </div>
       </div>

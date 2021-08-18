@@ -28,73 +28,69 @@
       <header class="">
          <?php
             session_start();
-            if(isset($_SESSION['email'])){
+            if(isset($_SESSION['email'])&& $_SESSION['userType']== 1){
             	if($_SESSION['email'] === 'admin@allday.com'){
             $basedir = realpath(__DIR__);
             		include($basedir . '/navbars/navadmin.php');
             	}
-            	else{
-            $basedir = realpath(__DIR__);
-            		include($basedir . '/navbars/navuser.php');
-            	}
             }
             else{
-            $basedir = realpath(__DIR__);
-            include($basedir . '/navbars/nav.php');
+                    header('Location:index.php');
             }
             
             ?>
       </header>
       <!-- Page Content -->
-      <?php
-     if(isset($_SESSION['email'])&& $_SESSION['userType']== 1){
-         echo '
-         <div class="page-heading contact-heading header-text" style="background-image: url(assets/images/heading-4-1920x500.jpg);">
+      <div class="page-heading about-heading header-text" style="background-image: url(assets/images/items/veghs.png);">
          <div class="container">
             <div class="row">
                <div class="col-md-12">
                   <div class="text-content">
-                     <h4>AllDay ~ Market</h4>
-                     <h2>Admin Panel</h2>
+                     <h4>AllDay Market</h4>
+                     <h2>Employees</h2>
                   </div>
                </div>
             </div>
          </div>
       </div>
-      <div class="send-message">
-         <div class="container">
-            <div class="row">
-               <div class="col-md-12">
-                  <div class="section-heading">
-                     <h2>Admin Control Panel </h2>
-                  </div>
-               </div>
-               <div class="col-md-8">
-                  <br><br><br>
-                  <a href="itemControls.php"><input  class="btn btn-danger"type="submit" value="Items Controls"></a>
-                  <a href="employeeControls.php"><input  class="btn btn-danger"type="submit" value="Employees Controls"></a>
-                  <a href="addSupplierForm.php"><input  class="btn btn-danger"type="submit" value="Supplier Controls"></a>
-               </div>
-               <div class="col-md-4">
-                  <img src="assets/images/adnan.jpeg" class="img-fluid" alt="">
-                  <h5 class="text-center" style="margin-top: 15px;">
-                     Website Manager <br> Adnan Hourani<br><br>
-                     <form action="logout.php" method="post">
-                        <button class="btn btn-danger" type="submit">Log-Out</button>
-                     </form>
-                  </h5>
-                  <br>
-               </div>
-            </div>
+      <div class="col-md-9">
+         <div class="row">
+            <?php 
+               mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+               include 'db.php';
+               // Getting all the records of the employees
+               $sql = "SELECT * FROM employees";
+               $stmt= mysqli_stmt_init($conn);
+               mysqli_stmt_prepare($stmt,$sql);
+               mysqli_stmt_execute($stmt);
+               $results=mysqli_stmt_get_result($stmt);
+               while($row = mysqli_fetch_assoc($results)){
+               $eID = $row['eID'];
+               // Getting the current payroll_id of the current month
+               $sql = "SELECT id from payroll_ids WHERE eID = ? AND isFinished = 0 LIMIT 1";
+               mysqli_stmt_init($conn);
+               mysqli_stmt_prepare($stmt,$sql);
+               mysqli_stmt_bind_param($stmt,"i",$eID);
+               mysqli_stmt_execute($stmt);
+                if($res = mysqli_stmt_get_result($stmt)){
+                $row=mysqli_fetch_assoc($res);
+                $payroll_id =$row['id'];}
+                // Getting the sum of total shift times per employee and saving the lowest and the biggest one
+                $low =0,$high=0;
+                $sql = "SELECT MAX(SUM(totalTime)) as sumTotal from payroll_details WHERE payroll_id = ?";
+                mysqli_stmt_init($conn);
+                mysqli_stmt_prepare($stmt,$sql);
+                mysqli_stmt_bind_param($stmt,"i",$payroll_id);
+                mysqli_stmt_execute($stmt);
+                $res = mysqli_stmt_get_result($stmt);
+                $row = mysqli_fetch_assoc($res);
+                $sumTotal = $row['sumTotal'];
+                if()
+               
+            }  
+                       ?>
          </div>
       </div>
-      </div>
-      </div>' ;
-      }
-      else 
-      header('Location:index.php');
-      ?>
- 
       <footer>
          <div class="container">
             <div class="row">

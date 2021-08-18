@@ -41,13 +41,13 @@
             ?>
       </header>
       <!-- Page Content -->
-      <div class="page-heading about-heading header-text" style="background-image: url(assets/images/veghs.png);">
+      <div class="page-heading about-heading header-text" style="background-image: url(assets/images/items/veghs.png);">
          <div class="container">
             <div class="row">
                <div class="col-md-12">
                   <div class="text-content">
                      <h4>AllDay Market</h4>
-                     <h2>Employees ~ MAKE SETPIN btn</h2>
+                     <h2>Employees </h2>
                   </div>
                </div>
             </div>
@@ -57,63 +57,312 @@
          <div class="row">
             <?php 
                mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-                           include 'db.php';
-                           // Selecting barcode, name and the highest sellCount in Vegehtables department
-                           $sql = "SELECT Barcode,Name,MAX(sellCount) as MaxSold,img FROM items WHERE Department =1 LIMIT 1";
-                           $stmt= mysqli_stmt_init($conn);
-                           mysqli_stmt_prepare($stmt,$sql);
-                           mysqli_stmt_execute($stmt);
-                           $results=mysqli_stmt_get_result($stmt);
-                           $row = mysqli_fetch_assoc($results);
-                           $barcode = $row['Barcode'];
-                           $name = $row['Name'];
-                           $sellCount = $row['MaxSold'];
-                           $img = $row['img'];
-                           echo'               		
-                           <div class="col-md-6">
-                   <div class="product-item">
-                    <center> <h6> Most selling in Vegehtables</h6><br>
-                    <img src="'.$img.'" alt="">
-                    <div class="down-content">
-                     <center><strong>'.$name.'</strong><small>('.$barcode.')</small></center>
-                      </div>
-                       <br>
-                       <div>
-                        This is the highest selling item with a total of:  <strong>'.$sellCount.' KGs.</strong>
-                       </div>
-                       <div>
-                     </div>
-                   </div>
-                 </div>';   
-                 $sql = "SELECT Barcode,Name,MIN(sellCount) as MinSold,img FROM items WHERE Department =1 LIMIT 1";
-                 $stmt= mysqli_stmt_init($conn);
-                 mysqli_stmt_prepare($stmt,$sql);
-                 mysqli_stmt_execute($stmt);
-                 $results=mysqli_stmt_get_result($stmt);
-                 $row = mysqli_fetch_assoc($results);
-                 $barcode = $row['Barcode'];
-                 $name = $row['Name'];
-                 $img = $row['img'];
-                 $sellCount = $row['MinSold'];
-
-                 echo'               		
-                 <div class="col-md-6">
-         <div class="product-item">
-          <center> <h6> Lowest selling in Vegehtables</h6><br>
-          <img src="'.$img.'" alt="">
-          <div class="down-content">
-           <center><strong>'.$name.'</strong><small>('.$barcode.')</small></center>
-            </div>
-             <br>
-             <div>
-              This is the lowest selling item with a total of:  <strong>'.$sellCount.' KGs.</strong>
-             </div>
-             <div>
-           </div>
-         </div>
-       </div>';  
-                        
-                        ?>
+               include 'db.php';
+               // Selecting the highest sellCount in Vegehtables department
+               $sql = "SELECT MAX(sellCount) as MaxSold FROM items WHERE Department =1 LIMIT 1";
+               $stmt= mysqli_stmt_init($conn);
+               mysqli_stmt_prepare($stmt,$sql);
+               mysqli_stmt_execute($stmt);
+               $results=mysqli_stmt_get_result($stmt);
+               $row = mysqli_fetch_assoc($results);
+               $sellCount = $row['MaxSold'];
+               //Getting all the products who where sold at the maximum price incase there are more than one record
+               $sql ="SELECT * from items WHERE sellCount = ? AND Department = 1";
+               mysqli_stmt_init($conn);
+               mysqli_stmt_prepare($stmt,$sql);
+               mysqli_stmt_bind_param($stmt,"i",$sellCount);
+               mysqli_stmt_execute($stmt);
+               $results = mysqli_stmt_get_result($stmt);
+               while($row = mysqli_fetch_assoc($results))
+               {
+                  $barcode = $row['Barcode'];
+                  $name = $row['Name'];
+                  $img = $row['img'];
+               echo'               		
+               <div class="col-md-6">
+               <div class="product-item">
+               <center> <h4> Most selling in <strong>Vegehtables</strong></h4><br>
+               <img src="'.$img.'" alt="">
+               <div class="down-content">
+               <center><strong>'.$name.'</strong><small>('.$barcode.')</small></center>
+               </div>
+               <br>
+               <div>
+               This is the highest selling item with a total of:  <strong>'.$sellCount.' KGs.</strong>
+               </div>
+               <div>
+               </div>
+               </div>
+               </div>
+               ';  
+               }
+                    // Selecting the lowest sellCount in Vegehtables department
+               $sql = "SELECT MIN(sellCount) as MinSold FROM items WHERE Department =1 LIMIT 1";
+               $stmt= mysqli_stmt_init($conn);
+               mysqli_stmt_prepare($stmt,$sql);
+               mysqli_stmt_execute($stmt);
+               $results=mysqli_stmt_get_result($stmt);
+               $row = mysqli_fetch_assoc($results);
+               $sellCount = $row['MinSold'];
+               //Getting all the products who where sold at the minimum price incase there are more than one record
+               $sql ="SELECT * from items WHERE sellCount = ? AND Department =1";
+               mysqli_stmt_init($conn);
+               mysqli_stmt_prepare($stmt,$sql);
+               mysqli_stmt_bind_param($stmt,"i",$sellCount);
+               mysqli_stmt_execute($stmt);
+               $results = mysqli_stmt_get_result($stmt);
+               while($row = mysqli_fetch_assoc($results))
+               {
+                  $barcode = $row['Barcode'];
+                  $name = $row['Name'];
+                  $img = $row['img'];
+               echo'               		
+               <div class="col-md-6">
+               <div class="product-item">
+               <center> <h4> Lowest selling in <strong>Vegehtables</strong></h4><br>
+               <img src="'.$img.'" alt="">
+               <div class="down-content">
+               <center><strong>'.$name.'</strong><small>('.$barcode.')</small></center>
+               </div>
+               <br>
+               <div>
+               This is the lowest selling item with a total of:  <strong>'.$sellCount.' KGs.</strong>
+               </div>
+               <div>
+               </div>
+               </div>
+               </div>
+               ';  
+               }  
+                     // Selecting the highest sellCount in HomeTools department
+                     $sql = "SELECT MAX(sellCount) as MaxSold FROM items WHERE Department =2 LIMIT 1";
+                     $stmt= mysqli_stmt_init($conn);
+                     mysqli_stmt_prepare($stmt,$sql);
+                     mysqli_stmt_execute($stmt);
+                     $results=mysqli_stmt_get_result($stmt);
+                     $row = mysqli_fetch_assoc($results);
+                     $sellCount = $row['MaxSold'];
+                     //Getting all the products who where sold at the maximum price incase there are more than one record
+                     $sql ="SELECT * from items WHERE sellCount = ? AND Department = 2";
+                     mysqli_stmt_init($conn);
+                     mysqli_stmt_prepare($stmt,$sql);
+                     mysqli_stmt_bind_param($stmt,"i",$sellCount);
+                     mysqli_stmt_execute($stmt);
+                     $results = mysqli_stmt_get_result($stmt);
+                     while($row = mysqli_fetch_assoc($results))
+                     {
+                        $barcode = $row['Barcode'];
+                        $name = $row['Name'];
+                        $img = $row['img'];
+                     echo'               		
+                     <div class="col-md-6">
+               <div class="product-item">
+               <center> <h4> Most selling in <strong>Home Tools</strong></h4><br>
+               <img src="'.$img.'" alt="">
+               <div class="down-content">
+               <center><strong>'.$name.'</strong><small>('.$barcode.')</small></center>
+                </div>
+                 <br>
+                 <div>
+                  This is the highest selling item with a total of:  <strong>'.$sellCount.' units.</strong>
+                 </div>
+                 <div>
+               </div>
+               </div>
+               </div>';  
+                     }
+                          // Selecting the lowest sellCount in HomeTools department
+                     $sql = "SELECT MIN(sellCount) as MinSold FROM items WHERE Department =2 LIMIT 1";
+                     $stmt= mysqli_stmt_init($conn);
+                     mysqli_stmt_prepare($stmt,$sql);
+                     mysqli_stmt_execute($stmt);
+                     $results=mysqli_stmt_get_result($stmt);
+                     $row = mysqli_fetch_assoc($results);
+                     $sellCount = $row['MinSold'];
+                     //Getting all the products who where sold at the minimum price incase there are more than one record
+                     $sql ="SELECT * from items WHERE sellCount = ? AND Department =2";
+                     mysqli_stmt_init($conn);
+                     mysqli_stmt_prepare($stmt,$sql);
+                     mysqli_stmt_bind_param($stmt,"i",$sellCount);
+                     mysqli_stmt_execute($stmt);
+                     $results = mysqli_stmt_get_result($stmt);
+                     while($row = mysqli_fetch_assoc($results))
+                     {
+                        $barcode = $row['Barcode'];
+                        $name = $row['Name'];
+                        $img = $row['img'];
+                     echo'               		
+                     <div class="col-md-6">
+               <div class="product-item">
+               <center> <h4> Lowest selling in <strong>Home Tools</strong></h4><br>
+               <img src="'.$img.'" alt="">
+               <div class="down-content">
+               <center><strong>'.$name.'</strong><small>('.$barcode.')</small></center>
+                </div>
+                 <br>
+                 <div>
+                  This is the lowest selling item with a total of:  <strong>'.$sellCount.' Units.</strong>
+                 </div>
+                 <div>
+               </div>
+               </div>
+               </div>';  
+                     } 
+                     // Selecting the highest sellCount in Bakery department
+                     $sql = "SELECT MAX(sellCount) as MaxSold FROM items WHERE Department =3 LIMIT 1";
+                     $stmt= mysqli_stmt_init($conn);
+                     mysqli_stmt_prepare($stmt,$sql);
+                     mysqli_stmt_execute($stmt);
+                     $results=mysqli_stmt_get_result($stmt);
+                     $row = mysqli_fetch_assoc($results);
+                     $sellCount = $row['MaxSold'];
+                     if($sellCount>0){
+                     //Getting all the products who where sold at the maximum price incase there are more than one record
+                     $sql ="SELECT * from items WHERE sellCount = ? AND Department = 3";
+                     mysqli_stmt_init($conn);
+                     mysqli_stmt_prepare($stmt,$sql);
+                     mysqli_stmt_bind_param($stmt,"i",$sellCount);
+                     mysqli_stmt_execute($stmt);
+                     $results = mysqli_stmt_get_result($stmt);
+                     while($row = mysqli_fetch_assoc($results))
+                     {
+                        $barcode = $row['Barcode'];
+                        $name = $row['Name'];
+                        $img = $row['img'];
+                     echo'               		
+                     <div class="col-md-6">
+               <div class="product-item">
+               <center> <h4> Most selling in <strong>Bakerys</strong></h4><br>
+               <img src="'.$img.'" alt="">
+               <div class="down-content">
+               <center><strong>'.$name.'</strong><small>('.$barcode.')</small></center>
+                </div>
+                 <br>
+                 <div>
+                  This is the highest selling item with a total of:  <strong>'.$sellCount.' pcs.</strong>
+                 </div>
+                 <div>
+               </div>
+               </div>
+               </div>';  
+                     }
+                    }
+                          // Selecting the lowest sellCount in Bakery department
+                     $sql = "SELECT MIN(sellCount) as MinSold FROM items WHERE Department =3 LIMIT 1";
+                     $stmt= mysqli_stmt_init($conn);
+                     mysqli_stmt_prepare($stmt,$sql);
+                     mysqli_stmt_execute($stmt);
+                     $results=mysqli_stmt_get_result($stmt);
+                     $row = mysqli_fetch_assoc($results);
+                     $sellCount = $row['MinSold'];
+                     //Getting all the products who where sold at the minimum price incase there are more than one record
+                     $sql ="SELECT * from items WHERE sellCount = ? AND Department =3";
+                     mysqli_stmt_init($conn);
+                     mysqli_stmt_prepare($stmt,$sql);
+                     mysqli_stmt_bind_param($stmt,"i",$sellCount);
+                     mysqli_stmt_execute($stmt);
+                     $results = mysqli_stmt_get_result($stmt);
+                     while($row = mysqli_fetch_assoc($results))
+                     {
+                        $barcode = $row['Barcode'];
+                        $name = $row['Name'];
+                        $img = $row['img'];
+                     echo'               		
+                     <div class="col-md-6">
+               <div class="product-item">
+               <center> <h4> Lowest selling in <strong>Bakery</strong></h4><br>
+               <img src="'.$img.'" alt="">
+               <div class="down-content">
+               <center><strong>'.$name.'</strong><small>('.$barcode.')</small></center>
+                </div>
+                 <br>
+                 <div>
+                  This is the lowest selling item with a total of:  <strong>'.$sellCount.' PCs.</strong>
+                 </div>
+                 <div>
+               </div>
+               </div>
+               </div>';  
+                     } 
+                          // Selecting the highest sellCount in Vegehtables department
+               $sql = "SELECT MAX(sellCount) as MaxSold FROM items WHERE Department =4 LIMIT 1";
+               $stmt= mysqli_stmt_init($conn);
+               mysqli_stmt_prepare($stmt,$sql);
+               mysqli_stmt_execute($stmt);
+               $results=mysqli_stmt_get_result($stmt);
+               $row = mysqli_fetch_assoc($results);
+               $sellCount = $row['MaxSold'];
+               if($sellCount >0){
+               //Getting all the products who where sold at the maximum price incase there are more than one record
+               $sql ="SELECT * from items WHERE sellCount = ? AND Department = 4";
+               mysqli_stmt_init($conn);
+               mysqli_stmt_prepare($stmt,$sql);
+               mysqli_stmt_bind_param($stmt,"i",$sellCount);
+               mysqli_stmt_execute($stmt);
+               $results = mysqli_stmt_get_result($stmt);
+               while($row = mysqli_fetch_assoc($results))
+               {
+                  $barcode = $row['Barcode'];
+                  $name = $row['Name'];
+                  $img = $row['img'];
+               echo'               		
+               <div class="col-md-6">
+               <div class="product-item">
+               <center> <h4> Most selling in <strong>Butchery</strong></h4><br>
+               <img src="'.$img.'" alt="">
+               <div class="down-content">
+               <center><strong>'.$name.'</strong><small>('.$barcode.')</small></center>
+               </div>
+               <br>
+               <div>
+               This is the highest selling item with a total of:  <strong>'.$sellCount.' KGs.</strong>
+               </div>
+               <div>
+               </div>
+               </div>
+               </div>
+               ';      }
+               }
+                                // Selecting the lowest sellCount in Butchery department
+                                  $sql = "SELECT MIN(sellCount) as MinSold FROM items WHERE Department =4 LIMIT 1";
+                                    $stmt= mysqli_stmt_init($conn);
+                                    mysqli_stmt_prepare($stmt,$sql);
+                                    mysqli_stmt_execute($stmt);
+                                    $results=mysqli_stmt_get_result($stmt);
+                                    $row = mysqli_fetch_assoc($results);
+                                    $sellCount = $row['MinSold'];
+                                    //Getting all the products who where sold at the minimum price incase there are more than one record
+                                    $sql ="SELECT * from items WHERE sellCount = ? AND Department =4";
+                                    mysqli_stmt_init($conn);
+                                    mysqli_stmt_prepare($stmt,$sql);
+                                    mysqli_stmt_bind_param($stmt,"i",$sellCount);
+                                    mysqli_stmt_execute($stmt);
+                                    $results = mysqli_stmt_get_result($stmt);
+                                    while($row = mysqli_fetch_assoc($results))
+                                    {
+                                       $barcode = $row['Barcode'];
+                                       $name = $row['Name'];
+                                       $img = $row['img'];
+                                    echo'               		
+                                    <div class="col-md-6">
+                            <div class="product-item">
+                             <center> <h4> Lowest selling in <strong>Butchery</strong></h4><br>
+                             <img src="'.$img.'" alt="">
+                             <div class="down-content">
+                              <center><strong>'.$name.'</strong><small>('.$barcode.')</small></center>
+                               </div>
+                                <br>
+                                <div>
+                                 This is the lowest selling item with a total of:  <strong>'.$sellCount.' KGs.</strong>
+                                </div>
+                                <div>
+                              </div>
+                            </div>
+                          </div>
+                          ';  
+                                    }  
+                   
+                       ?>
          </div>
       </div>
       <footer>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 17, 2021 at 04:30 PM
+-- Generation Time: Aug 18, 2021 at 03:21 PM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 7.3.28
 
@@ -90,8 +90,7 @@ CREATE TABLE `employees` (
 --
 
 INSERT INTO `employees` (`id`, `eID`, `PIN`, `firstname`, `lastname`, `depNum`, `perhour`, `residence`, `avatar`) VALUES
-(1, 322470303, '2109', 'Ameen', 'Assadi', 1, 60, 'Deir El Assad', 'assets/images/employees/noPic.jpg'),
-(4, 450450450, NULL, 'Lionel ', 'Messi', 2, 50, 'Paris', 'assets/images/users/noPic.jpg');
+(1, 322470303, '2109', 'Ameen', 'Assadi', 1, 60, 'Deir El Assad', 'assets/images/employees/noPic.jpg');
 
 -- --------------------------------------------------------
 
@@ -116,9 +115,9 @@ CREATE TABLE `items` (
 
 INSERT INTO `items` (`Barcode`, `Name`, `Price`, `Department`, `img`, `quantity`, `supplierID`, `sellCount`) VALUES
 (11, 'Tomatoes', 4, 1, 'assets/images/items/bandora.png', 199, 0, 10),
-(12, 'Cucmber', 4, 1, 'assets/images/items/khear.png', 200, 0, 1),
+(12, 'Cucmber', 4, 1, 'assets/images/items/khear.png', 200, 0, 10),
 (13, 'Garlic', 4, 1, 'assets/images/items/garlic.png', 200, 0, 0),
-(14, 'ChilliPepper', 5, 1, 'assets/images/items/pepper.png', 197, 0, 5),
+(14, 'ChilliPepper', 5, 1, 'assets/images/items/pepper.png', 197, 0, 0),
 (21, 'Laundry Machine', 1200, 2, 'assets/images/items/ghsale.png', 200, 0, 9),
 (22, 'Small Heater', 600, 2, 'assets/images/items/sheater.png', 200, 0, 1),
 (23, 'Heater', 800, 2, 'assets/images/items/heater.png', 200, 0, 3),
