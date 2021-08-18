@@ -43,7 +43,7 @@
                 }
                 if(is_null($avatar))
                 {
-                  $sql = "UPDATE employees set avatar = 'assets/images/users/noPic.jpg' WHERE eID = ?; ";
+                  $sql = "UPDATE employees set avatar = 'assets/images/employees/noPic.jpg' WHERE eID = ?; ";
                   $stmt= mysqli_stmt_init($conn);
                   mysqli_stmt_prepare($stmt,$sql);
                   mysqli_stmt_bind_param($stmt,"i",$eID);

@@ -47,6 +47,11 @@
             		include($basedir . '/navbars/navuser.php');
             	}
             }
+            if(isset($_SESSION['eID'])){
+              $basedir = realpath(__DIR__);
+              include($basedir . '/navbars/navEmployee.php');
+
+            }
             else{
 				$basedir = realpath(__DIR__);
 				include($basedir . '/navbars/nav.php');

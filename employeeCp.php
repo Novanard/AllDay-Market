@@ -15,6 +15,33 @@
       <link rel="stylesheet" href="assets/css/owl.css">
    </head>
    <body>
+      <?php
+         session_start();
+         if(isset($_SESSION['eID'])){
+         $eID = $_SESSION['eID'];
+         if (isset($_POST['submit'])) {
+         include 'db.php';
+         $type = (explode('.', $_FILES['ePhoto']['name']));
+         $tmp_name = $_FILES['ePhoto']['tmp_name'];
+         $name = $_FILES['ePhoto']['name'];
+         $target_dir = 'assets/images/employees/';
+         $type = end($type);
+         $allowed = ['png','jpg'];
+         if(in_array($type, $allowed)){
+         $target_file = $target_dir . basename($_FILES["ePhoto"]["name"]);
+         move_uploaded_file($tmp_name, $target_file);
+         $sql = "UPDATE employees SET avatar = ? WHERE eID = ?;";
+         $stmt= mysqli_stmt_init($conn);
+          mysqli_stmt_prepare($stmt,$sql);
+          mysqli_stmt_bind_param($stmt,"si",$target_file,$eID);
+          mysqli_stmt_execute($stmt);
+            }
+         else
+         $uploadError = 'This type isnt allowed!';	
+         
+         }
+         }
+         ?>
       <!-- ***** Preloader Start ***** -->
       <div id="preloader">
          <div class="jumper">
@@ -27,15 +54,27 @@
       <!-- Header -->
       <header class="">
          <?php
-            session_start();
             if(isset($_SESSION['eID'])){
+               include 'db.php';
+               $eID = $_SESSION['eID'];
                 $basedir = realpath(__DIR__);
                 include($basedir . '/navbars/navEmployee.php');
-                $avatar = $_SESSION['avatar'];
+                //Getting the employee avatar
+                $sql = "SELECT avatar from employees WHERE eID = ? LIMIT 1";
+                $stmt = mysqli_stmt_init($conn);
+                mysqli_stmt_prepare($stmt,$sql);
+                mysqli_stmt_bind_param($stmt,"i",$eID);
+                mysqli_stmt_execute($stmt);
+                $res = mysqli_stmt_get_result($stmt);
+                $row = mysqli_fetch_assoc($res);
+                $avatar = $row['avatar'];
             }
             else{
                 header('Location:index.php');
             }
+            
+            
+            
             
             ?>
       </header>
@@ -67,11 +106,25 @@
                   <a href="shiftForm.php"><input  class="btn btn-danger"type="submit"  value="Shift Controls"></a>
                </div>
                <div class="col-md-4">
-                 <img src=" <?php echo($avatar); ?> " class="img-fluid" alt="">  
+                  <center><img src=" <?php echo($avatar); ?> " height="370px" width="270px" class="img-fluid" alt=""></center> 
                   <h5 class="text-center" style="margin-top: 15px;">
-                     <?php echo('Employee:' .$_SESSION['firstname'] .'&nbsp' .$_SESSION['lastname']); ?>
+                     <center><?php echo('Employee:' .$_SESSION['firstname'] .'&nbsp' .$_SESSION['lastname']); ?><center>
                      <form action="logout.php" method="post">
                         <button class="btn btn-danger" type="submit">Log-Out</button>
+                     </form>
+                     <br><br>
+                     <form action="employeeCp.php" method="post" enctype="multipart/form-data">
+                        <div>
+                           <fieldset>
+                              <input type="file" name="ePhoto" id="ePhoto" required="">
+                           </fieldset>
+                        </div>
+                        <div >
+                           <fieldset>
+                              <br>
+                              <button type="submit" name="submit" class="btn btn-success" value="Submit">Upload Photo</button>
+                           </fieldset>
+                        </div>
                      </form>
                   </h5>
                   <br>

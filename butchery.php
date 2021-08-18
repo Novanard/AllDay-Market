@@ -80,7 +80,7 @@
                      echo '
                      <div class="col-md-6">
                      <div class="product-item">
-                     <a href="#"><img src="'.$img.'" alt=""></a>
+                     <a href="#"><img src="'.$img.'" height="350px" width="250px" alt=""></a>
                      <div class="down-content">
                      <a href="#"><h4>'.$name.'</h4></a>
                      
@@ -114,7 +114,7 @@
                echo '
                <div class="col-md-6">
                <div class="product-item">
-               <a href="#"><img src="'.$img.'" alt=""></a>
+               <a href="#"><img src="'.$img.'" height="350px" width="250px" alt=""></a>
                <div class="down-content">
                <a href="#"><h4>'.$name.'</h4></a>
                
@@ -143,7 +143,7 @@
                echo '
                <div class="col-md-6">
                <div class="product-item">
-               <a href="#"><img src="'.$img.'" alt=""></a>
+               <a href="#"><img src="'.$img.'" height="350px" width="250px" alt=""></a>
                <div class="down-content">
                <a href="#"><h4>'.$name.'</h4></a>
                

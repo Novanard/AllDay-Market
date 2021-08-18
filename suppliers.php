@@ -83,7 +83,7 @@
                			  echo '
                				<div class="col-md-6">
                				  <div class="product-item">
-               					<a href="#"><img src="'.$img.'" alt=""></a>
+               					<a href="#"><img src="'.$img.'" height="350px" width="250px" alt=""></a>
                				   <div class="down-content">
                					<center><strong>'.$sName.' &nbsp ~ &nbsp '.$company.'&nbsp Company</strong><small>('.$ID.')</small></center>
                					 </div>
