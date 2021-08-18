@@ -53,41 +53,218 @@
             </div>
          </div>
       </div>
+      <br>
       <div class="col-md-9">
          <div class="row">
             <?php 
                mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
                include 'db.php';
-               // Getting all the records of the employees
-               $sql = "SELECT * FROM employees";
+               // Getting the highest totalTime
+               $sql = "SELECT MAX(totalTime) as MaxTime FROM payroll_ids WHERE isFinished =0 LIMIT 1";
                $stmt= mysqli_stmt_init($conn);
                mysqli_stmt_prepare($stmt,$sql);
                mysqli_stmt_execute($stmt);
-               $results=mysqli_stmt_get_result($stmt);
-               while($row = mysqli_fetch_assoc($results)){
-               $eID = $row['eID'];
-               // Getting the current payroll_id of the current month
-               $sql = "SELECT id from payroll_ids WHERE eID = ? AND isFinished = 0 LIMIT 1";
-               mysqli_stmt_init($conn);
+               $result=mysqli_stmt_get_result($stmt);
+               $row = mysqli_fetch_assoc($result);
+               $maxTime = $row['MaxTime'];
+               // Selecting eID of the records who have their totalTime = MaxTime, in case there is more than 1 record
+               $sql = "SELECT eID from payroll_ids WHERE totalTime = $maxTime";
+               $stmt = mysqli_stmt_init($conn);
                mysqli_stmt_prepare($stmt,$sql);
-               mysqli_stmt_bind_param($stmt,"i",$eID);
                mysqli_stmt_execute($stmt);
-                if($res = mysqli_stmt_get_result($stmt)){
-                $row=mysqli_fetch_assoc($res);
-                $payroll_id =$row['id'];}
-                // Getting the sum of total shift times per employee and saving the lowest and the biggest one
-                $low =0,$high=0;
-                $sql = "SELECT MAX(SUM(totalTime)) as sumTotal from payroll_details WHERE payroll_id = ?";
-                mysqli_stmt_init($conn);
-                mysqli_stmt_prepare($stmt,$sql);
-                mysqli_stmt_bind_param($stmt,"i",$payroll_id);
-                mysqli_stmt_execute($stmt);
-                $res = mysqli_stmt_get_result($stmt);
-                $row = mysqli_fetch_assoc($res);
-                $sumTotal = $row['sumTotal'];
-                if()
+               $results = mysqli_stmt_get_result($stmt);
+               while($row = mysqli_fetch_assoc($results))
+               {
+                  $eID = $row['eID'];
+                  //Getting information about the records with the MaxTime
+                  $sql = "SELECT * FROM employees WHERE eID = ?";
+                  mysqli_stmt_init($conn);
+                  mysqli_stmt_prepare($stmt,$sql);
+                  mysqli_stmt_bind_param($stmt,"i",$eID);
+                  mysqli_stmt_execute($stmt);
+                  $res = mysqli_stmt_get_result($stmt);
+                  while($row = mysqli_fetch_assoc($res))
+                  {
+                     $firstname = $row['firstname'];
+                     $lastname = $row['lastname'];
+                     $depNum = $row['depNum'];
+                     $avatar = $row['avatar'];
+                     echo'              		
+                     <div class="col-md-6">
+                     <div class="product-item">
+                     <center>  Employee with <strong> MOST time </strong> at work<br>
+                     <img src="'.$avatar.'" alt="">
+                     <div class="down-content">
+                     <center>'.$firstname.' '.$lastname.'<small>('.$eID.')</small></center>
+                     </div>
+                     <br>
+                     <div>
+                     <h6>The Employee with most hours at work with a total of:<br>  <strong>'.$maxTime.' Hours.</strong></h6>
+                     <br>
+                     <small>(Department Number: '.$depNum.')</small>
+                     </div>
+                     <div>
+                     </div>
+                     </div>
+                     </div>
+                     ';  
+                  }
+               }
+               // Getting the lowest totalTime
+               $sql = "SELECT MIN(totalTime) as MinTime FROM payroll_ids WHERE isFinished =0 LIMIT 1";
+               $stmt= mysqli_stmt_init($conn);
+               mysqli_stmt_prepare($stmt,$sql);
+               mysqli_stmt_execute($stmt);
+               $result=mysqli_stmt_get_result($stmt);
+               $row = mysqli_fetch_assoc($result);
+               $minTime = $row['MinTime'];
+               // Selecting eID of the records who have their totalTime = MinTime, in case there is more than 1 record
+               $sql = "SELECT eID from payroll_ids WHERE totalTime = $minTime";
+               $stmt = mysqli_stmt_init($conn);
+               mysqli_stmt_prepare($stmt,$sql);
+               mysqli_stmt_execute($stmt);
+               $results = mysqli_stmt_get_result($stmt);
+               while($row = mysqli_fetch_assoc($results))
+               {
+                  $eID = $row['eID'];
+                  //Getting information about the records with the MinTime
+                  $sql = "SELECT * FROM employees WHERE eID = ?";
+                  mysqli_stmt_init($conn);
+                  mysqli_stmt_prepare($stmt,$sql);
+                  mysqli_stmt_bind_param($stmt,"i",$eID);
+                  mysqli_stmt_execute($stmt);
+                  $res = mysqli_stmt_get_result($stmt);
+                  while($row = mysqli_fetch_assoc($res))
+                  {
+                     $firstname = $row['firstname'];
+                     $lastname = $row['lastname'];
+                     $depNum = $row['depNum'];
+                     $avatar = $row['avatar'];
+                     echo'               		
+                     <div class="col-md-6">
+                     <div class="product-item">
+                     <center>  Employee with <strong> LEAST time </strong> at work<br>
+                     <img src="'.$avatar.'" alt="">
+                     <div class="down-content">
+                     <center>'.$firstname.' '.$lastname.'<small>('.$eID.')</small></center>
+                     </div>
+                     <br>
+                     <div>
+                     The Employee with least hours at work with a total of:<br>  <strong>'.$minTime.' Hours.</strong>
+                     <br>
+                     <small>(Department Number: '.$depNum.')</small>
+                     </div>
+                     <div>
+                     </div>
+                     </div>
+                     </div>
+                     ';  
+                  }
+               } 
+                              // Getting the Max totalMoney
+                              $sql = "SELECT MAX(totalMoney) as MaxMoney FROM payroll_ids WHERE isFinished =0 LIMIT 1";
+                              $stmt= mysqli_stmt_init($conn);
+                              mysqli_stmt_prepare($stmt,$sql);
+                              mysqli_stmt_execute($stmt);
+                              $result=mysqli_stmt_get_result($stmt);
+                              $row = mysqli_fetch_assoc($result);
+                              $maxMoney = $row['MaxMoney'];
+                              // Selecting eID of the records who have their totalMoney = MaxMoney, in case there is more than 1 record
+                              $sql = "SELECT eID from payroll_ids WHERE totalMoney = $maxMoney";
+                              $stmt = mysqli_stmt_init($conn);
+                              mysqli_stmt_prepare($stmt,$sql);
+                              mysqli_stmt_execute($stmt);
+                              $results = mysqli_stmt_get_result($stmt);
+                              while($row = mysqli_fetch_assoc($results))
+                              {
+                                 $eID = $row['eID'];
+                                 //Getting information about the records with the MaxMoney
+                                 $sql = "SELECT * FROM employees WHERE eID = ?";
+                                 mysqli_stmt_init($conn);
+                                 mysqli_stmt_prepare($stmt,$sql);
+                                 mysqli_stmt_bind_param($stmt,"i",$eID);
+                                 mysqli_stmt_execute($stmt);
+                                 $res = mysqli_stmt_get_result($stmt);
+                                 while($row = mysqli_fetch_assoc($res))
+                                 {
+                                    $firstname = $row['firstname'];
+                                    $lastname = $row['lastname'];
+                                    $depNum = $row['depNum'];
+                                    $avatar = $row['avatar'];
+                                    echo'               		
+                                    <div class="col-md-6">
+                                    <div class="product-item">
+                                    <center> Employee with <strong> HIGHEST payroll </strong> at work<br>
+                                    <img src="'.$avatar.'" alt="">
+                                    <div class="down-content">
+                                    <center>'.$firstname.' '.$lastname.'<small>('.$eID.')</small></center>
+                                    </div>
+                                    <br>
+                                    <div>
+                                    The Employee with highest payroll with a total of:<br>  <strong>₪ '.$maxMoney.'</strong>
+                                   <br>
+                                    <small>(Department Number: '.$depNum.')</small>
+                                    </div>
+                                    <div>
+                                    </div>
+                                    </div>
+                                    </div>
+                                    ';  
+                                 }
+                              } // CHECKPOINT
+                              // Getting the Min totalMoney
+                              $sql = "SELECT MIN(totalMoney) as MinMoney FROM payroll_ids WHERE isFinished =0 LIMIT 1";
+                              $stmt= mysqli_stmt_init($conn);
+                              mysqli_stmt_prepare($stmt,$sql);
+                              mysqli_stmt_execute($stmt);
+                              $result=mysqli_stmt_get_result($stmt);
+                              $row = mysqli_fetch_assoc($result);
+                              $minMoney = $row['MinMoney'];
+                              // Selecting eID of the records who have their totalMoney = MinMoney, in case there is more than 1 record
+                              $sql = "SELECT eID from payroll_ids WHERE totalMoney = $minMoney";
+                              $stmt = mysqli_stmt_init($conn);
+                              mysqli_stmt_prepare($stmt,$sql);
+                              mysqli_stmt_execute($stmt);
+                              $results = mysqli_stmt_get_result($stmt);
+                              while($row = mysqli_fetch_assoc($results))
+                              {
+                                 $eID = $row['eID'];
+                                 //Getting information about the records with the MinMoney
+                                 $sql = "SELECT * FROM employees WHERE eID = ?";
+                                 mysqli_stmt_init($conn);
+                                 mysqli_stmt_prepare($stmt,$sql);
+                                 mysqli_stmt_bind_param($stmt,"i",$eID);
+                                 mysqli_stmt_execute($stmt);
+                                 $res = mysqli_stmt_get_result($stmt);
+                                 while($row = mysqli_fetch_assoc($res))
+                                 {
+                                    $firstname = $row['firstname'];
+                                    $lastname = $row['lastname'];
+                                    $depNum = $row['depNum'];
+                                    $avatar = $row['avatar'];
+                                    echo'               		
+                                    <div class="col-md-6">
+                                    <div class="product-item">
+                                    <center> Employee with <strong> LOWEST payroll </strong> at work<br>
+                                    <img src="'.$avatar.'" alt="">
+                                    <div class="down-content">
+                                    <center>'.$firstname.' '.$lastname.'<small>('.$eID.')</small></center>
+                                    </div>
+                                    <br>
+                                    <div>
+                                    The Employee with lowest payroll with a total of:<br>  <strong>₪ '.$minMoney.'</strong>
+                                    <br>
+                                    <small>(Department Number: '.$depNum.')</small>
+                                    </div>
+                                    <div>
+                                    </div>
+                                    </div>
+                                    </div>
+                                    ';  
+                                 }
+                              }
+                              
                
-            }  
                        ?>
          </div>
       </div>

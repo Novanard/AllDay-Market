@@ -20,6 +20,7 @@
          if (isset($_POST['submit']) && isset($_POST['checkIn'])) {
           include 'db.php';
          	$eID = $_POST['eID'];
+            echo($eID);
             // If employee is checking-in, first thing is to check if they exist
            $sql = "SELECT * FROM employees WHERE eID = ? LIMIT 1";
            $stmt= mysqli_stmt_init($conn);
@@ -143,14 +144,14 @@
           $payroll_id = $row['id'];
           echo('Payroll ID GET successfully');
           // Inserting the payroll details of the employee
-          $sql = "INSERT INTO payroll_details (startTime,endTime,totalTime,payroll_id) VALUES (?,?,?,?);";
+          $sql = "INSERT INTO payroll_details (startTime,endTime,totalTime,payroll_id,eID) VALUES (?,?,?,?,?);";
           $datetime1 = strtotime($startTime);
           $datetime2 = strtotime($endTime);
           $interval  = abs($datetime1 - $datetime2);
           $totalHours = $interval;
           $stmt= mysqli_stmt_init($conn);
            mysqli_stmt_prepare($stmt,$sql);
-           mysqli_stmt_bind_param($stmt,"ssii",$startTime,$endTime,$totalHours,$payroll_id);
+           mysqli_stmt_bind_param($stmt,"ssiii",$startTime,$endTime,$totalHours,$payroll_id,$eID);
            mysqli_stmt_execute($stmt);
            echo('Payroll Details Executed');
            // Getting the perhour from employee tables to calculate the payday
@@ -180,7 +181,42 @@
            mysqli_stmt_bind_param($stmt,"ii",$payday,$pay_detailsID);
            mysqli_stmt_execute($stmt);
            echo('Payday updated');
-         
+           //Getting the current TotalMoney and increasing it with the current payday
+           $sql="SELECT totalMoney FROM payroll_ids  WHERE id = ? LIMIT 1";
+           $stmt= mysqli_stmt_init($conn);
+           mysqli_stmt_prepare($stmt,$sql);
+           mysqli_stmt_bind_param($stmt,"i",$payroll_id);
+           mysqli_stmt_execute($stmt);
+           echo('totalMoney GET');
+            $res = mysqli_stmt_get_result($stmt);
+            $row = mysqli_fetch_assoc($res);
+            $totalMoney = $row['totalMoney'];
+            $totalMoney += $payday;
+            // Updating totalMoney with the new amount
+            $sql ="UPDATE payroll_ids SET totalMoney = ? Where id = ?";
+            $stmt = mysqli_stmt_init($conn);
+            mysqli_stmt_prepare($stmt,$sql);
+            mysqli_stmt_bind_param($stmt,"ii",$totalMoney,$payroll_id);
+            mysqli_stmt_execute($stmt);
+            echo('totalMoney Updated');
+           //Getting the current TotalTime and increasing it with the current hours
+           $sql="SELECT totalTime FROM payroll_ids  WHERE id = ? LIMIT 1";
+           $stmt= mysqli_stmt_init($conn);
+           mysqli_stmt_prepare($stmt,$sql);
+           mysqli_stmt_bind_param($stmt,"i",$payroll_id);
+           mysqli_stmt_execute($stmt);
+           echo('totalTime GET');
+            $res = mysqli_stmt_get_result($stmt);
+            $row = mysqli_fetch_assoc($res);
+            $totalTime = $row['totalTime'];
+            $totalTime += $totalHours;
+            // Updating totalTime with the new amount
+            $sql ="UPDATE payroll_ids SET totalTime = ? Where id = ?";
+            $stmt = mysqli_stmt_init($conn);
+            mysqli_stmt_prepare($stmt,$sql);
+            mysqli_stmt_bind_param($stmt,"ii",$totalTime,$payroll_id);
+            mysqli_stmt_execute($stmt);
+            echo('totalTime Updated');
          
          }
          }
