@@ -28,19 +28,13 @@
       <header class="">
          <?php
             session_start();
-            if(isset($_SESSION['email'])){
-            	if($_SESSION['email'] === 'admin@allday.com'){
-            $basedir = realpath(__DIR__);
+            if(isset($_SESSION['email']) && $_SESSION['userType']==1){
+                   $basedir = realpath(__DIR__);
             		include($basedir . '/navbars/navadmin.php');
             	}
-            	else{
-            $basedir = realpath(__DIR__);
-            		include($basedir . '/navbars/navuser.php');
-            	}
-            }
+            
             else{
-            $basedir = realpath(__DIR__);
-            include($basedir . '/navbars/nav.php');
+                  header('Location:index.php');
             }
             
             ?>
@@ -68,9 +62,7 @@
                            mysqli_stmt_prepare($stmt,$sql);
                            mysqli_stmt_execute($stmt);
                            $results=mysqli_stmt_get_result($stmt);
-               
-               	if(isset($_SESSION['email'])){
-               	if($_SESSION['email'] === 'admin@allday.com'){
+            
                		while ($row=mysqli_fetch_assoc($results))
                			{
                			  $ID = $row['id'];
@@ -80,6 +72,7 @@
                			  $depNum=$row['depNum'];
                			  $perhour=$row['perhour'];
                			  $residence=$row['residence'];
+                          $pin = $row['PIN'];
                			  $img = $row['avatar'];
                			  
                			  echo '
@@ -94,6 +87,7 @@
                					  <ul>
                					  <li><strong>PerHour:</strong>₪'.$perhour.'</li>
                					  <li><strong>Residence:</strong>'.$residence.'</li>
+               					  <li><strong>PIN:</strong>'.$pin.'</li>
                					  </div>
                					  <div>
                	          	<a href="editEmployeeForm.php?id='.$ID.'">
@@ -110,15 +104,6 @@
                				</div>
                			  ';
                			}
-               	}
-               
-               	}
-               else{
-               			  echo '
-               				You cant see here
-               			  ';
-               			
-               	}
                		  ?>
          </div>
       </div>

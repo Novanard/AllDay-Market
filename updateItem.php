@@ -2,6 +2,7 @@
 
 if ($_SERVER['REQUEST_METHOD'] === "POST" ) {   
   if(isset($_POST['itemEdit'])){
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
       include 'db.php';
       $Barcode = $_POST['id'];
       $Name=$_POST['Name'];
@@ -15,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" ) {
       header('Location:index.php');
     }
   elseif(isset($_POST['itemDel'])){
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
     include 'db.php';
     $Barcode =$_POST['id'];
     $sql = "DELETE FROM items WHERE Barcode = ?; ";

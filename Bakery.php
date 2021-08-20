@@ -69,7 +69,7 @@
                mysqli_stmt_execute($stmt);
                $results=mysqli_stmt_get_result($stmt);
                if(isset($_SESSION['email'])){
-               if($_SESSION['email'] === 'admin@allday.com'){
+               if($_SESSION['userType'] ==1){
                while ($row=mysqli_fetch_assoc($results))
                {
                $ID = $row['Barcode'];

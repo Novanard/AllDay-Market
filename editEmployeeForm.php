@@ -67,13 +67,13 @@
         <div class="row">
           <div class="col-md-12">
             <div class="section-heading">
-              <h2>Edit Employee</h2>
+              <h2>Edit Employee ~ <?php echo($eID); ?></h2>
             </div>
           </div>
           <div class="col-md-8">
             <div class="contact-form">
               <form action="updateEmployee.php" method="POST">
-                <input type="hidden" name="id" value="<?php echo $ID ?>">
+                <input type="hidden" name="id" value="<?php echo $eID ?>">
                 <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
@@ -103,6 +103,11 @@
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
                       <input name="residence" type="text" class="form-control" id="subject" placeholder="New Residence" required="">
+                    </fieldset>
+                  </div>
+                  <div class="col-lg-12 col-md-12 col-sm-12">
+                    <fieldset>
+                      <input name="PIN" type="text" class="form-control" id="subject" placeholder="New PIN" required="">
                     </fieldset>
                   </div>
                   <div class="col-lg-12">

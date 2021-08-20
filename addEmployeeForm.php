@@ -25,11 +25,12 @@
          	$depNum = $_POST['depNum'];
          	$PerHour = $_POST['PerHour'];
          	$residence = $_POST['eResidence'];
+            $pin = $_POST['PIN'];
             $avatar;
-            $sql = "INSERT INTO employees (eID,firstname,lastname,depNum,perhour,residence) VALUES (?,?,?,?,?,?);";
+            $sql = "INSERT INTO employees (eID,firstname,lastname,depNum,perhour,residence,PIN) VALUES (?,?,?,?,?,?,?);";
          		$stmt= mysqli_stmt_init($conn);
          	    mysqli_stmt_prepare($stmt,$sql);
-         	    mysqli_stmt_bind_param($stmt,"issiis",$eID,$eFirstname,$eLastname,$depNum,$PerHour,$residence);
+         	    mysqli_stmt_bind_param($stmt,"issiiss",$eID,$eFirstname,$eLastname,$depNum,$PerHour,$residence,$pin);
          	    mysqli_stmt_execute($stmt);
                 $sql = "SELECT avatar FROM employees WHERE eID = ?";
                 $stmt= mysqli_stmt_init($conn);
@@ -151,6 +152,11 @@
                            <div class="col-lg-12 col-md-12 col-sm-12">
                               <fieldset>
                                  <input name="eResidence" type="text" class="form-control" id="name" placeholder="Employee Residence" required="">
+                              </fieldset>
+                           </div>
+                           <div class="col-lg-12 col-md-12 col-sm-12">
+                              <fieldset>
+                                 <input name="PIN" type="text" class="form-control" id="name" placeholder="PIN Code" required="">
                               </fieldset>
                            </div>
                            <div class="col-lg-12">
