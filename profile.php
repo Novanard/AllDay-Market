@@ -22,7 +22,33 @@
   </head>
 
   <body>
-
+  <?php
+         session_start();
+         if(isset($_SESSION['email']) && $_SESSION['userType']==0){
+         $email = $_SESSION['email'];
+         if (isset($_POST['submit'])) {
+         include 'db.php';
+         $type = (explode('.', $_FILES['uPhoto']['name']));
+         $tmp_name = $_FILES['uPhoto']['tmp_name'];
+         $name = $_FILES['uPhoto']['name'];
+         $target_dir = 'assets/images/users/';
+         $type = end($type);
+         $allowed = ['png','jpg'];
+         if(in_array($type, $allowed)){
+         $target_file = $target_dir . basename($_FILES["uPhoto"]["name"]);
+         move_uploaded_file($tmp_name, $target_file);
+         $sql = "UPDATE users SET avatar = ? WHERE email = ?;";
+         $stmt= mysqli_stmt_init($conn);
+          mysqli_stmt_prepare($stmt,$sql);
+          mysqli_stmt_bind_param($stmt,"ss",$target_file,$email);
+          mysqli_stmt_execute($stmt);
+            }
+         else
+         $uploadError = 'This type isnt allowed!';	
+         
+         }
+         }
+         ?>
     <!-- ***** Preloader Start ***** -->
     <div id="preloader">
         <div class="jumper">
@@ -36,7 +62,6 @@
     <!-- Header -->
        <header class="">
        <?php
-            session_start();
             if(isset($_SESSION['email'])){
             	if($_SESSION['email'] === 'admin@allday.com'){
 					$basedir = realpath(__DIR__);
@@ -56,7 +81,10 @@
 </header>
 
     <!-- Page Content -->
-  
+    <?php
+      if(!isset($_SESSION['userType']) || $_SESSION['userType'] !=0)
+      header('Location: index.php');
+      ?>
     <div class="page-heading contact-heading header-text" style="background-image: url(assets/images/heading-4-1920x500.jpg);">
       <div class="container">
         <div class="row">
@@ -91,16 +119,32 @@
           echo '
          <center> <div class="col-md-6">
             <div class="product-item">
-            <a href="#"><img src="'.$img.'" alt=""></a>
+            <a href="#"><img src="'.$img.'" height="370px" width = "270px" alt=""></a>
              <div class="down-content">
-            <center><strong>Hello &nbsp ~ &nbsp '.$name.'</center>
+            <center><strong>Hello</strong><br> '.$name.'</center>
              </div>
-              <br>
               <div>
               <ul>
-              <li><strong>Email:</strong>'.$email.'</li>
-              <li><strong>Phone No:</strong>'.$number.'</li>
-              <li><strong>Adress:</strong>'.$address.'<li>
+              <li><strong>Email:</strong><br>'.$email.'</li>
+              <li><strong>Phone No:</strong><br>'.$number.'</li>
+              <li><strong>Adress:</strong><br>'.$address.'<li>
+              </ul>
+              <strong>Upload an avatar</strong>
+                    <form action="profile.php" method="post" enctype="multipart/form-data">
+                        <div>
+                           <fieldset>
+                              <input type="file" name="uPhoto" id="uPhoto" required="">
+                           </fieldset>
+                        </div>
+                        <div >
+                           <fieldset>
+                              <br>
+                              <button type="submit" name="submit" class="btn btn-success" value="Submit">Upload Photo</button>
+                           </fieldset>
+                        </div>
+                     </form>
+
+              <br><br>
               <form action="logout.php">
               <fieldset>
               <button type="submit" name="logout" id="form-submit" class="btn btn-danger">Logout</button>
