@@ -60,6 +60,23 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 		$newQ = $qnt - $quantity;
 		mysqli_stmt_bind_param($stmt,"ii",$newQ,$itemBarcode);
 		mysqli_stmt_execute($stmt);
+		// Counting the total items in order to update the order id and total money in order to update orders_id
+		$sql = "SELECT COUNT(itemBarcode) as totalItems FROM order_details WHERE order_id = ?";
+		$stmt = mysqli_stmt_init($conn);
+		mysqli_stmt_prepare($stmt,$sql);
+		mysqli_stmt_bind_param($stmt,"i",$order_id);
+		mysqli_stmt_execute($stmt);
+		$res = mysqli_stmt_get_result($stmt);
+		$res = mysqli_fetch_assoc($res);
+		$totalItems = $row['totalItems'];
+		// Updating the totalItems in order_details
+		$sql = "UPDATE orders_id SET totalItems = ? WHERE id =?;";
+		$stmt = mysqli_stmt_init($conn);
+		mysqli_stmt_prepare($stmt,$sql);
+		mysqli_stmt_bind_param($stmt,"ii",$totalItems,$order_id);
+		mysqli_stmt_execute($stmt);
+				/// CHECK POINTTTTTTTTTTTTTTTTTT
+
 		//Getting the current sellCount in order to increase it
 		$sql ="SELECT sellCount FROM items WHERE Barcode = ? LIMIT 1";
 		$stmt = mysqli_stmt_init($conn);
