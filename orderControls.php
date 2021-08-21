@@ -57,7 +57,7 @@
           <div class="col-md-12">
             <div class="text-content">
               <h4>AllDay Market</h4>
-              <h2>Cart</h2>
+              <h2>View Order</h2>
             </div>
           </div>
         </div>
@@ -65,63 +65,46 @@
     </div>
  <div class="col-md-9">
   <div class="row">
-	<?php 
-		include 'db.php';
-		if(isset($_SESSION['email'])){
-			$userID = $_SESSION['id'];
-			$sql = "SELECT * FROM cart WHERE userID = ?";
-	        $stmt= mysqli_stmt_init($conn);
-	        mysqli_stmt_prepare($stmt,$sql);
-	        mysqli_stmt_bind_param($stmt,"i",$userID);
-	        mysqli_stmt_execute($stmt);
-	        $results=mysqli_stmt_get_result($stmt);
-	    	$totalPrice = 0;
-		  while ($row=mysqli_fetch_assoc($results)) 
+  <?php 
+  if(isset($_POST['viewOrder'])){
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+      include 'db.php';
+      $orderID = $_POST['orderID'];
+      $sql = "SELECT * from order_details WHERE order_id = ?; ";
+      $stmt= mysqli_stmt_init($conn);
+      mysqli_stmt_prepare($stmt,$sql);
+      mysqli_stmt_bind_param($stmt,"i",$orderID);
+      mysqli_stmt_execute($stmt);
+	  while ($row=mysqli_fetch_assoc($results)) 
 	        {
-			
-			echo '		<div class="col-md-6">
-                      <div class="product-item">';                   
-					$name = $row['name'];
-					$price = $row['price'];
-					$qnt = $row['qnt'];
-					$img = $row['img'];
-					$total=$row['qnt'] * $row['price'];
-					$totalPrice += $total;
-				echo '<div style="display: flex;align-items:center;">
+                echo '		<div class="col-md-6">
+                <div class="product-item">';                   
+                  $itemBarcode = $row['itemBarcode'];
+                  $itemName = $row['itemName'];
+                  $depNum = $row['depNum'];
+                  $price = $row['price'];
+                  $qnt = $row['quantity'];
+                  $total = $row['total'];
+                  $img = $row['img'];
+          echo '<div style="display: flex;align-items:center;">
 
-                        <a href="#"><img src="'.$img.'" alt=""></a>
-                       <div class="down-content">
-                          <a href="#"><h4>'.$name.'</h4></a>
-                          <h6>₪'.$price.'
-						  <h6>Amount: '.$qnt.'
-						  <h6>Total:'.$total.' <br>
-						<form action="deleteCart.php" method="post">
-							<input type="hidden" value="'.$name.'" name="delete" />
-							<input class="btn btn-danger" value="Delete" type="submit" />
-						</form>
-				
+                  <a href="#"><img src="'.$img.'" alt=""></a>
+                 <div class="down-content">
+                    <a href="#"><h4>'.$itemName.'<small>('.$itemBarcode.')</small></h4></a>
+                    <h6>₪'.$price.'
+                    <h6>Amount: '.$qnt.'
+                    <h6>Total:'.$total.' <br>
+                    <br><br>                                                 
+                  </div>
+                </div>
+              </div>
+              ';
+          echo "</div>";
 
-                          <br><br>                                                 
-                        </div>
-                      </div>
-                    </div>
-					';
-	        	echo "</div>";
 				
 	        }
-	    }	
-			
-?> 	
+	    }	  ?> 	
 	</div>
-	<div style="font-family: 'Poppins', sans-serif;font-size: 20px;float: right;font-weight: bold">
-    <?php 
-    if(isset($totalPrice))
-      echo 'Total Price: ₪'.$totalPrice;
-
-    ?> 
-		<form action="createOrder.php" method="POST">
-		<button class="btn btn-danger" type="submit" name="submit" class="filled-button" class="payBtn">Checkout</button>
-		</form>
 		
 	
 	</div>

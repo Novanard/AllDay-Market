@@ -14,10 +14,10 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
         mysqli_stmt_bind_param($stmt,"is",$userID,$timestamp);
         mysqli_stmt_execute($stmt);
 		// Geting the order_id in order to store it in order details table 
-		$sql = "SELECT id FROM orders_id WHERE userID =?";
+		$sql = "SELECT id FROM orders_id WHERE userID =? AND date = ?";
         $stmt= mysqli_stmt_init($conn);
         mysqli_stmt_prepare($stmt,$sql);
-        mysqli_stmt_bind_param($stmt,"i",$userID);
+        mysqli_stmt_bind_param($stmt,"is",$userID,$timestamp);
         mysqli_stmt_execute($stmt);
 		$results=mysqli_stmt_get_result($stmt);
 		$order_id;
@@ -30,11 +30,15 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
         mysqli_stmt_bind_param($stmt,"i",$userID);
         mysqli_stmt_execute($stmt);
 		$results=mysqli_stmt_get_result($stmt);
+		$totalItems = 0;	$totalMoney=0;
+
 		while ($row=mysqli_fetch_assoc($results))
 		{
 		$itemBarcode=$row['itemBarcode'];
 		$itemName=$row['name'];
 		$quantity=$row['qnt'];
+		$price = $row['price'];
+		$total = $quantity * $price;
 		$depNum =$row['depNum'];
 		$img = $row['img'];
 		// Checking the quantity of the product in the inventory
@@ -48,10 +52,12 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 		$qnt = $row['quantity'];
 		// If the quantity is bigger than what the customer wants, then we add it to their order
 		if($qnt > $quantity){
-		$sql = "INSERT INTO order_details (itemBarcode,depNum,quantity,order_id,img) VALUES (?,?,?,?,?);";
+			$totalItems++;
+			$totalMoney+=$total;
+		$sql = "INSERT INTO order_details (itemBarcode,itemName,depNum,price,quantity,total,order_id,img) VALUES (?,?,?,?,?,?,?,?);";
         $stmt= mysqli_stmt_init($conn);
         mysqli_stmt_prepare($stmt,$sql);
-        mysqli_stmt_bind_param($stmt,"iiiis",$itemBarcode,$depNum,$quantity,$order_id,$img);
+        mysqli_stmt_bind_param($stmt,"isiiiiis",$itemBarcode,$itemName,$depNum,$price,$quantity,$total,$order_id,$img);
         mysqli_stmt_execute($stmt);
 		// Updating the quantity in the inventory 
 		$sql ="UPDATE items SET quantity = ? WHERE Barcode = ?";
@@ -60,28 +66,10 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 		$newQ = $qnt - $quantity;
 		mysqli_stmt_bind_param($stmt,"ii",$newQ,$itemBarcode);
 		mysqli_stmt_execute($stmt);
-		// Counting the total items in order to update the order id and total money in order to update orders_id
-		$sql = "SELECT COUNT(itemBarcode) as totalItems FROM order_details WHERE order_id = ?";
-		$stmt = mysqli_stmt_init($conn);
-		mysqli_stmt_prepare($stmt,$sql);
-		mysqli_stmt_bind_param($stmt,"i",$order_id);
-		mysqli_stmt_execute($stmt);
-		$res = mysqli_stmt_get_result($stmt);
-		$res = mysqli_fetch_assoc($res);
-		$totalItems = $row['totalItems'];
-		// Updating the totalItems in order_details
-		$sql = "UPDATE orders_id SET totalItems = ? WHERE id =?;";
-		$stmt = mysqli_stmt_init($conn);
-		mysqli_stmt_prepare($stmt,$sql);
-		mysqli_stmt_bind_param($stmt,"ii",$totalItems,$order_id);
-		mysqli_stmt_execute($stmt);
-				/// CHECK POINTTTTTTTTTTTTTTTTTT
-
 		//Getting the current sellCount in order to increase it
 		$sql ="SELECT sellCount FROM items WHERE Barcode = ? LIMIT 1";
 		$stmt = mysqli_stmt_init($conn);
 		mysqli_stmt_prepare($stmt,$sql);
-		$newQ = $qnt - $quantity;
 		mysqli_stmt_bind_param($stmt,"i",$itemBarcode);
 		mysqli_stmt_execute($stmt);
 		$result = mysqli_stmt_get_result($stmt);
@@ -94,12 +82,18 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 		mysqli_stmt_prepare($stmt,$sql);
 		mysqli_stmt_bind_param($stmt,"ii",$sellCount,$itemBarcode);
 		mysqli_stmt_execute($stmt);
-		}
-		header('Location:finishOrder.php');
-		}
+		}}		
+		// Updating the totalItems in order_details
+				$sql = "UPDATE orders_id SET totalItems = ?,totalMoney=? WHERE id =?;";
+				$stmt = mysqli_stmt_init($conn);
+				mysqli_stmt_prepare($stmt,$sql);
+				mysqli_stmt_bind_param($stmt,"iii",$totalItems,$totalMoney,$order_id);
+				mysqli_stmt_execute($stmt);
+				header('Location:finishOrder.php');
 		}
 	else
 		header('Location:login.php');
 	}
+	
 ?>
 

@@ -71,7 +71,7 @@
                           $totalMoney = $row['totalMoney'];
             
                     echo '
-                   <center> <div class="col-md-6">
+                  <div class="col-md-6">
                       <div class="product-item">
                        <div class="down-content">
                        <h5><a href="#">Order ID: '.$orderID.'</a>
@@ -83,9 +83,10 @@
                         <li><strong>Total Money:</strong><br>'.$totalMoney.'<li>
                         </ul>
                         <strong>Order Controls</strong>
-                              <form action="profile.php" method="post" enctype="multipart/form-data">
+                              <form action="orderControls.php" method="post" enctype="multipart/form-data">
                                   <div>
                                      <fieldset>
+                                       <input type="hidden" name="orderID" value="'.$orderID.'">
                                         <input type="submit" name="viewOrder" value="Order Deatils" class="btn btn-info" required="">
                                      </fieldset>
                                   </div>
@@ -100,7 +101,7 @@
                         <br><br>
                         </div>
                         </div>
-                      </div></center>
+                      </div>
                       ';
             
                    }
