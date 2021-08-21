@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 18, 2021 at 03:21 PM
--- Server version: 10.4.19-MariaDB
--- PHP Version: 7.3.28
+-- Generation Time: Aug 22, 2021 at 01:21 AM
+-- Server version: 10.4.17-MariaDB
+-- PHP Version: 7.3.26
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -43,8 +43,8 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`id`, `userID`, `name`, `price`, `qnt`, `itemBarcode`, `depNum`, `img`) VALUES
-(15, 2, 'Tomatoes', 4, 1, 11, 1, 'assets/images/items/bandora.png'),
-(16, 2, 'ChilliPepper', 5, 3, 14, 1, 'assets/images/items/pepper.png');
+(19, 2, 'Laundry Machine', 1200, 2, 21, 2, 'assets/images/items/ghsale.png'),
+(20, 2, 'Vaccum Cleaner', 450, 1, 24, 2, 'assets/images/items/sho2ev.png');
 
 -- --------------------------------------------------------
 
@@ -114,19 +114,19 @@ CREATE TABLE `items` (
 --
 
 INSERT INTO `items` (`Barcode`, `Name`, `Price`, `Department`, `img`, `quantity`, `supplierID`, `sellCount`) VALUES
-(11, 'Tomatoes', 4, 1, 'assets/images/items/bandora.png', 199, 0, 10),
+(11, 'Tomatoes', 4, 1, 'assets/images/items/bandora.png', 194, 0, 15),
 (12, 'Cucmber', 4, 1, 'assets/images/items/khear.png', 200, 0, 10),
 (13, 'Garlic', 4, 1, 'assets/images/items/garlic.png', 200, 0, 0),
-(14, 'ChilliPepper', 5, 1, 'assets/images/items/pepper.png', 197, 0, 0),
-(21, 'Laundry Machine', 1200, 2, 'assets/images/items/ghsale.png', 200, 0, 9),
+(14, 'ChilliPepper', 5, 1, 'assets/images/items/pepper.png', 182, 0, 15),
+(21, 'Laundry Machine', 1200, 2, 'assets/images/items/ghsale.png', 194, 0, 15),
 (22, 'Small Heater', 600, 2, 'assets/images/items/sheater.png', 200, 0, 1),
 (23, 'Heater', 800, 2, 'assets/images/items/heater.png', 200, 0, 3),
-(24, 'Vaccum Cleaner', 450, 2, 'assets/images/items/sho2ev.png', 200, 0, 2),
+(24, 'Vaccum Cleaner', 450, 2, 'assets/images/items/sho2ev.png', 197, 0, 5),
 (31, 'Arabian Pita', 10, 3, 'assets/images/items/Pita.jpg', 200, 0, 0),
 (33, 'Oreo Cake', 150, 3, 'assets/images/items/oreo.jpg', 200, 0, 0),
 (34, 'French Waffles', 30, 3, 'assets/images/items/waffle.jpg', 200, 0, 0),
 (41, 'Sinta Meat', 110, 4, 'assets/images/items/sinta.jpg', 200, 0, 0),
-(42, 'Tomhawk Steak', 300, 4, 'assets/images/items/Tomahawk.jpg', 200, 0, 0),
+(42, 'Tomhawk Steak', 300, 4, 'assets/images/items/Tomahawk.jpg', 180, 0, 20),
 (43, 'Sheep Shoulder', 45, 4, 'assets/images/items/shoulder.jpg', 200, 0, 0),
 (44, 'Entrecote Steak ', 50, 4, 'assets/images/items/entrecote.jpg', 200, 0, 0),
 (52, 'Jewish Bread', 4, 3, 'assets/images/items/bread.jpg', 200, 0, 0);
@@ -140,15 +140,18 @@ INSERT INTO `items` (`Barcode`, `Name`, `Price`, `Department`, `img`, `quantity`
 CREATE TABLE `orders_id` (
   `id` int(11) NOT NULL,
   `userID` int(11) NOT NULL,
-  `date` timestamp NOT NULL DEFAULT current_timestamp()
+  `date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `totalItems` int(11) DEFAULT NULL,
+  `totalMoney` int(11) DEFAULT NULL,
+  `isDone` tinyint(4) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `orders_id`
 --
 
-INSERT INTO `orders_id` (`id`, `userID`, `date`) VALUES
-(40, 2, '2021-08-17 11:30:52');
+INSERT INTO `orders_id` (`id`, `userID`, `date`, `totalItems`, `totalMoney`, `isDone`) VALUES
+(48, 2, '2021-08-21 22:12:40', 2, 2850, 0);
 
 -- --------------------------------------------------------
 
@@ -159,8 +162,11 @@ INSERT INTO `orders_id` (`id`, `userID`, `date`) VALUES
 CREATE TABLE `order_details` (
   `id` int(11) NOT NULL,
   `itemBarcode` int(11) NOT NULL,
+  `itemName` varchar(256) NOT NULL,
   `depNum` tinyint(1) NOT NULL,
+  `price` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
+  `total` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
   `isDone` tinyint(1) DEFAULT 0,
   `img` varchar(256) NOT NULL
@@ -170,9 +176,9 @@ CREATE TABLE `order_details` (
 -- Dumping data for table `order_details`
 --
 
-INSERT INTO `order_details` (`id`, `itemBarcode`, `depNum`, `quantity`, `order_id`, `isDone`, `img`) VALUES
-(24, 11, 1, 1, 40, 0, 'assets/images/items/bandora.png'),
-(25, 14, 1, 3, 40, 0, 'assets/images/items/pepper.png');
+INSERT INTO `order_details` (`id`, `itemBarcode`, `itemName`, `depNum`, `price`, `quantity`, `total`, `order_id`, `isDone`, `img`) VALUES
+(45, 21, 'Laundry Machine', 2, 1200, 2, 2400, 48, 0, 'assets/images/items/ghsale.png'),
+(46, 24, 'Vaccum Cleaner', 2, 450, 1, 450, 48, 0, 'assets/images/items/sho2ev.png');
 
 -- --------------------------------------------------------
 
@@ -365,7 +371,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `employees`
@@ -383,13 +389,13 @@ ALTER TABLE `items`
 -- AUTO_INCREMENT for table `orders_id`
 --
 ALTER TABLE `orders_id`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `order_details`
 --
 ALTER TABLE `order_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `payroll_details`
