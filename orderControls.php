@@ -51,26 +51,27 @@
             ?>
 </header>
 
-    <div class="page-heading about-heading header-text" style="background-image: url(assets/images/veghs.png);">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="text-content">
-              <h4>AllDay Market</h4>
-              <h2>Order Status</h2>
-            </div>
+
+  <?php 
+  if(isset($_POST['viewOrder'])){
+    echo'    <div class="page-heading about-heading header-text" style="background-image: url(assets/images/veghs.png);">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="text-content">
+            <h4>AllDay Market</h4>
+            <h2>View Order</h2>
           </div>
         </div>
       </div>
     </div>
- <div class="col-md-9">
-  <div class="row">
-  <?php 
-  if(isset($_POST['viewOrder'])){
+  </div>
+<div class="col-md-9">
+<div class="row">';
     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
       include 'db.php';
       $orderID = $_POST['orderID'];
-      $sql = "SELECT * from order_details WHERE order_id = ?; ";
+      $sql = "SELECT * from oldOrder_details WHERE order_id = ?; ";
       $stmt= mysqli_stmt_init($conn);
       mysqli_stmt_prepare($stmt,$sql);
       mysqli_stmt_bind_param($stmt,"i",$orderID);
@@ -104,6 +105,20 @@
 	        }
 	    }	 
     if(isset($_POST['statusOrder'])){
+      echo'    <div class="page-heading about-heading header-text" style="background-image: url(assets/images/veghs.png);">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="text-content">
+              <h4>AllDay Market</h4>
+              <h2>Order Status</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+ <div class="col-md-9">
+  <div class="row">';
       mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
       include 'db.php';
       $orderID = $_POST['orderID'];

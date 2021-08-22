@@ -40,19 +40,19 @@
       </header>
       <!-- Page Content -->
       <div class="page-heading about-heading header-text" style="background-image: url(assets/images/items/veghs.png);">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="text-content">
-              <h4>AllDay Market</h4>
-              <h2>My Orders</h2>
+         <div class="container">
+            <div class="row">
+               <div class="col-md-12">
+                  <div class="text-content">
+                     <h4>AllDay Market</h4>
+                     <h2>My Orders</h2>
+                  </div>
+               </div>
             </div>
-          </div>
-        </div>
+         </div>
       </div>
-    </div>
- <div class="col-md-9">
-  <div class="row">
+      <div class="col-md-12">
+      <div class="row">
          <?php 
             include 'db.php';
             if(isset($_SESSION['id'])){
@@ -63,6 +63,12 @@
                    mysqli_stmt_bind_param($stmt,"i",$id);
                    mysqli_stmt_execute($stmt);
                    $results=mysqli_stmt_get_result($stmt);
+                   if(mysqli_num_rows($results)==0){
+                      echo'<br><div class="alert alert-info col-md-12" role="alert">
+                      <p class="text-center">No active orders found!</p>
+                    </div>';
+                   }
+                   else{
               while ($row=mysqli_fetch_assoc($results))
                    {                  
                      echo '		<div class="col-md-6">
@@ -96,10 +102,10 @@
                         </div>
                       </div>
                       ';
-                   }
+                   }}
                    echo'</div></div>';
                    // Checking old orders of the user
-                   $sql = "SELECT * from orders_id WHERE userID = ? and isDone = 1;";
+                   $sql = "SELECT * from oldOrders_id WHERE userID = ?;";
                    $stmt = mysqli_stmt_init($conn);
                    mysqli_stmt_prepare($stmt,$sql);
                    mysqli_stmt_bind_param($stmt,"i",$id);
@@ -107,24 +113,46 @@
                    $results = mysqli_stmt_get_result($stmt);
                    if(mysqli_num_rows($results)>0)
                    {
-                      echo'      <div class="page-heading about-heading header-text" style="background-image: url(assets/images/items/veghs.png);">
-                      <div class="container">
-                        <div class="row">
-                          <div class="col-md-12">
-                            <div class="text-content">
-                              <h4>AllDay Market</h4>
-                              <h2>Order History</h2>
-                            </div>
-                          </div>
+                      echo'  <hr><div class="alert alert-dark" role="alert">
+                     <p class="text-center" font-weight:bold>Order History</p>
+                    </div><hr>';
+                    echo'<div class="col-md-6">
+                    <div class="product-item">'; 
+                        while($row = mysqli_fetch_assoc($results)){   
+                         $orderID = $row['id'];
+                         $date = $row['date'];
+                         $totalItems = $row['totalItems'];
+                         $totalMoney = $row['totalMoney'];
+                         echo '<div style="display: flex;align-items:center;">
+           
+                      <h5><a href="#">Order ID: '.$orderID.'</a>
+                      </div>
+                       <div class="down-content">
+                       <ul>
+                       <li><strong>Order Date:</strong><br>'.$date.'</li><br>
+                       <li><strong>Total Items:</strong><br>'.$totalItems.'</li><br>
+                       <li><strong>Total Money:</strong><br>₪'.$totalMoney.'<li>
+                       </ul>
+                                        <strong>Order Controls</strong>
+                        <form action="orderControls.php" method="post">
+                        <div >
+                           <fieldset>
+                           <input type="hidden" name="orderID" value="'.$orderID.'">
+                              <button type="submit" name="viewOrder" class="btn btn-secondary">View Order</button>
+                           </fieldset>
+                        </div>
+                     </form>
+            
+                        <br><br>
+                        </div>
                         </div>
                       </div>
-                    </div>';
+                      ';
                    }
                }		
-         
+            }
             ?> 	
-
-</div>
+      </div>
       <footer>
          <div class="container">
             <div class="row">
