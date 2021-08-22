@@ -57,7 +57,7 @@
           <div class="col-md-12">
             <div class="text-content">
               <h4>AllDay Market</h4>
-              <h2>View Order</h2>
+              <h2>Order Status</h2>
             </div>
           </div>
         </div>
@@ -75,6 +75,7 @@
       mysqli_stmt_prepare($stmt,$sql);
       mysqli_stmt_bind_param($stmt,"i",$orderID);
       mysqli_stmt_execute($stmt);
+      $results = mysqli_stmt_get_result($stmt);
 	  while ($row=mysqli_fetch_assoc($results)) 
 	        {
                 echo '		<div class="col-md-6">
@@ -100,16 +101,56 @@
               </div>
               ';
           echo "</div>";
-
-				
 	        }
-	    }	  ?> 	
+	    }	 
+    if(isset($_POST['statusOrder'])){
+      mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+      include 'db.php';
+      $orderID = $_POST['orderID'];
+      $sql = "SELECT * from order_details WHERE order_id = ?; ";
+      $stmt= mysqli_stmt_init($conn);
+      mysqli_stmt_prepare($stmt,$sql);
+      mysqli_stmt_bind_param($stmt,"i",$orderID);
+      mysqli_stmt_execute($stmt);
+      $results = mysqli_stmt_get_result($stmt);
+	  while ($row=mysqli_fetch_assoc($results)) 
+	        {
+                echo '		<div class="col-md-6">
+                <div class="product-item">';                   
+                  $itemBarcode = $row['itemBarcode'];
+                  $itemName = $row['itemName'];
+                  $depNum = $row['depNum'];
+                  $price = $row['price'];
+                  $qnt = $row['quantity'];
+                  $total = $row['total'];
+                  $img = $row['img'];
+                  $isDone = $row['isDone'];
+          echo '<div style="display: flex;align-items:center;">
+
+                  <a href="#"><img src="'.$img.'" alt=""></a>
+                 <div class="down-content">
+                    <a href="#"><h4>'.$itemName.'<small>('.$itemBarcode.')</small></h4></a>
+                    <h6>₪'.$price.'
+                    <h6>Amount: '.$qnt.'
+                    <h6>Total:'.$total.' <br>
+                    <h6>Status:'; 
+                    if($isDone==0)
+                      echo'<span style="font-size:22px; color:red">InComplete</span>';
+                      else
+                      echo'<span style="font-size:22px; color:green">Complete</span>';
+                      echo'
+                    <br><br>                                                 
+                  </div>
+                </div>
+              </div>
+              ';
+          echo "</div>";
+	        }
+    }
+      ?> 	
 	</div>
-		
-	
 	</div>
 	</div>
-    
 
 
     <!-- Page Content -->

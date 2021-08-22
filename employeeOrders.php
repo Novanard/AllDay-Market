@@ -95,6 +95,7 @@
                                <form action="updateOrder.php" method="post">
                                <input type="hidden" name="barcode" value="'.$itemBarcode.'">
                                <fieldset>
+                               <input type="hidden" name="orderID" value="'.$orderID.'">
                                <button type="submit" name="isDone" id="form-submit" class="btn btn-success">isDone</button>
                                </fieldset>
                                </form>

@@ -39,20 +39,20 @@
                  ?>
       </header>
       <!-- Page Content -->
-      <div class="page-heading contact-heading header-text" style="background-image: url(assets/images/heading-4-1920x500.jpg);">
-         <div class="container">
-            <div class="row">
-               <div class="col-md-12">
-                  <div class="text-content">
-                     <h4>AllDay ~ Market</h4>
-                     <h2>Profile Page</h2>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-      <br><br>
+      <div class="page-heading about-heading header-text" style="background-image: url(assets/images/veghs.png);">
       <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="text-content">
+              <h4>AllDay Market</h4>
+              <h2>My Orders</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+ <div class="col-md-9">
+  <div class="row">
          <?php 
             include 'db.php';
             if(isset($_SESSION['id'])){
@@ -65,38 +65,31 @@
                    $results=mysqli_stmt_get_result($stmt);
               while ($row=mysqli_fetch_assoc($results))
                    {                  
+                     echo '		<div class="col-md-6">
+                     <div class="product-item">';    
                           $orderID = $row['id'];
                           $date = $row['date'];
                           $totalItems = $row['totalItems'];
                           $totalMoney = $row['totalMoney'];
+                          echo '<div style="display: flex;align-items:center;">
             
-                    echo '
-                  <div class="col-md-6">
-                      <div class="product-item">
-                       <div class="down-content">
                        <h5><a href="#">Order ID: '.$orderID.'</a>
                        </div>
-                        <div>
+                        <div class="down-content">
                         <ul>
-                        <li><strong>Order Date:</strong><br>'.$date.'</li>
-                        <li><strong>Total Items:</strong><br>'.$totalItems.'</li>
-                        <li><strong>Total Money:</strong><br>'.$totalMoney.'<li>
+                        <li><strong>Order Date:</strong><br>'.$date.'</li><br>
+                        <li><strong>Total Items:</strong><br>'.$totalItems.'</li><br>
+                        <li><strong>Total Money:</strong><br>₪'.$totalMoney.'<li>
                         </ul>
                         <strong>Order Controls</strong>
-                              <form action="orderControls.php" method="post" enctype="multipart/form-data">
-                                  <div>
-                                     <fieldset>
-                                       <input type="hidden" name="orderID" value="'.$orderID.'">
-                                        <input type="submit" name="viewOrder" value="Order Deatils" class="btn btn-info" required="">
-                                     </fieldset>
-                                  </div>
-                                  <br>
-                                  <div >
-                                     <fieldset>
-                                        <button type="submit" name="statusOrder" class="btn btn-secondary">Order Status</button>
-                                     </fieldset>
-                                  </div>
-                               </form>
+                        <form action="orderControls.php" method="post">
+                        <div >
+                           <fieldset>
+                           <input type="hidden" name="orderID" value="'.$orderID.'">
+                              <button type="submit" name="statusOrder" class="btn btn-secondary">Order Status</button>
+                           </fieldset>
+                        </div>
+                     </form>
             
                         <br><br>
                         </div>
