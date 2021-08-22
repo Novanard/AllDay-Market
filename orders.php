@@ -39,7 +39,7 @@
                  ?>
       </header>
       <!-- Page Content -->
-      <div class="page-heading about-heading header-text" style="background-image: url(assets/images/veghs.png);">
+      <div class="page-heading about-heading header-text" style="background-image: url(assets/images/items/veghs.png);">
       <div class="container">
         <div class="row">
           <div class="col-md-12">
@@ -96,16 +96,35 @@
                         </div>
                       </div>
                       ';
-            
                    }
-               }			
+                   echo'</div></div>';
+                   // Checking old orders of the user
+                   $sql = "SELECT * from orders_id WHERE userID = ? and isDone = 1;";
+                   $stmt = mysqli_stmt_init($conn);
+                   mysqli_stmt_prepare($stmt,$sql);
+                   mysqli_stmt_bind_param($stmt,"i",$id);
+                   mysqli_stmt_execute($stmt);
+                   $results = mysqli_stmt_get_result($stmt);
+                   if(mysqli_num_rows($results)>0)
+                   {
+                      echo'      <div class="page-heading about-heading header-text" style="background-image: url(assets/images/items/veghs.png);">
+                      <div class="container">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="text-content">
+                              <h4>AllDay Market</h4>
+                              <h2>Order History</h2>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>';
+                   }
+               }		
+         
             ?> 	
-         <!-- 
-            <a href="editProfileForm.php?id='.$ID.'"> 
-            <button class="btn btn-secondary" type="button" class="filled-button" class="editBtn">Edit</button>
-            </a>
-            -->
-      </div>
+
+</div>
       <footer>
          <div class="container">
             <div class="row">
