@@ -52,7 +52,7 @@
             ?>
       </header>
       <!-- Page Content -->
-      <div class="page-heading about-heading header-text" style="background-image: url(assets/images/me5baz.jpg);">
+      <div class="page-heading about-heading header-text" style="background-image: url(assets/images/items/me5baz.jpg);">
          <div class="container">
             <div class="row">
                <div class="col-md-12">

@@ -51,7 +51,7 @@
             </div>
          </div>
       </div>
-      <div class="col-md-9">
+      <div class="col-md-12">
          <div class="row">
             <?php 
 
@@ -59,13 +59,22 @@
                if(isset($_SESSION['eID'])){
                   $eID = $_SESSION['eID'];
                            include 'db.php';
-                           // To get the department number of the current employee
+                           // To get the payroll id of the current payroll for employee
                            $sql = "SELECT id FROM payroll_ids WHERE eID = ? AND isFinished = 0 LIMIT 1";
                            $stmt= mysqli_stmt_init($conn);
                            mysqli_stmt_prepare($stmt,$sql);
                            mysqli_stmt_bind_param($stmt,"i",$eID);
                            mysqli_stmt_execute($stmt);
                            $results=mysqli_stmt_get_result($stmt);
+                           if(mysqli_num_rows($results)==0){
+                              echo '<br><div class="alert alert-info col-md-12" role="alert">
+                              <p class="text-center">No active payrolls found found!</p>
+                            </div>';
+                           }
+                           else{
+                              echo'  <hr><div class="alert alert-dark col-md-12" role="alert">
+                              <p class="text-center" font-weight:bold>Current Payroll</p>
+                             </div><hr>';
                             $row = mysqli_fetch_assoc($results);
                             $payroll_id = $row['id'];
                             //Getting all the working days of the current payroll_id
@@ -92,7 +101,7 @@
                                <ol><li>StartTime: '.$startTime.'<br>
                                <li>endTime: '.$endTime.'<br>
                                <li>TotalTime: '.$totalTime.'<br>
-                               <li>Payday: '.$payday.'<br>
+                               <li>Payday: ₪'.$payday.'<br>
 
                                </div>
                                </div>
@@ -125,7 +134,7 @@
                                <a href="#"><h4>Summary:</h4></a>
                                <br>
                                Total Work Days: '.$totalDays.'<br>
-                               Total Payday: '.$totalPayday.'
+                               Total Payday: ₪'.$totalPayday.'
 
 
 
@@ -133,11 +142,48 @@
                                </div>
                                </div>
                                ';
-                               
-
 
                			}
-                        
+                        echo '</div></div>';
+                     }
+                   // Checking old orders of the user
+                   $sql = "SELECT * from oldPayroll_ids WHERE eID = ?;";
+                   $stmt = mysqli_stmt_init($conn);
+                   mysqli_stmt_prepare($stmt,$sql);
+                   mysqli_stmt_bind_param($stmt,"i",$eID);
+                   mysqli_stmt_execute($stmt);
+                   $results = mysqli_stmt_get_result($stmt);
+                   if(mysqli_num_rows($results)>0)
+                   {
+                        while($row=mysqli_fetch_assoc($results)){
+                           $payrollID = $row['id'];
+                           $payMonth = $row['payMonth'];
+                           $totalTime = $row['totalTime'];
+                           $totalMoney = $row['totalMoney'];
+                           $isFinished = $row['isFinished'];
+                               echo'  <hr><div class="alert alert-dark" role="alert">
+                                <p class="text-center" font-weight:bold>Payroll History</p>
+                                </div><hr>';
+                    
+                               echo' <div class="col-md-6">
+                               <div class="product-item">
+                               <div class="down-content">
+                               <a href="#"><h4>Payroll_ID:'.$payrollID.'</h4></a>
+                               <br>
+                               PayMonth: '.$payMonth.'<br>
+                               Total Time: '.$totalTime.'<br>
+                               Total Money: ₪'.$totalMoney.'<br>
+                               <form action="payrollControls.php" method="post>
+                               <input type="hidden" name="id" value="'.$payrollID.'">
+                               <input type="submit" name="viewPayroll" value="View Payroll" class="btn btn-secondary">
+                               </form>
+                               </div>
+                               </div>
+                               </div>
+                               ';
+
+                   }
+                  }
                else
                			  echo 'Incorrect Session Details ';
                		  ?>

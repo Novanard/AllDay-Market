@@ -126,7 +126,50 @@
                    mysqli_stmt_prepare($stmt,$sql);
                    mysqli_stmt_bind_param($stmt,"i",$eID);
                    mysqli_stmt_execute($stmt);
-                  
+                   //Getting all of the record info so we move it to archive 
+                   $sql = "SELECT * FROM payroll_ids WHERE eID = ? and isFinished = 1;";
+                   $stmt= mysqli_stmt_init($conn);
+                    mysqli_stmt_prepare($stmt,$sql);
+                    mysqli_stmt_bind_param($stmt,"i",$eID);
+                    mysqli_stmt_execute($stmt);
+                    $result = mysqli_stmt_get_result($stmt);
+                    $row = mysqli_fetch_assoc($result);
+                    $id = $row['id'];
+                    $payMonth = $row['payMonth'];
+                    $totalTime = $row['totalTime'];
+                    $totalMoney = $row['totalMoney'];
+                    $isFinished = $row['isFinished'];
+                    $sql = "INSERT INTO oldPayroll_ids (id,eID,payMonth,totalTime,totalMoney,isFinished) VALUES (?,?,?,?,?,?);";
+                    $stmt= mysqli_stmt_init($conn);
+                     mysqli_stmt_prepare($stmt,$sql);
+                     mysqli_stmt_bind_param($stmt,"iisiii",$id,$eID,$payMonth,$totalTime,$totalMoney,$isFinished);
+                     mysqli_stmt_execute($stmt);
+                  //Selecting the payroll details so it could be archieved as well.
+                  $sql = "SELECT * FROM payroll_details WHERE payroll_id = ?;";
+                  $stmt= mysqli_stmt_init($conn);
+                   mysqli_stmt_prepare($stmt,$sql);
+                   mysqli_stmt_bind_param($stmt,"i",$id);
+                   mysqli_stmt_execute($stmt);
+                   $result = mysqli_stmt_get_result($stmt);
+                  while($row = mysqli_fetch_assoc($result)){
+                     $id = $row['id'];
+                     $startTime = $row['startTime'];
+                     $endTime = $row['endTime'];
+                     $totalTime = $row['totalTime'];
+                     $payday = $row['payday'];
+                     $payroll_id = $row['payroll_id'];
+                     $sql = "INSERT INTO oldPayroll_details(id,startTime,endTime,totalTime,payday,payroll_id) VALUES (?,?,?,?,?,?);";
+                     $stmt= mysqli_stmt_init($conn);
+                      mysqli_stmt_prepare($stmt,$sql);
+                      mysqli_stmt_bind_param($stmt,"issiii",$id,$startTime,$endTime,$totalTime,$payday,$payroll_id);
+                      mysqli_stmt_execute($stmt);
+                  }
+                  //Deleting the month from active payroll
+                  $sql = "DELETE FROM payroll_ids WHERE id = ?;";
+                  $stmt = mysqli_stmt_init($conn);
+                  mysqli_stmt_prepare($stmt,$sql);
+                  mysqli_stmt_bind_param($stmt,"i",$payroll_id);
+                  mysqli_stmt_execute($stmt);
                   $sql = "INSERT INTO payroll_ids (eID,payMonth) VALUES (?,?);";
                   $stmt= mysqli_stmt_init($conn);
                    mysqli_stmt_prepare($stmt,$sql);
