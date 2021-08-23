@@ -23,8 +23,9 @@
 
   <body>
   <?php 
-
-if ($_SERVER['REQUEST_METHOD'] === "POST" ) {   
+  $isRegistered = 0;  
+if ($_SERVER['REQUEST_METHOD'] === "POST" ) {
+ 
 include 'db.php'; 
   $name=$_POST['name'];
   $email=$_POST['email'];
@@ -33,6 +34,17 @@ include 'db.php';
   $address=$_POST['address'];
   $number=$_POST['number'];
 
+
+      //Check if the user is already registered
+      $sql = "SELECT * FROM users WHERE email = ?;";
+      $stmt = mysqli_stmt_init($conn);
+      mysqli_stmt_prepare($stmt,$sql);
+      mysqli_stmt_bind_param($stmt,"s",$email);
+      mysqli_stmt_execute($stmt);
+      $res = mysqli_stmt_get_result($stmt);
+      if(mysqli_num_rows($res)>0)
+      $isRegistered =1;
+      else{
       $sql = "INSERT INTO users (name,email,password,address,number) VALUES (?,?,?,?,?);";
         $stmt= mysqli_stmt_init($conn);
         mysqli_stmt_prepare($stmt,$sql);
@@ -41,6 +53,7 @@ include 'db.php';
 
         header('Location:login.php');
     }
+  }
 
 ?>
     <!-- ***** Preloader Start ***** -->
@@ -69,7 +82,7 @@ include 'db.php';
             }
             else{
 				$basedir = realpath(__DIR__);
-				include($basedir . '/navbars/nav.php');
+				include($basedir . '/navbars/navbar.php');
             }
             
             ?>
@@ -134,6 +147,14 @@ include 'db.php';
                   </div>
                 </div>
               </form>
+              <?php
+              if($isRegistered==1){
+                echo	'  <hr><div class="alert alert-warning" role="alert">
+                <p class="text-center" font-weight:bold>Email is already registered</p>
+               </div><hr>';
+
+              }
+              ?>
             </div>
           </div>
 	</div>

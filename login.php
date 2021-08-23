@@ -23,7 +23,8 @@
 
   <body>
   <?php 
-
+    $stats = 0;
+    $uEmail = 0;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
    	include "db.php";
@@ -35,27 +36,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     mysqli_stmt_bind_param($stmt,"s",$email);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
-
     if(mysqli_num_rows($result)>0){
+      $uEmail=1;
     	$row = mysqli_fetch_assoc($result);
     	$pwdcheck=password_verify($password,$row['password']);
     	if($pwdcheck){
+        $stats=1;
     		session_start();
         $_SESSION['id']=$row['id'];
     		$_SESSION['email']=$row['email'];
         $_SESSION['userType']=$row['userType'];
     		 header('Location:index.php');
-    	}
-    	else{
-    		echo "Password is incorrect";
-    		exit();
-    	}
+      }
+      else
+      $stats =2;
     }
-    else {
-    	echo "Email isn't registered";
-    	exit();
+    else 
+    	$uEmail = 2;
     }
-}
 ?>
     <!-- ***** Preloader Start ***** -->
     <div id="preloader">
@@ -82,14 +80,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             else{
 				$basedir = realpath(__DIR__);
-				include($basedir . '/navbars/nav.php');
+				include($basedir . '/navbars/navbar.php');
             }
             
             ?>
 </header>
 
 
-    <div class="page-heading contact-heading header-text" style="background-image: url(assets/images/heading-4-1920x500.jpg);">
+    <div class="page-heading contact-heading header-text" style="background-image: url(assets/images/items/heading-4-1920x500.jpg);">
       <div class="container">
         <div class="row">
           <div class="col-md-12">
@@ -130,6 +128,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   </div>
                 </div>
               </form>
+              <?php
+              if($stats==2){
+                echo	'  <hr><div class="alert alert-warning" role="alert">
+                <p class="text-center" font-weight:bold>Incorrect Password</p>
+               </div><hr>';
+              }
+              else if($uEmail==2){
+              echo	'  <hr><div class="alert alert-warning" role="alert">
+              <p class="text-center" font-weight:bold>Email is not registered</p>
+             </div><hr>';
+            }   
+            ?>
 			  <br><br>
             </div>
           </div>
