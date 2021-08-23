@@ -45,7 +45,7 @@
             }
             else{
 				$basedir = realpath(__DIR__);
-				include($basedir . '/navbars/nav.php');
+				include($basedir . '/navbars/navbar.php');
             }
             
             ?>
@@ -116,13 +116,13 @@
 	<div style="font-family: 'Poppins', sans-serif;font-size: 20px;float: right;font-weight: bold">
     <?php 
     if(isset($totalPrice))
-      echo 'Total Price: ₪'.$totalPrice;
+      echo 'Total Price: ₪'.$totalPrice.'
 
-    ?> 
 		<form action="tempOrder.php" method="POST">
 		<button class="btn btn-danger" type="submit" name="submit" class="filled-button" class="payBtn">Checkout</button>
-		</form>
+		</form>';
 		
+    ?> 
 	
 	</div>
 	</div>
