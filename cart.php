@@ -51,7 +51,7 @@
             ?>
 </header>
 
-    <div class="page-heading about-heading header-text" style="background-image: url(assets/images/veghs.png);">
+    <div class="page-heading about-heading header-text" style="background-image: url(assets/images/items/veghs.png);">
       <div class="container">
         <div class="row">
           <div class="col-md-12">
@@ -94,7 +94,7 @@
                           <a href="#"><h4>'.$name.'</h4></a>
                           <h6>₪'.$price.'
 						  <h6>Amount: '.$qnt.'
-						  <h6>Total:'.$total.' <br>
+						  <h6>Total:₪'.$total.' <br>
 						<form action="deleteCart.php" method="post">
 							<input type="hidden" value="'.$name.'" name="delete" />
 							<input class="btn btn-danger" value="Delete" type="submit" />
@@ -119,7 +119,7 @@
       echo 'Total Price: ₪'.$totalPrice;
 
     ?> 
-		<form action="createOrder.php" method="POST">
+		<form action="tempOrder.php" method="POST">
 		<button class="btn btn-danger" type="submit" name="submit" class="filled-button" class="payBtn">Checkout</button>
 		</form>
 		

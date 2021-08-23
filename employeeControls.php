@@ -40,7 +40,7 @@
             }
             else{
             $basedir = realpath(__DIR__);
-            include($basedir . '/navbars/nav.php');
+            include($basedir . '/navbars/navbar.php');
             }
             
             ?>

@@ -46,19 +46,19 @@
             }
             else{
             $basedir = realpath(__DIR__);
-            include($basedir . '/navbars/nav.php');
+            include($basedir . '/navbars/navbar.php');
             }
             
             ?>
       </header>
       <!-- Page Content -->
-      <div class="page-heading about-heading header-text" style="background-image: url(assets/images/me5baz.jpg);">
+      <div class="page-heading about-heading header-text" style="background-image: url(assets/images/items/butcher.png);">
          <div class="container">
             <div class="row">
                <div class="col-md-12">
                   <div class="text-content">
                      <h4>AllDay Market</h4>
-                     <h2>Bakery</h2>
+                     <h2>ButcherShop</h2>
                   </div>
                </div>
             </div>
@@ -82,6 +82,7 @@
                      $name = $row['Name'];
                      $price = $row['Price'];
                      $img = $row['img'];
+                     $qnt = $row['quantity'];
                      echo '
                      <div class="col-md-6">
                      <div class="product-item">
@@ -89,7 +90,7 @@
                      <div class="down-content">
                      <a href="#"><h4>'.$name.'</h4></a>
                      
-                     <h6><small><del> ₪4.20</del></small> ₪'.$price.'
+                     ₪'.$price.' ~ <small>('.$qnt.')KGs available</small>
                      <br><br>
                      
                      <a href="editItemForm.php?id='.$ID.'">
@@ -116,6 +117,7 @@
                $name = $row['Name'];
                $price = $row['Price'];
                $img = $row['img'];
+               $qnt = $row['quantity'];
                echo '
                <div class="col-md-6">
                <div class="product-item">
@@ -123,7 +125,7 @@
                <div class="down-content">
                <a href="#"><h4>'.$name.'</h4></a>
                
-               <h6><small><del> ₪4.20</del></small> ₪'.$price.'
+               ₪'.$price.' ~ <small>('.$qnt.')KGs available</small>
                <br><br>
                <form id="qnt'.$ID.'">
                <input type="text" placeholder="Enter Quantity in Kilo" name="qty" required>
@@ -145,6 +147,7 @@
                $name = $row['Name'];
                $price = $row['Price'];
                $img = $row['img'];
+               $qnt = $row['quantity'];
                echo '
                <div class="col-md-6">
                <div class="product-item">
@@ -152,7 +155,7 @@
                <div class="down-content">
                <a href="#"><h4>'.$name.'</h4></a>
                
-               <h6> ₪'.$price.'
+               ₪'.$price.' ~ <small>('.$qnt.')KGs available</small>
                <br><br>
                <form id="qnt'.$id.'">
                <input type="text" placeholder="Enter Quantity in Kilo" name="qty" required>

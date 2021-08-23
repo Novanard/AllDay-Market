@@ -51,7 +51,7 @@
             </div>
          </div>
       </div>
-      <div class="col-md-9">
+      <div class="col-md-12">
          <div class="row">
             <?php 
 
@@ -59,6 +59,14 @@
                if(isset($_SESSION['eID'])){
                   $eID = $_SESSION['eID'];
                            include 'db.php';
+                           //Employee can not see Orders without being in their shift
+                           $sql = "SELECT * FROM shift where eID = ?;";
+                           $stmt = mysqli_stmt_init($conn);
+                           mysqli_stmt_prepare($stmt,$sql);
+                           mysqli_stmt_bind_param($stmt,"i",$eID);
+                           mysqli_stmt_execute($stmt);
+                           $results = mysqli_stmt_get_result($stmt);
+                           if(mysqli_num_rows($results)){
                            // To get the department number of the current employee
                            $sql = "SELECT depNum FROM employees WHERE eID = ? LIMIT 1";
                            $stmt= mysqli_stmt_init($conn);
@@ -105,11 +113,17 @@
                                ';
                                }
 
-
-               			}
+                              }
+                              else{
+                                 echo '<div class="alert alert-warning col-md-12" role="alert">
+                                 <p style="text-align:center;">You must check-in your shift before accessing Orders!</p>
+                               </div> ';
+                           }
+                        }
+               
                         
-               else
-               			  echo 'Incorrect Session Details ';
+               else{
+               			  echo '5ra';}
                		  ?>
          </div>
       </div>

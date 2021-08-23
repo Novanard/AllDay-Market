@@ -105,10 +105,10 @@
                   <a href="employeeOrders.php"><input  class="btn btn-danger"type="submit"  value="View Orders"></a>
                   <a href="shiftForm.php"><input  class="btn btn-danger"type="submit"  value="Shift Controls"></a>
                </div>
-               <div class="col-md-4">
-                  <center><img src=" <?php echo($avatar); ?> " height="370px" width="270px" class="img-fluid" alt=""></center> 
-                  <h5 class="text-center" style="margin-top: 15px;">
-                     <center><?php echo('Employee:' .$_SESSION['firstname'] .'&nbsp' .$_SESSION['lastname']); ?><center>
+               <div class="col-md-4"><center>
+                  <img src=" <?php echo($avatar); ?> " height="370px" width="270px" class="img-fluid" alt="">
+                  <h5 class="text-center" style="margin-top: 15px;"></h5>
+                     <?php echo('Employee:' .$_SESSION['firstname'] .'&nbsp' .$_SESSION['lastname']); ?>
                      <form action="logout.php" method="post">
                         <button class="btn btn-danger" type="submit">Log-Out</button>
                      </form>
@@ -126,7 +126,8 @@
                            </fieldset>
                         </div>
                      </form>
-                  </h5>
+         </center>
+                  
                   <br>
                </div>
             </div>
