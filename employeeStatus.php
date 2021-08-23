@@ -173,7 +173,7 @@
                                PayMonth: '.$payMonth.'<br>
                                Total Time: '.$totalTime.'<br>
                                Total Money: ₪'.$totalMoney.'<br>
-                               <form action="payrollControls.php" method="post>
+                               <form action="payrollControls.php" method="post">
                                <input type="hidden" name="id" value="'.$payrollID.'">
                                <input type="submit" name="viewPayroll" value="View Payroll" class="btn btn-secondary">
                                </form>

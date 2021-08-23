@@ -70,7 +70,7 @@
     echo' 
     <div class="col-md-12">
     <div class="row">';
-      $id = $_POST['payrollID'];
+      $id = $_POST['id'];
       $sql = "SELECT * from oldPayroll_details WHERE payroll_id = ?; ";
       $stmt= mysqli_stmt_init($conn);
       mysqli_stmt_prepare($stmt,$sql);
@@ -80,8 +80,6 @@
       $day = 1;
 	  while ($row=mysqli_fetch_assoc($results)) 
 	        {
-             
-                $id = $row['id'];
                 $startTime = $row['startTime'];
                 $endTime = $row['endTime'];
                 $totalTime = $row['totalTime'];
@@ -103,8 +101,40 @@
                                </div>
                                ';
                 $day+=1;
+                
            }
-           echo'</div></div>';
+                              // Making sum of all current working days
+                              $sql = "SELECT SUM(payday) as totalPayday FROM oldPayroll_details WHERE payroll_id = ? ";
+                              $stmt= mysqli_stmt_init($conn);
+                              mysqli_stmt_prepare($stmt,$sql);
+                              mysqli_stmt_bind_param($stmt,"i",$id);
+                              mysqli_stmt_execute($stmt);
+                              $results=mysqli_stmt_get_result($stmt);
+                              $row = mysqli_fetch_assoc($results);
+                              $totalPayday = $row['totalPayday'];
+                              // Making count of all working days
+                              $sql = "SELECT COUNT(payday) as totalDays FROM oldPayroll_details WHERE payroll_id = ? ";
+                              $stmt= mysqli_stmt_init($conn);
+                              mysqli_stmt_prepare($stmt,$sql);
+                              mysqli_stmt_bind_param($stmt,"i",$id);
+                              mysqli_stmt_execute($stmt);
+                              $results=mysqli_stmt_get_result($stmt);
+                              $row = mysqli_fetch_assoc($results);
+                              $totalDays = $row['totalDays']; 
+                              echo '
+                              <div class="col-md-6">
+                              <div class="product-item">
+                              <div class="down-content">
+                              <a href="#"><h4>Summary:</h4></a>
+                              <br>
+                              Total Work Days: '.$totalDays.'<br>
+                              Total Payday: ₪'.$totalPayday.'
+
+                              </div>
+                              </div>
+                              </div>
+                              ';
+                              echo'</div></div>';
         }
     }
         else
