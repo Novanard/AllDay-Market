@@ -18,6 +18,12 @@
 		$price = $row['Price'];
 		$img = $row['img'];
 		$depNum = $row['Department'];
+		$currentQ = $row['quantity'];
+		if($qnt > $currentQ)
+		{
+			echo'not enough quantity';
+			exit();
+		}
 		//Checking if the product already exists into cart update quantity only
 		$sql = "SELECT * from Cart WHERE userID = ? AND itemBarcode =?;";
 		$stmt = mysqli_stmt_init($conn);
