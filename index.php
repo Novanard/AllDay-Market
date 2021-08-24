@@ -38,7 +38,7 @@
     <?php
             session_start();
             if(isset($_SESSION['email'])){
-            	if($_SESSION['email'] === 'admin@allday.com'){
+            	if($_SESSION['userType'] == 1){
 					$basedir = realpath(__DIR__);
             		include($basedir . '/navbars/navadmin.php');
             	}

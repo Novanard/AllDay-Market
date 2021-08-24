@@ -29,7 +29,6 @@
          <?php
             session_start();
             if(isset($_SESSION['email'])&& $_SESSION['userType']== 1){
-            	if($_SESSION['email'] === 'admin@allday.com'){
             $basedir = realpath(__DIR__);
             		include($basedir . '/navbars/navadmin.php');
             	}

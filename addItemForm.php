@@ -67,7 +67,7 @@
     <?php
 	session_start();
 	if(isset($_SESSION['email'])){
-		if($_SESSION['email'] === 'admin@allday.com'){
+		if($_SESSION['userType'] == 1){
 			$target_dir = 'navbars/navadmin.php';
 			include ($target_dir);
 		}

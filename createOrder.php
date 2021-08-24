@@ -51,7 +51,7 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 		$row = mysqli_fetch_assoc($result);
 		$qnt = $row['quantity'];
 		// If the quantity is bigger than what the customer wants, then we add it to their order
-		if($qnt > $quantity){
+		if($qnt >= $quantity){
 			$totalItems++;
 			$totalMoney+=$total;
 		$sql = "INSERT INTO order_details (itemBarcode,itemName,depNum,price,quantity,total,order_id,img) VALUES (?,?,?,?,?,?,?,?);";
@@ -82,8 +82,45 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 		mysqli_stmt_prepare($stmt,$sql);
 		mysqli_stmt_bind_param($stmt,"ii",$sellCount,$itemBarcode);
 		mysqli_stmt_execute($stmt);
-		}}		
-		// Updating the totalItems in order_details
+		}
+        else if($qnt<$quantity && $qnt >0){
+
+            $quantity = $qnt;
+            $totalItems++;
+            $total = $qnt * $price;
+			$totalMoney+=$total;
+		$sql = "INSERT INTO order_details (itemBarcode,itemName,depNum,price,quantity,total,order_id,img) VALUES (?,?,?,?,?,?,?,?);";
+        $stmt= mysqli_stmt_init($conn);
+        mysqli_stmt_prepare($stmt,$sql);
+        mysqli_stmt_bind_param($stmt,"isiiiiis",$itemBarcode,$itemName,$depNum,$price,$quantity,$total,$order_id,$img);
+        mysqli_stmt_execute($stmt);
+		// Updating the quantity in the inventory 
+		$sql ="UPDATE items SET quantity = ? WHERE Barcode = ?";
+		$stmt = mysqli_stmt_init($conn);
+		mysqli_stmt_prepare($stmt,$sql);
+		$newQ = $qnt - $quantity;
+		mysqli_stmt_bind_param($stmt,"ii",$newQ,$itemBarcode);
+		mysqli_stmt_execute($stmt);
+		//Getting the current sellCount in order to increase it
+		$sql ="SELECT sellCount FROM items WHERE Barcode = ? LIMIT 1";
+		$stmt = mysqli_stmt_init($conn);
+		mysqli_stmt_prepare($stmt,$sql);
+		mysqli_stmt_bind_param($stmt,"i",$itemBarcode);
+		mysqli_stmt_execute($stmt);
+		$result = mysqli_stmt_get_result($stmt);
+		$row = mysqli_fetch_assoc($result);
+		$sellCount = $row['sellCount'];
+		//Updating the sellCount to the new one
+		$sellCount += $quantity;
+		$sql = "UPDATE items SET sellCount = ? WHERE Barcode = ?";
+		$stmt = mysqli_stmt_init($conn);
+		mysqli_stmt_prepare($stmt,$sql);
+		mysqli_stmt_bind_param($stmt,"ii",$sellCount,$itemBarcode);
+		mysqli_stmt_execute($stmt);
+
+        }    
+    }		
+		// Updating the totalItems and totalMoney in orders id
 				$sql = "UPDATE orders_id SET totalItems = ?,totalMoney=? WHERE id =?;";
 				$stmt = mysqli_stmt_init($conn);
 				mysqli_stmt_prepare($stmt,$sql);
