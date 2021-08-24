@@ -49,7 +49,7 @@
       <?php
      if(isset($_SESSION['email'])&& $_SESSION['userType']== 1){
          echo '
-         <div class="page-heading contact-heading header-text" style="background-image: url(assets/images/heading-4-1920x500.jpg);">
+         <div class="page-heading contact-heading header-text" style="background-image: url(assets/images/items/heading-4-1920x500.jpg);">
          <div class="container">
             <div class="row">
                <div class="col-md-12">
@@ -73,7 +73,7 @@
                   <br><br><br>
                   <a href="itemControls.php"><input  class="btn btn-danger"type="submit" value="Items Controls"></a>
                   <a href="employeeControls.php"><input  class="btn btn-danger"type="submit" value="Employees Controls"></a>
-                  <a href="addSupplierForm.php"><input  class="btn btn-danger"type="submit" value="Supplier Controls"></a>
+                  <a href="userControls.php"><input  class="btn btn-danger"type="submit" value="Users Controls"></a>
                </div>
                <div class="col-md-4">
                   <img src="assets/images/adnan.jpeg" class="img-fluid" alt="">

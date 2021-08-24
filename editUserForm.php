@@ -36,7 +36,7 @@
   <!-- Header -->
       <header class="">
       <?php
-       $sID=$_GET['id'];
+       $uID=$_GET['id'];
 	session_start();
   if(isset($_SESSION['email'])&& $_SESSION['userType']== 1){
     $target_dir = 'navbars/navadmin.php';
@@ -67,37 +67,42 @@
         <div class="row">
           <div class="col-md-12">
             <div class="section-heading">
-            <h2>Edit Employee </h2>
+            <h2>Edit User </h2>
             </div>
           </div>
           <div class="col-md-8">
             <div class="contact-form">
-              <form action="updateSupplier.php" method="POST">
-                <input type="hidden" name="id" value="<?php echo $sID ?>">
+              <form action="updateUser.php" method="POST">
+                <input type="hidden" name="id" value="<?php echo $uID ?>">
                 <div class="row">
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="sID" type="number" class="form-control" id="sID" placeholder="New Supplier ID" required="">
+                      <input name="name" type="text" class="form-control" id="name" placeholder="New Name" required="">
                     </fieldset>
                   </div>
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="name" type="text" class="form-control" id="sName" placeholder="New Supplier Name" required="">
+                      <input name="email" type="text" class="form-control" id="email" placeholder="New Email Address" required="">
                     </fieldset>
                   </div>
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="company" type="text" class="form-control" id="company" placeholder="New Supplier Company" required="">
+                      <input name="password" type="password" class="form-control" id="password" placeholder="New Password" pattern="(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"  required="">
                     </fieldset>
                   </div>
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="phone" type="number" class="form-control" id="phone" placeholder="New Supplier Phone Number" required="">
+                      <input name="address" type="text" class="form-control" id="address" placeholder="New Address"   required="">
+                    </fieldset>
+                  </div>
+                  <div class="col-lg-12 col-md-12 col-sm-12">
+                    <fieldset>
+                      <input name="phone" type="number" class="form-control" id="number" placeholder="New Phone Number"   required="">
                     </fieldset>
                   </div>
                   <div class="col-lg-12">
                     <fieldset>
-                      <button name="supplierEdit" type="submit" id="form-submit" class="filled-button">Edit Item</button>
+                      <button name="userEdit" type="submit" id="form-submit" class="filled-button">Edit User</button>
                     </fieldset>
                   </div>
                 </div>

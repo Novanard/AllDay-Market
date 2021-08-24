@@ -26,7 +26,7 @@
                 </li>
 				<li class="nav-item"><a class="nav-link" href="adminCp.php">Admin</a></li>
 				<li class="nav-item"><a class="nav-link" href="employees.php">Employees</a></li>
-				<li class="nav-item"><a class="nav-link" href="suppliers.php">Suppliers</a></li>
+				<li class="nav-item"><a class="nav-link" href="users.php">Users</a></li>
             </ul>
           </div>
         </div>

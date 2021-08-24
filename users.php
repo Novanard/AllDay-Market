@@ -51,13 +51,13 @@
             ?>
       </header>
       <!-- Page Content -->
-      <div class="page-heading about-heading header-text" style="background-image: url(assets/images/veghs.png);">
+      <div class="page-heading about-heading header-text" style="background-image: url(assets/images/items/heading-4-1920x500.jpg);">
          <div class="container">
             <div class="row">
                <div class="col-md-12">
                   <div class="text-content">
                      <h4>AllDay Market</h4>
-                     <h2>Employees</h2>
+                     <h2>Users</h2>
                   </div>
                </div>
             </div>
@@ -68,44 +68,45 @@
             <?php 
                mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
                            include 'db.php';
-                           $sql = "SELECT * FROM suppliers";
+                           $sql = "SELECT * FROM users";
                            $stmt= mysqli_stmt_init($conn);
                            mysqli_stmt_prepare($stmt,$sql);
                            mysqli_stmt_execute($stmt);
                            $results=mysqli_stmt_get_result($stmt);
                
                	if(isset($_SESSION['email'])){
-               	if($_SESSION['email'] === 'admin@allday.com'){
+               	if($_SESSION['userType'] == 1){
                		while ($row=mysqli_fetch_assoc($results))
                			{
-               			  $ID = $row['id'];
-               			  $sID=$row['sID'];
-                                         $sName=$row['name'];
-                                         $company=$row['company'];
-                                         $phone=$row['phone'];
+               			  $id = $row['id'];
+                         $name=$row['name'];
+                         $email=$row['email'];
+                         $address=$row['address'];
+                         $number = $row['number'];
                			  $img = $row['avatar'];
-               			  
                			  echo '
                				<div class="col-md-6">
                				  <div class="product-item">
                					<a href="#"><img src="'.$img.'" height="350px" width="250px" alt=""></a>
                				   <div class="down-content">
-               					<center><strong>'.$sName.' &nbsp ~ &nbsp '.$company.'&nbsp Company</strong><small>('.$ID.')</small></center>
+               					<center><strong>'.$name.' &nbsp ~ &nbsp '.$address.'&nbsp </strong><small>('.$id.')</small></center>
                					 </div>
                					  <br>
                					  <div>
                					  <ul>
-               					  <li><strong>Supplier ID:</strong>'.$sID.'</li>
-               					  <li><strong>Phone No:</strong>'.$phone.'</li>
+               					  <li><strong>Email Address: </strong>'.$email.'</li>
+                                <li><strong>Address: </strong>'.$address.'</li>
+               					  <li><strong>Phone No: </strong>'.$number.'</li>
+                                 </ul>
                					  </div>
                					  <div>
-                               <a href="editSupplierForm.php?id='.$ID.'">
+                               <a href="editUserForm.php?id='.$id.'">
                                <button class="btn btn-secondary" type="button" class="filled-button" class="editBtn">Edit</button>
                                </a>
                                <form action="updateSupplier.php" method="post">
-                               <input type="hidden" name="id" value="'.$ID.'">
+                               <input type="hidden" name="id" value="'.$id.'">
                                <fieldset>
-                               <button type="submit" name="supplierDel" id="form-submit" class="btn btn-danger">Delete</button>
+                               <button type="submit" name="userDel" id="form-submit" class="btn btn-danger">Delete</button>
                                </fieldset>
                                </form>
                            </div>
