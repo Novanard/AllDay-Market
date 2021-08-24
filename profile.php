@@ -89,7 +89,7 @@
       if(!isset($_SESSION['userType']) || $_SESSION['userType'] !=0)
       header('Location: index.php');
       ?>
-    <div class="page-heading contact-heading header-text" style="background-image: url(assets/images/heading-4-1920x500.jpg);">
+    <div class="page-heading contact-heading header-text" style="background-image: url(assets/images/items/heading-4-1920x500.jpg);">
       <div class="container">
         <div class="row">
           <div class="col-md-12">
@@ -114,7 +114,8 @@
 	        mysqli_stmt_execute($stmt);
 	        $results=mysqli_stmt_get_result($stmt);
 		  while ($row=mysqli_fetch_assoc($results))
-	        {                  
+	        {    
+          $id = $row['id'];                
 					$name = $row['name'];
 					$email = $row['email'];
 					$address = $row['address'];
@@ -147,6 +148,9 @@
                            </fieldset>
                         </div>
                      </form>
+                     <br>
+                     <a href="editProfileForm.php?id='.$id.'">
+                     <button type="submit" name="profileEdit" class="btn btn-secondary" value="Submit">Edit Profile</button>
 
               <br><br>
               <form action="logout.php">

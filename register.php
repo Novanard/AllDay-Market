@@ -50,6 +50,21 @@ include 'db.php';
         mysqli_stmt_prepare($stmt,$sql);
         mysqli_stmt_bind_param($stmt,"sssss",$name,$email,$hashedpwd,$address,$number);
         mysqli_stmt_execute($stmt);
+        //Setting default avatar
+        $sql ="SELECT id FROM users ORDER BY id DESC LIMIT 1;";
+        $stmt= mysqli_stmt_init($conn);
+        mysqli_stmt_prepare($stmt,$sql);
+        mysqli_stmt_execute($stmt);
+        $res = mysqli_stmt_get_result($stmt);
+        $row = mysqli_fetch_assoc($res);
+        $id = $row['id'];
+
+        $sql = "UPDATE users SET avatar = ? WHERE id =?;";
+        $avatar = "assets/images/users/noPic.jpg";
+        $stmt= mysqli_stmt_init($conn);
+        mysqli_stmt_prepare($stmt,$sql);
+        mysqli_stmt_bind_param($stmt,"si",$avatar,$id);
+        mysqli_stmt_execute($stmt);
 
         header('Location:login.php');
     }
