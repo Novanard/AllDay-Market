@@ -81,17 +81,20 @@
                			  $id = $row['id'];
                          $name=$row['name'];
                          $email=$row['email'];
+                         $userType =$row['userType'];
                          $address=$row['address'];
                          $number = $row['number'];
                			  $img = $row['avatar'];
+                          if($userType==0){
                			  echo '
                				<div class="col-md-6">
                				  <div class="product-item">
                					<a href="#"><img src="'.$img.'" height="350px" width="250px" alt=""></a>
                				   <div class="down-content">
-               					<center><strong>'.$name.' &nbsp ~ &nbsp '.$address.'&nbsp </strong><small>('.$id.')</small></center>
+                              <center><small>('.$id.')</small><strong>'.$name.'  ~  '.$address.'&nbsp </strong><br>
+                              <form action="updateUser.php" method="post"><input type="hidden" name="id" value="'.$id.'">
+                              <input name="alterUser" class="btn btn-secondary" type="submit" class="filled-button" class="editBtn" value="makeAdmin"></form></center>
                					 </div>
-               					  <br>
                					  <div>
                					  <ul>
                					  <li><strong>Email Address: </strong>'.$email.'</li>
@@ -114,6 +117,39 @@
                          </div>
                          ';
                			}
+                        else{
+                           echo '
+               				<div class="col-md-6">
+               				  <div class="product-item">
+               					<a href="#"><img src="'.$img.'" height="350px" width="250px" alt=""></a>
+               				   <div class="down-content">
+               					<center><small>('.$id.')</small><strong>'.$name.' &nbsp ~ &nbsp '.$address.'&nbsp </strong><br>
+                              <form action="updateUser.php" method="post"><input type="hidden" name="id" value="'.$id.'">
+                              <input name="alterUser" class="btn btn-secondary" type="submit" class="filled-button" class="editBtn" value="delAdmin"></form></center>
+               					 </div>
+               					  <div>
+               					  <ul>
+               					  <li><strong>Email Address: </strong>'.$email.'</li>
+                                <li><strong>Address: </strong>'.$address.'</li>
+               					  <li><strong>Phone No: </strong>'.$number.'</li>
+                                 </ul>
+               					  </div>
+               					  <div>
+                               <a href="editUserForm.php?id='.$id.'">
+                               <button class="btn btn-secondary" type="button" class="filled-button" class="editBtn">Edit</button>
+                               </a>
+                               <form action="updateSupplier.php" method="post">
+                               <input type="hidden" name="id" value="'.$id.'">
+                               <fieldset>
+                               <button type="submit" name="userDel" id="form-submit" class="btn btn-danger">Delete</button>
+                               </fieldset>
+                               </form>
+                           </div>
+                           </div>
+                         </div>
+                         ';
+                        }
+                     }
                	}
                
                	}
