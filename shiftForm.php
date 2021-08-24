@@ -16,6 +16,9 @@
    </head>
    <body>
       <?php 
+                  session_start();
+                  $_SESSION['alert']="";
+                  $_SESSION['alertType']=0;
          mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
          if (isset($_POST['submit']) && isset($_POST['checkIn'])) {
           include 'db.php';
@@ -39,8 +42,11 @@
            mysqli_stmt_execute($stmt);
            $results=mysqli_stmt_get_result($stmt);
            $row=mysqli_fetch_assoc($results);
-          if (isset($row['eID']))
-            echo('Employee Already in their shift');
+          if (isset($row['eID'])){
+            $_SESSION['alert']="Employee Already in their shift";
+            $_SESSION['alertType']=2;
+            
+          }
            else{
               //If the employee isnt in their shift, they start a new shift
             $sql = "INSERT INTO shift (eID,startTime) VALUES (?,?);";
@@ -48,8 +54,13 @@
          	    mysqli_stmt_prepare($stmt,$sql);
          	    mysqli_stmt_bind_param($stmt,"is",$eID,$startTime);
          	    mysqli_stmt_execute($stmt);
-               echo('Successfully checked-in your shift!');
+                $_SESSION['alert']="Successfully checked-in your shift!";
+                $_SESSION['alertType']=1;
          }
+         }
+         else{
+            $_SESSION['alert']="Employee not found!";
+            $_SESSION['alertType']=3;
          }
          }
          else if (isset($_POST['submit']) && isset($_POST['checkOut'])) {
@@ -71,10 +82,9 @@
            mysqli_stmt_bind_param($stmt,"i",$eID);
            mysqli_stmt_execute($stmt);
            $results =mysqli_stmt_get_result($stmt);
-           $row = mysqli_fetch_assoc($results);
-           if(!isset($row['eID'])){
-            echo('You cant check-out before you check-in!');
-            exit();
+           if(mysqli_num_rows($results)>0){
+            $_SESSION['alert']="Successfully checked-out your shift!";
+            $_SESSION['alertType']=1;
            }
            else{
             $startTime=$row['startTime'];
@@ -85,15 +95,12 @@
            mysqli_stmt_prepare($stmt,$sql);
            mysqli_stmt_bind_param($stmt,"si",$endTime,$eID);
            mysqli_stmt_execute($stmt);
-           echo('Successfully check-out of your shift!');
            // Deleting the shift after it ends
            $sql = "DELETE FROM shift WHERE eID = ?";
            $stmt= mysqli_stmt_init($conn);
            mysqli_stmt_prepare($stmt,$sql);
            mysqli_stmt_bind_param($stmt,"i",$eID);
            mysqli_stmt_execute($stmt);
-           echo('Shift Deleted');
-         }
          //Checking if the employee has previous payroll_id
          $sql="SELECT payMonth,isFinished FROM payroll_ids WHERE eID = ?";
          $stmt= mysqli_stmt_init($conn);
@@ -178,6 +185,7 @@
                    mysqli_stmt_bind_param($stmt,"is",$eID,$currentDate);
                    mysqli_stmt_execute($stmt);
                }
+               
                
           }
           //Getting the payroll id in order to insert it as the foreign key
@@ -265,8 +273,14 @@
             mysqli_stmt_execute($stmt);
             echo('totalTime Updated');
          
+
          }
          }
+         else{
+            $_SESSION['alert']="Employee not found!";
+            $_SESSION['alertType']=3;
+         }
+      }
          ?>
       <!-- ***** Preloader Start ***** -->
       <div id="preloader">
@@ -280,7 +294,6 @@
       <!-- Header -->
       <header class="">
       <?php
-            session_start();
             if(isset($_SESSION['eID'])){
                 $basedir = realpath(__DIR__);
                 include($basedir . '/navbars/navEmployee.php');
@@ -292,7 +305,7 @@
             ?>
       </header>
       <!-- Page Content -->
-      <div class="page-heading contact-heading header-text" style="background-image: url(assets/images/heading-4-1920x500.jpg);">
+      <div class="page-heading contact-heading header-text" style="background-image: url(assets/images/items/heading-4-1920x500.jpg);">
          <div class="container">
             <div class="row">
                <div class="col-md-12">
@@ -333,7 +346,28 @@
                            </div>
                         </div>
                      </form>
+                     <?php
+                     if(isset($_SESSION['alertType'])&&$_SESSION['alertType']==1){
+                           echo'<hr><div class="alert alert-success" role="alert">
+                           <p class="text-center" font-weight:bold>';echo($_SESSION['alert']);echo'</p>
+                          </div><hr>';
+                     }
+                     if(isset($_SESSION['alertType'])&&$_SESSION['alertType']==2){
+                        echo'<hr><div class="alert alert-warning" role="alert">
+                        <p class="text-center" font-weight:bold>';echo($_SESSION['alert']);echo'</p>
+                       </div><hr>';
+                  }
+                  if(isset($_SESSION['alertType'])&&$_SESSION['alertType']==3){
+                     echo'<hr><div class="alert alert-danger" role="alert">
+                     <p class="text-center" font-weight:bold>';echo($_SESSION['alert']);echo'</p>
+                    </div><hr>';
+               }
+                     
+                     unset($_SESSION['alertType']);
+                     unset($_SESSION['alert']);
+                     ?>
                   </div>
+               
                </div>
             </div>
          </div>
