@@ -83,14 +83,11 @@
            mysqli_stmt_execute($stmt);
            $results =mysqli_stmt_get_result($stmt);
            if(mysqli_num_rows($results)>0){
-            $_SESSION['alert']="Successfully checked-out your shift!";
-            $_SESSION['alertType']=1;
-           }
-           else{
+            $row=mysqli_fetch_assoc($results);
             $startTime=$row['startTime'];
           $endTime = date("Y-m-d H:i:s"); 
           // If the employee is in a shift, update their checkout time
-           $sql = "UPDATE shift SET endtime = ? WHERE eID = ?";
+           $sql = "UPDATE shift SET endTime = ? WHERE eID = ?";
            $stmt= mysqli_stmt_init($conn);
            mysqli_stmt_prepare($stmt,$sql);
            mysqli_stmt_bind_param($stmt,"si",$endTime,$eID);
@@ -197,7 +194,6 @@
           $results = mysqli_stmt_get_result($stmt);
           $row = mysqli_fetch_assoc($results);
           $payroll_id = $row['id'];
-          echo('Payroll ID GET successfully');
           // Inserting the payroll details of the employee
           $sql = "INSERT INTO payroll_details (startTime,endTime,totalTime,payroll_id,eID) VALUES (?,?,?,?,?);";
           $datetime1 = strtotime($startTime);
@@ -208,7 +204,6 @@
            mysqli_stmt_prepare($stmt,$sql);
            mysqli_stmt_bind_param($stmt,"ssiii",$startTime,$endTime,$totalHours,$payroll_id,$eID);
            mysqli_stmt_execute($stmt);
-           echo('Payroll Details Executed');
            // Getting the perhour from employee tables to calculate the payday
            $sql="SELECT perhour FROM employees WHERE eID = ? LIMIT 1";
            $stmt= mysqli_stmt_init($conn);
@@ -228,21 +223,18 @@
            $results = mysqli_stmt_get_result($stmt);
            $row = mysqli_fetch_assoc($results);
            $pay_detailsID = $row['id'];
-           echo('Pay roll details PK GET Success');
            // UPDATING the payday column in the payroll_details
            $sql="UPDATE payroll_details SET payday = ? WHERE id = ?";
            $stmt= mysqli_stmt_init($conn);
            mysqli_stmt_prepare($stmt,$sql);
            mysqli_stmt_bind_param($stmt,"ii",$payday,$pay_detailsID);
            mysqli_stmt_execute($stmt);
-           echo('Payday updated');
            //Getting the current TotalMoney and increasing it with the current payday
            $sql="SELECT totalMoney FROM payroll_ids  WHERE id = ? LIMIT 1";
            $stmt= mysqli_stmt_init($conn);
            mysqli_stmt_prepare($stmt,$sql);
            mysqli_stmt_bind_param($stmt,"i",$payroll_id);
            mysqli_stmt_execute($stmt);
-           echo('totalMoney GET');
             $res = mysqli_stmt_get_result($stmt);
             $row = mysqli_fetch_assoc($res);
             $totalMoney = $row['totalMoney'];
@@ -253,14 +245,12 @@
             mysqli_stmt_prepare($stmt,$sql);
             mysqli_stmt_bind_param($stmt,"ii",$totalMoney,$payroll_id);
             mysqli_stmt_execute($stmt);
-            echo('totalMoney Updated');
            //Getting the current TotalTime and increasing it with the current hours
            $sql="SELECT totalTime FROM payroll_ids  WHERE id = ? LIMIT 1";
            $stmt= mysqli_stmt_init($conn);
            mysqli_stmt_prepare($stmt,$sql);
            mysqli_stmt_bind_param($stmt,"i",$payroll_id);
            mysqli_stmt_execute($stmt);
-           echo('totalTime GET');
             $res = mysqli_stmt_get_result($stmt);
             $row = mysqli_fetch_assoc($res);
             $totalTime = $row['totalTime'];
@@ -271,8 +261,8 @@
             mysqli_stmt_prepare($stmt,$sql);
             mysqli_stmt_bind_param($stmt,"ii",$totalTime,$payroll_id);
             mysqli_stmt_execute($stmt);
-            echo('totalTime Updated');
-         
+            $_SESSION['alert']="Successfully checked-out your shift!";
+            $_SESSION['alertType']=1;
 
          }
          }

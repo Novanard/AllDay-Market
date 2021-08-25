@@ -54,7 +54,7 @@
 
   <?php 
   if(isset($_POST['viewOrder'])){
-    echo'    <div class="page-heading about-heading header-text" style="background-image: url(assets/images/veghs.png);">
+    echo'    <div class="page-heading about-heading header-text" style="background-image: url(assets/images/items/heading-4-1920x500.jpg);">
     <div class="container">
       <div class="row">
         <div class="col-md-12">
@@ -66,7 +66,7 @@
       </div>
     </div>
   </div>
-<div class="col-md-9">
+<div class="col-md-12">
 <div class="row">';
     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
       include 'db.php';
@@ -95,7 +95,7 @@
                     <a href="#"><h4>'.$itemName.'<small>('.$itemBarcode.')</small></h4></a>
                     <h6>₪'.$price.'
                     <h6>Amount: '.$qnt.'
-                    <h6>Total:'.$total.' <br>
+                    <h6>Total:₪'.$total.' <br>
                     <br><br>                                                 
                   </div>
                 </div>
@@ -105,7 +105,7 @@
 	        }
 	    }	 
     if(isset($_POST['statusOrder'])){
-      echo'    <div class="page-heading about-heading header-text" style="background-image: url(assets/images/veghs.png);">
+      echo'    <div class="page-heading about-heading header-text" style="background-image: url(assets/images/items/heading-4-1920x500.jpg);">
       <div class="container">
         <div class="row">
           <div class="col-md-12">
@@ -117,7 +117,7 @@
         </div>
       </div>
     </div>
- <div class="col-md-9">
+ <div class="col-md-12">
   <div class="row">';
       mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
       include 'db.php';
@@ -140,14 +140,13 @@
                   $total = $row['total'];
                   $img = $row['img'];
                   $isDone = $row['isDone'];
-          echo '<div style="display: flex;align-items:center;">
-
+          echo '
                   <a href="#"><img src="'.$img.'" height="370px" width="270px" alt=""></a>
                  <div class="down-content">
                     <a href="#"><h4>'.$itemName.'<small>('.$itemBarcode.')</small></h4></a>
                     <h6>₪'.$price.'
                     <h6>Amount: '.$qnt.'
-                    <h6>Total:'.$total.' <br>
+                    <h6>Total:₪'.$total.' <br>
                     <h6>Status:'; 
                     if($isDone==0)
                       echo'<span style="font-size:22px; color:red">InComplete</span>';
@@ -157,7 +156,6 @@
                     <br><br>                                                 
                   </div>
                 </div>
-              </div>
               ';
           echo "</div>";
 	        }

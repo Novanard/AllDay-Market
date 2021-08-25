@@ -126,6 +126,42 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 				mysqli_stmt_prepare($stmt,$sql);
 				mysqli_stmt_bind_param($stmt,"iii",$totalItems,$totalMoney,$order_id);
 				mysqli_stmt_execute($stmt);
+		//Getting the current weeklyOrders,lifeTimeOrders of the user and increasing it.	
+		$sql = "SELECT weeklyOrders,lifetimeOrders FROM users WHERE id=? LIMIT 1;";
+		$stmt = mysqli_stmt_init($conn);
+		mysqli_stmt_prepare($stmt,$sql);
+		mysqli_stmt_bind_param($stmt,"i",$userID);
+		mysqli_stmt_execute($stmt);	
+		$results=mysqli_stmt_get_result($stmt);
+		$row=mysqli_fetch_assoc($results);
+		$totalWeekly = $row['weeklyOrders'];
+		$totalLife = $row['lifetimeOrders'];
+		$totalWeekly+=1;
+		$totalLife+=1;
+		$sql = "UPDATE users SET weeklyOrders=?,lifetimeOrders=? WHERE id =?;";
+		$stmt = mysqli_stmt_init($conn);
+		mysqli_stmt_prepare($stmt,$sql);
+		mysqli_stmt_bind_param($stmt,"iii",$totalWeekly,$totalLife,$userID);
+		mysqli_stmt_execute($stmt);
+		//Getting the current weeklySpent,lifetimeSpent of the user and increasing it.	
+		$sql = "SELECT weeklySpent,lifetimeSpent FROM users WHERE id=? LIMIT 1;";
+		$stmt = mysqli_stmt_init($conn);
+		mysqli_stmt_prepare($stmt,$sql);
+		mysqli_stmt_bind_param($stmt,"i",$userID);
+		mysqli_stmt_execute($stmt);	
+		$results=mysqli_stmt_get_result($stmt);
+		$row=mysqli_fetch_assoc($results);
+		$totalWeekly = $row['weeklySpent'];
+		$totalLife = $row['lifetimeSpent'];
+		$totalWeekly+=$totalMoney;
+		$totalLife+=$totalMoney;
+		$sql = "UPDATE users SET weeklySpent=?,lifetimeSpent=? WHERE id =?;";
+		$stmt = mysqli_stmt_init($conn);
+		mysqli_stmt_prepare($stmt,$sql);
+		mysqli_stmt_bind_param($stmt,"iii",$totalWeekly,$totalLife,$userID);
+		mysqli_stmt_execute($stmt);
+
+
 				header('Location:finishOrder.php');
 		}
 	else

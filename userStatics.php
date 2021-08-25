@@ -28,73 +28,57 @@
       <header class="">
          <?php
             session_start();
-            if(isset($_SESSION['email'])){
-            	if($_SESSION['userType'] == 1){
+            if(isset($_SESSION['email'])&& $_SESSION['userType']== 1){
             $basedir = realpath(__DIR__);
             		include($basedir . '/navbars/navadmin.php');
             	}
-            	else{
-            $basedir = realpath(__DIR__);
-            		include($basedir . '/navbars/navuser.php');
-            	}
-            }
+            
             else{
-            $basedir = realpath(__DIR__);
-            include($basedir . '/navbars/nav.php');
+                    header('Location:index.php');
             }
             
             ?>
+  <style>
+         img {
+  border: 5px solid #555;
+}
+         </style>
       </header>
       <!-- Page Content -->
-      <?php
-     if(isset($_SESSION['email'])&& $_SESSION['userType']== 1){
-         echo '
-         <div class="page-heading contact-heading header-text" style="background-image: url(assets/images/items/heading-4-1920x500.jpg);">
+      <div class="page-heading about-heading header-text" style="background-image: url(assets/images/items/veghs.png);">
          <div class="container">
             <div class="row">
                <div class="col-md-12">
                   <div class="text-content">
-                     <h4>AllDay ~ Market</h4>
-                     <h2>Admin Panel</h2>
+                     <h4>AllDay Market</h4>
+                     <h2>User Statics</h2>
                   </div>
                </div>
             </div>
          </div>
       </div>
-      <div class="send-message">
-         <div class="container">
-            <div class="row">
-               <div class="col-md-12">
-                  <div class="section-heading">
-                     <h2>Admin Control Panel </h2>
-                  </div>
-               </div>
-               <div class="col-md-8">
-                  <br><br><br>
-                  <a href="itemControls.php"><input  class="btn btn-danger"type="submit" value="Items Controls"></a>
-                  <a href="employeeControls.php"><input  class="btn btn-danger"type="submit" value="Employees Controls"></a>
-                  <a href="userStatics.php"><input  class="btn btn-danger"type="submit" value="Users Statics"></a>
-               </div>
-               <div class="col-md-4">
-                  <img src="assets/images/adnan.jpeg" class="img-fluid" alt="">
-                  <h5 class="text-center" style="margin-top: 15px;">
-                     Website Manager <br> Adnan Hourani<br><br>
-                     <form action="logout.php" method="post">
-                        <button class="btn btn-danger" type="submit">Log-Out</button>
-                     </form>
-                  </h5>
-                  <br>
-               </div>
+      <br>
+      <div class="col-md-12">
+         <div class="row">
+            <?php 
+               mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+               include 'db.php';
+               // Getting the needed statistics for users
+               $sql = "SELECT MAX(weeklyOrders) as MaxWOrders,MAX(lifetimeOrders) as MaxLOrders,MAX(weeklySpent) as MaxWSpent,MAX(lifetimeSpent) as MaxLSpent FROM users;";
+               $stmt= mysqli_stmt_init($conn);
+               mysqli_stmt_prepare($stmt,$sql);
+               mysqli_stmt_execute($stmt);
+               $result=mysqli_stmt_get_result($stmt);
+               $row = mysqli_fetch_assoc($result);
+               $maxWeekO = $row['MaxWOrders'];
+               $maxLifeO= $row['MaxLOrders'];
+               $maxWeekS=$row['MaxWSpent'];
+               $maxLifeS=$row['MaxLSpent'];
+
+
+?>
+</div>
             </div>
-         </div>
-      </div>
-      </div>
-      </div>' ;
-      }
-      else 
-      header('Location:index.php');
-      ?>
- 
       <footer>
          <div class="container">
             <div class="row">

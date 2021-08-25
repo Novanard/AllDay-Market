@@ -51,7 +51,7 @@
             ?>
 </header>
 
-    <div class="page-heading about-heading header-text" style="background-image: url(assets/images/items/veghs.png);">
+    <div class="page-heading about-heading header-text" style="background-image: url(assets/images/items/heading-4-1920x500.jpg);">
       <div class="container">
         <div class="row">
           <div class="col-md-12">
@@ -63,7 +63,7 @@
         </div>
       </div>
     </div>
- <div class="col-md-9">
+ <div class="col-md-12">
   <div class="row">
 	<?php 
 		include 'db.php';
@@ -79,7 +79,7 @@
 		  while ($row=mysqli_fetch_assoc($results)) 
 	        {
 			
-			echo '		<div class="col-md-6">
+			echo '		<div class="col-md-4">
                       <div class="product-item">';                   
 					$name = $row['name'];
 					$price = $row['price'];
@@ -87,9 +87,7 @@
 					$img = $row['img'];
 					$total=$row['qnt'] * $row['price'];
 					$totalPrice += $total;
-				echo '<div style="display: flex;align-items:center;">
-
-                        <a href="#"><img src="'.$img.'" alt=""></a>
+				echo '      <a href="#"><img src="'.$img.'" height="370px" width="270px" alt=""></a>
                        <div class="down-content">
                           <a href="#"><h4>'.$name.'</h4></a>
                           <h6>₪'.$price.'
@@ -103,7 +101,6 @@
 
                           <br><br>                                                 
                         </div>
-                      </div>
                     </div>
 					';
 	        	echo "</div>";
