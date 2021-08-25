@@ -57,7 +57,7 @@
             </div>
          </div>
       </div>
-      <div class="col-md-9">
+      <div class="col-md-12">
          <div class="row">
             <?php 
                mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);

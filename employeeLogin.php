@@ -23,21 +23,31 @@
 
   <body>
   <?php 
-
+  $stats = 0;
+  $employee = 0;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
    	include "db.php";
    	$eID=$_POST['eID'];
    	$PIN=$_POST['PIN'];
-  	$sql = "SELECT * FROM employees WHERE eID = ? AND PIN = ? LIMIT 1";
+  	$sql = "SELECT * FROM employees WHERE eID = ? LIMIT 1";
     $stmt= mysqli_stmt_init($conn);
     mysqli_stmt_prepare($stmt,$sql);
-    mysqli_stmt_bind_param($stmt,"is",$eID,$PIN);
+    mysqli_stmt_bind_param($stmt,"i",$eID);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
 
     if(mysqli_num_rows($result)>0){
+      $employee =1;
     	$row = mysqli_fetch_assoc($result);
+      $sql = "SELECT * FROM employees WHERE eID = ? AND  PIN = ? LIMIT 1";
+      $stmt= mysqli_stmt_init($conn);
+      mysqli_stmt_prepare($stmt,$sql);
+      mysqli_stmt_bind_param($stmt,"is",$eID,$PIN);
+      mysqli_stmt_execute($stmt);
+      $res = mysqli_stmt_get_result($stmt);
+      if(mysqli_num_rows($res)==1){
+        $stats=1;
     		session_start();
             $_SESSION['eID']=$row['eID'];
             $_SESSION['firstname'] = $row['firstname'];
@@ -45,11 +55,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['avatar'] = $row['avatar'];
     		 header('Location:employeeCp.php');
     	}
-    	else{
-    		echo "Incorrect Details";
-    		exit();
-    	}
+      else
+      $stats = 2;
     }
+    else
+    $employee =2;
+  }
 
 ?>
     <!-- ***** Preloader Start ***** -->
@@ -125,6 +136,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   </div>
                 </div>
               </form>
+              <?php
+              if($employee ==1 && $stats==2){
+                echo	'  <hr><div class="alert alert-danger" role="alert">
+                <p class="text-center" font-weight:bold>Incorrect PIN</p>
+               </div><hr>';
+              }
+              else if($employee==2){
+              echo	'  <hr><div class="alert alert-danger" role="alert">
+              <p class="text-center" font-weight:bold>Employee not found!</p>
+             </div><hr>';
+            }   
+            ?>
 			  <br><br>
             </div>
           </div>

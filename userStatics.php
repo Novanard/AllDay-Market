@@ -74,8 +74,115 @@
                $maxLifeO= $row['MaxLOrders'];
                $maxWeekS=$row['MaxWSpent'];
                $maxLifeS=$row['MaxLSpent'];
-
-
+               $sql = "SELECT * FROM users WHERE lifetimeOrders =?;";
+               $stmt= mysqli_stmt_init($conn);
+               mysqli_stmt_prepare($stmt,$sql);
+               mysqli_stmt_bind_param($stmt,"i",$maxLifeO);
+               mysqli_stmt_execute($stmt);
+               $result=mysqli_stmt_get_result($stmt);
+               while($row=mysqli_fetch_assoc($result)){
+                  $id = $row['id'];
+                  $name = $row['name'];
+                  $email = $row['email'];
+                  $avatar = $row['avatar'];
+                  echo'
+                  <div class="col-md-6">
+                  <div class="product-item">
+                  <center> <h4> Most Orders Lifetime</h4><br>
+                  <img src="'.$avatar.'" height="370px" width="270px" alt="">
+                  <div class="down-content">
+                  <center><strong>'.$name.'</strong><small>('.$id.')</small></center>
+                  </div>                   <br>
+                   <div>
+                    The highest order amount of <b>all time</b> goes to <u>'.$email.'</u> with a total of:  <strong>'.$maxLifeO.' orders.</strong>
+                   </div>
+                   <div>
+                 </div>
+                 </div>
+                 </div>';
+               }
+               $sql = "SELECT * FROM users WHERE weeklyOrders =?;";
+               $stmt= mysqli_stmt_init($conn);
+               mysqli_stmt_prepare($stmt,$sql);
+               mysqli_stmt_bind_param($stmt,"i",$maxWeekO);
+               mysqli_stmt_execute($stmt);
+               $result=mysqli_stmt_get_result($stmt);
+               while($row=mysqli_fetch_assoc($result)){
+                  $id = $row['id'];
+                  $name = $row['name'];
+                  $email = $row['email'];
+                  $avatar = $row['avatar'];
+                  echo'
+                  <div class="col-md-6">
+                  <div class="product-item">
+                  <center> <h4> Most Orders This Week</h4><br>
+                  <img src="'.$avatar.'" height="370px" width="270px" alt="">
+                  <div class="down-content">
+                  <center><strong>'.$name.'</strong><small>('.$id.')</small></center>
+                  </div>                   <br>
+                   <div>
+                    The highest order amount of the <b>current week</b> goes to <u>'.$email.'</u> with a total of:  <strong>'.$maxWeekO.' orders.</strong>
+                   </div>
+                   <div>
+                 </div>
+                 </div>
+                 </div>';
+               }
+               $sql = "SELECT * FROM users WHERE weeklySpent =?;";
+               $stmt= mysqli_stmt_init($conn);
+               mysqli_stmt_prepare($stmt,$sql);
+               mysqli_stmt_bind_param($stmt,"i",$maxWeekS);
+               mysqli_stmt_execute($stmt);
+               $result=mysqli_stmt_get_result($stmt);
+               while($row=mysqli_fetch_assoc($result)){
+                  $id = $row['id'];
+                  $name = $row['name'];
+                  $email = $row['email'];
+                  $avatar = $row['avatar'];
+                  echo'
+                  <div class="col-md-6">
+                  <div class="product-item">
+                  <center> <h4> Biggest Spender This Week</h4><br>
+                  <img src="'.$avatar.'" height="370px" width="270px" alt="">
+                  <div class="down-content">
+                  <center><strong>'.$name.'</strong><small>('.$id.')</small></center>
+                  </div>                   <br>
+                   <div>
+                    The biggest spender of the <b>current week</b> goes to <u>'.$email.'</u> with a total of:  <strong>₪'.$maxWeekS.'</strong>
+                   </div>
+                   <div>
+                 </div>
+                 </div>
+                 </div>';
+               }
+               $sql = "SELECT * FROM users WHERE lifetimeSpent =?;";
+               $stmt= mysqli_stmt_init($conn);
+               mysqli_stmt_prepare($stmt,$sql);
+               mysqli_stmt_bind_param($stmt,"i",$maxLifeS);
+               mysqli_stmt_execute($stmt);
+               $result=mysqli_stmt_get_result($stmt);
+               while($row=mysqli_fetch_assoc($result)){
+                  $id = $row['id'];
+                  $name = $row['name'];
+                  $email = $row['email'];
+                  $avatar = $row['avatar'];
+                  echo'
+                  <div class="col-md-6">
+                  <div class="product-item">
+                  <center> <h4> Biggest Spender of AllTime</h4><br>
+                  <img src="'.$avatar.'" height="370px" width="270px" alt="">
+                  <div class="down-content">
+                  <center><strong>'.$name.'</strong><small>('.$id.')</small></center>
+                  </div>                   <br>
+                   <div>
+                    The biggest spender of <b>AllTime</b> goes to <u>'.$email.'</u> with a total of:  <strong>₪'.$maxLifeS.'</strong>
+                   </div>
+                   <div>
+                 </div>
+                 </div>
+                 </div>';
+               }
+               
 ?>
 </div>
             </div>
