@@ -95,7 +95,7 @@
                   $img = $row['img'];
           echo '<div style="display: flex;align-items:center;">
 
-                  <a href="#"><img src="'.$img.'" height="370px" width="270px" alt=""></a>
+                  <a href="#"><img src="'.$img.'" style="width:470px;height:370px;" alt=""></a>
                  <div class="down-content">
                     <a href="#"><h4>'.$itemName.'<small>('.$itemBarcode.')</small></h4></a>
                     <h6>₪'.$price.'
@@ -146,7 +146,7 @@
                   $img = $row['img'];
                   $isDone = $row['isDone'];
           echo '
-                  <a href="#"><img src="'.$img.'" height="370px" width="270px" alt=""></a>
+              <a href="#"><img src="'.$img.'" height="370px" width="270px" alt=""></a>
                  <div class="down-content">
                     <a href="#"><h4>'.$itemName.'<small>('.$itemBarcode.')</small></h4></a>
                     <h6>₪'.$price.'
@@ -167,8 +167,8 @@
     }
       ?> 	
 	</div>
-	</div>
-	</div>
+
+
 
 
     <!-- Page Content -->

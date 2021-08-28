@@ -124,7 +124,7 @@
           echo '
          <center> <div class="col-md-6">
             <div class="product-item">
-            <a href="#"><img src="'.$img.'" height="370px" width = "270px" alt=""></a>
+            <a href="#"><img src="'.$img.'" style="width:470px;height:370px;" alt=""></a>
              <div class="down-content">
             <center><strong>Hello</strong><br> '.$name.'</center>
              </div>

@@ -153,29 +153,23 @@
                    $result = mysqli_stmt_get_result($stmt);
                   while($row = mysqli_fetch_assoc($result)){
                      $id = $row['id'];
-                     $startTime = $row['startTime'];
-                     $endTime = $row['endTime'];
-                     $totalTime = $row['totalTime'];
-                     $payday = $row['payday'];
-                     $payroll_id = $row['payroll_id'];
+                     $oldStartTime = $row['startTime'];
+                     $oldEndTime = $row['endTime'];
+                     $oldTotalTime = $row['totalTime'];
+                     $oldPayday = $row['payday'];
+                     $oldPayroll_id = $row['payroll_id'];
                      $sql = "INSERT INTO oldPayroll_details(id,startTime,endTime,totalTime,payday,payroll_id) VALUES (?,?,?,?,?,?);";
                      $stmt= mysqli_stmt_init($conn);
                       mysqli_stmt_prepare($stmt,$sql);
-                      mysqli_stmt_bind_param($stmt,"issiii",$id,$startTime,$endTime,$totalTime,$payday,$payroll_id);
+                      mysqli_stmt_bind_param($stmt,"issiii",$id,$oldStartTime,$oldEndTime,$oldTotalTime,$oldPayday,$oldPayroll_id);
                       mysqli_stmt_execute($stmt);
                   }
                   //Deleting the month from active payroll
                   $sql = "DELETE FROM payroll_ids WHERE id = ?;";
                   $stmt = mysqli_stmt_init($conn);
                   mysqli_stmt_prepare($stmt,$sql);
-                  mysqli_stmt_bind_param($stmt,"i",$payroll_id);
+                  mysqli_stmt_bind_param($stmt,"i",$oldPayroll_id);
                   mysqli_stmt_execute($stmt);
-                   // Deleting the shift after it ends
-                    $sql = "DELETE FROM shift WHERE eID = ?";
-                    $stmt= mysqli_stmt_init($conn);
-                    mysqli_stmt_prepare($stmt,$sql);
-                    mysqli_stmt_bind_param($stmt,"i",$eID);
-                    mysqli_stmt_execute($stmt);
                   $sql = "INSERT INTO payroll_ids (eID,payMonth) VALUES (?,?);";
                   $stmt= mysqli_stmt_init($conn);
                    mysqli_stmt_prepare($stmt,$sql);
@@ -261,9 +255,19 @@
             mysqli_stmt_prepare($stmt,$sql);
             mysqli_stmt_bind_param($stmt,"ii",$totalTime,$payroll_id);
             mysqli_stmt_execute($stmt);
+            // Deleting shift after its done
+            $sql ="DELETE FROM shift WHERE eID = ?;";
+            $stmt = mysqli_stmt_init($conn);
+            mysqli_stmt_prepare($stmt,$sql);
+            mysqli_stmt_bind_param($stmt,"i",$eID);
+            mysqli_stmt_execute($stmt);
             $_SESSION['alert']="Successfully checked-out your shift!";
             $_SESSION['alertType']=1;
 
+         }
+         else{
+            $_SESSION['alert']="You must check-in before you check-out!";
+            $_SESSION['alertType']=2;
          }
          }
          else{
