@@ -71,7 +71,7 @@
                    else{
               while ($row=mysqli_fetch_assoc($results))
                    {                  
-                     echo '		<div class="col-md-6">
+                     echo '		<div class="col-md-4">
                      <div class="product-item">';    
                           $orderID = $row['id'];
                           $date = $row['date'];
@@ -116,7 +116,7 @@
                       echo'  <hr><div class="alert alert-dark" role="alert">
                      <p class="text-center" font-weight:bold>Order History</p>
                     </div><hr>';
-                    echo'<div class="col-md-6">
+                    echo'<div class="col-md-4">
                     <div class="product-item">'; 
                         while($row = mysqli_fetch_assoc($results)){   
                          $orderID = $row['id'];

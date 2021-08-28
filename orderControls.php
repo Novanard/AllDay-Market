@@ -49,6 +49,11 @@
             }
             
             ?>
+                  <style>
+         img {
+  border: 5px solid #555;
+}
+         </style>
 </header>
 
 
@@ -130,7 +135,7 @@
       $results = mysqli_stmt_get_result($stmt);
 	  while ($row=mysqli_fetch_assoc($results)) 
 	        {
-                echo '		<div class="col-md-6">
+                echo '<div class="col-md-4">
                 <div class="product-item">';                   
                   $itemBarcode = $row['itemBarcode'];
                   $itemName = $row['itemName'];

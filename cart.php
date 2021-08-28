@@ -49,6 +49,11 @@
             }
             
             ?>
+                  <style>
+         img {
+  border: 5px solid #555;
+}
+         </style>
 </header>
 
     <div class="page-heading about-heading header-text" style="background-image: url(assets/images/items/heading-4-1920x500.jpg);">

@@ -92,12 +92,6 @@
            mysqli_stmt_prepare($stmt,$sql);
            mysqli_stmt_bind_param($stmt,"si",$endTime,$eID);
            mysqli_stmt_execute($stmt);
-           // Deleting the shift after it ends
-           $sql = "DELETE FROM shift WHERE eID = ?";
-           $stmt= mysqli_stmt_init($conn);
-           mysqli_stmt_prepare($stmt,$sql);
-           mysqli_stmt_bind_param($stmt,"i",$eID);
-           mysqli_stmt_execute($stmt);
          //Checking if the employee has previous payroll_id
          $sql="SELECT payMonth,isFinished FROM payroll_ids WHERE eID = ?";
          $stmt= mysqli_stmt_init($conn);
@@ -176,6 +170,12 @@
                   mysqli_stmt_prepare($stmt,$sql);
                   mysqli_stmt_bind_param($stmt,"i",$payroll_id);
                   mysqli_stmt_execute($stmt);
+                   // Deleting the shift after it ends
+                    $sql = "DELETE FROM shift WHERE eID = ?";
+                    $stmt= mysqli_stmt_init($conn);
+                    mysqli_stmt_prepare($stmt,$sql);
+                    mysqli_stmt_bind_param($stmt,"i",$eID);
+                    mysqli_stmt_execute($stmt);
                   $sql = "INSERT INTO payroll_ids (eID,payMonth) VALUES (?,?);";
                   $stmt= mysqli_stmt_init($conn);
                    mysqli_stmt_prepare($stmt,$sql);
