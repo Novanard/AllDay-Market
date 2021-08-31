@@ -64,7 +64,7 @@
             </div>
          </div>
       </div>
-      <div class="col-md-10">
+      <div class="col-md-12">
          <div class="row">
             <?php 
                include 'db.php';
@@ -73,8 +73,8 @@
                mysqli_stmt_prepare($stmt,$sql);
                mysqli_stmt_execute($stmt);
                $results=mysqli_stmt_get_result($stmt);
-               if(isset($_SESSION['email'])){
-               if($_SESSION['userType'] ==1){
+               if(isset($_SESSION['userType'])){
+                  if($_SESSION['userType'] == 1){
                while ($row=mysqli_fetch_assoc($results))
                {
                $ID = $row['Barcode'];
@@ -84,7 +84,7 @@
                $qnt = $row['quantity'];
 
                echo '
-               <div class="col-md-6">
+               <div class="col-md-4">
                <div class="product-item">
                <a href="#"><img src="'.$img.'" height="350px" width="250px" alt=""></a>
                <div class="down-content">
@@ -119,7 +119,7 @@
                $img = $row['img'];
                $qnt = $row['quantity'];
                echo '
-               <div class="col-md-6">
+               <div class="col-md-4">
                <div class="product-item">
                <a href="#"><img src="'.$img.'" style="width:470px;height:370px;" alt=""></a>
                <div class="down-content">
@@ -149,7 +149,7 @@
                $img = $row['img'];
                $qnt = $row['quantity'];
                echo '
-               <div class="col-md-6">
+               <div class="col-md-4">
                <div class="product-item">
                <a href="#"><img src="'.$img.'" height="350px" width="250px" alt=""></a>
                <div class="down-content">
@@ -157,11 +157,6 @@
                
                ₪'.$price.' ~ <small>('.$qnt.')Pcs available</small>
                <br><br>
-               <form id="qnt'.$id.'">
-               <input type="text" placeholder="Enter Quantity in Kilo" name="qty" required>
-               <button class="btn btn-danger" type="button" onclick= add('.$id.') class="filled-button" class="add2cart">Add To Cart</button></h6>
-               </form>
-               
                <p>Fresh Day to Day &nbsp;/&nbsp; Naturally Raised</p>
                </div>
                </div>

@@ -85,22 +85,38 @@
 	        {
 			
 			echo '		<div class="col-md-4">
-                      <div class="product-item">';                   
+                      <div class="product-item">'; 
+          $barcode = $row['itemBarcode'];                              
 					$name = $row['name'];
 					$price = $row['price'];
 					$qnt = $row['qnt'];
 					$img = $row['img'];
 					$total=$row['qnt'] * $row['price'];
 					$totalPrice += $total;
+          //Selecting how much left in inventory in case the user wants to change quiantity
+          $sql = "SELECT quantity FROM items WHERE Barcode = ?;";
+          $stmt = mysqli_stmt_init($conn);
+          mysqli_stmt_prepare($stmt,$sql);
+          mysqli_stmt_bind_param($stmt,"i",$barcode);
+          mysqli_stmt_execute($stmt);
+          $res = mysqli_stmt_get_result($stmt);
+          $row=mysqli_fetch_assoc($res);
+          $quantity=$row['quantity'];
 				echo '      <a href="#"><img src="'.$img.'" height="370px" width="270px" alt=""></a>
                        <div class="down-content">
                           <a href="#"><h4>'.$name.'</h4></a>
                           <h6>₪'.$price.'
 						  <h6>Amount: '.$qnt.'
 						  <h6>Total:₪'.$total.' <br>
-						<form action="deleteCart.php" method="post">
-							<input type="hidden" value="'.$name.'" name="delete" />
-							<input class="btn btn-danger" value="Delete" type="submit" />
+              <form action="updateCart.php" method="post">
+              <input type="text" placeholder="('.$quantity.')In Stock" name="newQty" required="">
+              <input type="hidden" name="stock" value="'.$quantity.'">
+              <input type="hidden" name="updateName" value="'.$name.'">
+              <input class="btn btn-danger" type="submit" name="updateCart"  class="filled-button" value="Update Quantity">
+              </form>
+						<form action="updateCart.php" method="post">
+							<input type="hidden" value="'.$name.'" name="deleteName" />
+							<input class="btn btn-danger" value="Delete" type="submit" name="deleteCart" />
 						</form>
 				
 
@@ -117,18 +133,22 @@
 	</div>
 	<div style="font-family: 'Poppins', sans-serif;font-size: 20px;float: right;font-weight: bold">
     <?php 
-    if(isset($totalPrice))
+    if(isset($totalPrice)&& $totalPrice>0)
       echo 'Total Price: ₪'.$totalPrice.'
-
 		<form action="createOrder.php" method="POST">
 		<button class="btn btn-danger" type="submit" name="submit" class="filled-button" class="payBtn">Checkout</button>
 		</form>';
-		
     ?> 
 	
 	</div>
 	</div>
-    
+    <?php
+    if($totalPrice==0)
+    echo'<hr><div class="alert alert-warning col-md-12" role="alert">
+    <p class="text-center" font-weight:bold>Your shopping cart is empty</p>
+   </div><hr>';
+
+   ?>
 
 
     <!-- Page Content -->
