@@ -169,11 +169,6 @@
 	        }
 	    }			
 ?> 	
- <!-- 
-                     <a href="editProfileForm.php?id='.$ID.'"> 
-                  <button class="btn btn-secondary" type="button" class="filled-button" class="editBtn">Edit</button>
-                  </a>
-    -->
 </div>
 
 

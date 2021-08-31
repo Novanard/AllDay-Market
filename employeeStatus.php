@@ -153,16 +153,19 @@
                    mysqli_stmt_execute($stmt);
                    $results = mysqli_stmt_get_result($stmt);
                    if(mysqli_num_rows($results)>0)
-                   {
+                   {echo'
+                     <hr><div class="alert alert-dark" role="alert">
+                     <p class="text-center" font-weight:bold>Payroll History</p>
+                     </div><hr>';
+                     echo'      <div class="col-md-12">
+                     <div class="row">';
                         while($row=mysqli_fetch_assoc($results)){
                            $payrollID = $row['id'];
                            $payMonth = $row['payMonth'];
                            $totalTime = $row['totalTime'];
                            $totalMoney = $row['totalMoney'];
                            $isFinished = $row['isFinished'];
-                               echo'  <hr><div class="alert alert-dark" role="alert">
-                                <p class="text-center" font-weight:bold>Payroll History</p>
-                                </div><hr>';
+                           
                     
                                echo' <div class="col-md-6">
                                <div class="product-item">

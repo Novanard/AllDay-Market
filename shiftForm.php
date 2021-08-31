@@ -117,6 +117,7 @@
              $currentMonth = date("m",strtotime($currentDate));
              if($onlyMonth == $currentMonth)
                echo('No need for another payroll id');
+               
            // If the current month does not match the payroll_id month, then we create a new one 
            // and update the previous isFinished to 1.
            //In addition we archieve the payroll_id and details.
@@ -193,6 +194,8 @@
           $datetime1 = strtotime($startTime);
           $datetime2 = strtotime($endTime);
           $interval  = abs($datetime1 - $datetime2)/30; // 0.5 minute equals 1 hour in real life for simulation purposes
+         if($interval>12)
+         $interval = 12;
           $totalHours = $interval;
           $stmt= mysqli_stmt_init($conn);
            mysqli_stmt_prepare($stmt,$sql);

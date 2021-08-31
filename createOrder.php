@@ -84,7 +84,6 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 		mysqli_stmt_execute($stmt);
 		}
         else if($qnt<$quantity && $qnt >0){
-
             $quantity = $qnt;
             $totalItems++;
             $total = $qnt * $price;

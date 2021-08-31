@@ -27,16 +27,18 @@
       <!-- Header -->
       <header class="">
          <?php
-            session_start();
-            if(isset($_SESSION['email'])&& $_SESSION['userType']== 0){
-            $basedir = realpath(__DIR__);
-                 		include($basedir . '/navbars/navuser.php');
-                 	}
-                 else{
-                         header('Location:index.php');
-                 }
-                 
-                 ?>
+session_start();
+if (isset($_SESSION['email']) && $_SESSION['userType'] == 0)
+{
+    $basedir = realpath(__DIR__);
+    include ($basedir . '/navbars/navuser.php');
+}
+else
+{
+    header('Location:index.php');
+}
+
+?>
       </header>
       <!-- Page Content -->
       <div class="page-heading about-heading header-text" style="background-image: url(assets/images/items/veghs.png);">
@@ -53,45 +55,48 @@
       </div>
       <div class="col-md-12">
       <div class="row">
-         <?php 
-            include 'db.php';
-            if(isset($_SESSION['id'])){
-            	$id = $_SESSION['id'];
-            	$sql = "SELECT * FROM orders_id WHERE userID = ? AND isDone = 0";
-                   $stmt= mysqli_stmt_init($conn);
-                   mysqli_stmt_prepare($stmt,$sql);
-                   mysqli_stmt_bind_param($stmt,"i",$id);
-                   mysqli_stmt_execute($stmt);
-                   $results=mysqli_stmt_get_result($stmt);
-                   if(mysqli_num_rows($results)==0){
-                      echo'<br><div class="alert alert-info col-md-12" role="alert">
+         <?php
+include 'db.php';
+if (isset($_SESSION['id']))
+{
+    $id = $_SESSION['id'];
+    $sql = "SELECT * FROM orders_id WHERE userID = ? AND isDone = 0";
+    $stmt = mysqli_stmt_init($conn);
+    mysqli_stmt_prepare($stmt, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $id);
+    mysqli_stmt_execute($stmt);
+    $results = mysqli_stmt_get_result($stmt);
+    if (mysqli_num_rows($results) == 0)
+    {
+        echo '<br><div class="alert alert-info col-md-12" role="alert">
                       <p class="text-center">No active orders found!</p>
                     </div>';
-                   }
-                   else{
-              while ($row=mysqli_fetch_assoc($results))
-                   {                  
-                     echo '		<div class="col-md-4">
-                     <div class="product-item">';    
-                          $orderID = $row['id'];
-                          $date = $row['date'];
-                          $totalItems = $row['totalItems'];
-                          $totalMoney = $row['totalMoney'];
-                          echo '<div style="display: flex;align-items:center;">
+    }
+    else
+    {
+        while ($row = mysqli_fetch_assoc($results))
+        {
+            echo '		<div class="col-md-4">
+                     <div class="product-item">';
+            $orderID = $row['id'];
+            $date = $row['date'];
+            $totalItems = $row['totalItems'];
+            $totalMoney = $row['totalMoney'];
+            echo '<div style="display: flex;align-items:center;">
             
-                       <h5><a href="#">Order ID: '.$orderID.'</a>
+                       <h5><a href="#">Order ID: ' . $orderID . '</a>
                        </div>
                         <div class="down-content">
                         <ul>
-                        <li><strong>Order Date:</strong><br>'.$date.'</li><br>
-                        <li><strong>Total Items:</strong><br>'.$totalItems.'</li><br>
-                        <li><strong>Total Money:</strong><br>₪'.$totalMoney.'<li>
+                        <li><strong>Order Date:</strong><br>' . $date . '</li><br>
+                        <li><strong>Total Items:</strong><br>' . $totalItems . '</li><br>
+                        <li><strong>Total Money:</strong><br>₪' . $totalMoney . '<li>
                         </ul>
                         <strong>Order Controls</strong>
                         <form action="orderControls.php" method="post">
                         <div >
                            <fieldset>
-                           <input type="hidden" name="orderID" value="'.$orderID.'">
+                           <input type="hidden" name="orderID" value="' . $orderID . '">
                               <button type="submit" name="statusOrder" class="btn btn-secondary">Order Status</button>
                            </fieldset>
                         </div>
@@ -102,42 +107,47 @@
                         </div>
                       </div>
                       ';
-                   }}
-                   echo'</div></div>';
-                   // Checking old orders of the user
-                   $sql = "SELECT * from oldOrders_id WHERE userID = ?;";
-                   $stmt = mysqli_stmt_init($conn);
-                   mysqli_stmt_prepare($stmt,$sql);
-                   mysqli_stmt_bind_param($stmt,"i",$id);
-                   mysqli_stmt_execute($stmt);
-                   $results = mysqli_stmt_get_result($stmt);
-                   if(mysqli_num_rows($results)>0)
-                   {
-                      echo'  <hr><div class="alert alert-dark" role="alert">
+        }
+    }
+    echo '</div></div>';
+    
+    // Checking old orders of the user
+    $sql = "SELECT * from oldOrders_id WHERE userID = ?;";
+    $stmt = mysqli_stmt_init($conn);
+    mysqli_stmt_prepare($stmt, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $id);
+    mysqli_stmt_execute($stmt);
+    $results = mysqli_stmt_get_result($stmt);
+    if (mysqli_num_rows($results) > 0)
+    {
+        echo '  <hr><div class="alert alert-dark" role="alert">
                      <p class="text-center" font-weight:bold>Order History</p>
                     </div><hr>';
-                    echo'<div class="col-md-4">
-                    <div class="product-item">'; 
-                        while($row = mysqli_fetch_assoc($results)){   
-                         $orderID = $row['id'];
-                         $date = $row['date'];
-                         $totalItems = $row['totalItems'];
-                         $totalMoney = $row['totalMoney'];
-                         echo '<div style="display: flex;align-items:center;">
+         echo('      <div class="col-md-12">
+         <div class="row">');
+        while ($row = mysqli_fetch_assoc($results))
+        {
+            $orderID = $row['id'];
+            $date = $row['date'];
+            $totalItems = $row['totalItems'];
+            $totalMoney = $row['totalMoney'];
+            echo '<div class="col-md-4">
+                         <div class="product-item">';
+            echo '<div style="display: flex;align-items:center;">
            
-                      <h5><a href="#">Order ID: '.$orderID.'</a>
+                      <h5><a href="#">Order ID: ' . $orderID . '</a>
                       </div>
                        <div class="down-content">
                        <ul>
-                       <li><strong>Order Date:</strong><br>'.$date.'</li><br>
-                       <li><strong>Total Items:</strong><br>'.$totalItems.'</li><br>
-                       <li><strong>Total Money:</strong><br>₪'.$totalMoney.'<li>
+                       <li><strong>Order Date:</strong><br>' . $date . '</li><br>
+                       <li><strong>Total Items:</strong><br>' . $totalItems . '</li><br>
+                       <li><strong>Total Money:</strong><br>₪' . $totalMoney . '<li>
                        </ul>
                                         <strong>Order Controls</strong>
                         <form action="orderControls.php" method="post">
                         <div >
                            <fieldset>
-                           <input type="hidden" name="orderID" value="'.$orderID.'">
+                           <input type="hidden" name="orderID" value="' . $orderID . '">
                               <button type="submit" name="viewOrder" class="btn btn-secondary">View Order</button>
                            </fieldset>
                         </div>
@@ -148,10 +158,11 @@
                         </div>
                       </div>
                       ';
-                   }
-               }		
-            }
-            ?> 	
+        }
+        echo('</div></div>');
+    }
+}
+?> 	
       </div>
       <footer>
          <div class="container">
