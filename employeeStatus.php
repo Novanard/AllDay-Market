@@ -127,6 +127,17 @@
                                $results=mysqli_stmt_get_result($stmt);
                                $row = mysqli_fetch_assoc($results);
                                $totalDays = $row['totalDays'];
+                               //Getting the summary of the lastpayroll id in order to calculate statics
+                               $sql ="SELECT TotalMoney,TotalTime FROM oldpayroll_ids ORDER BY id DESC LIMIT 1;";
+                               $stmt = mysqli_stmt_init($conn);
+                               mysqli_stmt_prepare($stmt,$sql);
+                               mysqli_stmt_execute($stmt);
+                               $results=mysqli_stmt_get_result($stmt);
+                               $row = mysqli_fetch_assoc($results);
+                               $prevTotalDays = $row['TotalTime'];
+                               $prevTotalPayday = $row['TotalMoney'];
+                              $paydayAvg = ($totalPayday/$prevTotalPayday)*100;
+                              $timeAvg = ($totalTime/$prevTotalDays)*100;
                                echo '
                                <div class="col-md-6">
                                <div class="product-item">
@@ -134,10 +145,27 @@
                                <a href="#"><h4>Summary:</h4></a>
                                <br>
                                Total Work Days: '.$totalDays.'<br>
-                               Total Payday: ₪'.$totalPayday.'
-
-
-
+                               Total Money: ₪'.$totalPayday.'<br>';
+                            if($totalPayday>$prevTotalPayday){  
+                               $paydayDiff = $totalPayday - $prevTotalPayday;
+                            echo'You have <b>%<font color="GREEN">'.$paydayAvg.'</font>growth rate</b> in your salary, good job!(Total of₪'.$paydayDiff.' Increase)</small>';
+                            }
+                           else if($totalPayday<$prevTotalPayday){  
+                              $paydayDiff = $prevTotalPayday - $totalPayday;
+                              echo'You have <b>%<font color="RED">'.$paydayAvg.'</font>decline rate </b>in your salary, work harder!(Total of₪'.$paydayDiff.' Decline)</small>';
+                              }
+                           else echo'You have <b>%<font color="Orange">0</font></b>changes in your salary, neutral status.';
+                           echo'<br>';
+                           if($totalPayday>$prevTotalPayday){  
+                              $timeDiff = $totalTime - $prevTotalDays;
+                              echo'You have <b>%<font color="GREEN">'.$timeAvg.'</font>growth rate</b> in your precense at work(Total of '.$timeDiff.'Hours Increase)</small>';
+                              }
+                             else if($totalPayday<$prevTotalPayday){  
+                                $timeDiff = $prevTotalDays - $totalTime;
+                                echo'You have <b>%<font color="RED">'.$timeAvg.'</font>decline rate </b>in your presence at work(Total of '.$timeDiff.' Hours Decline)</small>';
+                                }
+                             else echo'You have <b>%<font color="Orange">0</font></b>changes in your precense, neutral status.';
+                           echo'
                                </div>
                                </div>
                                </div>

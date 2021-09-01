@@ -22,9 +22,6 @@
   </head>
 
   <body>
-	<?php
-	header( "refresh:10;url=index.php" );
-	?>
     <!-- ***** Preloader Start ***** -->
     <div id="preloader">
         <div class="jumper">
@@ -36,26 +33,7 @@
     <!-- ***** Preloader End ***** -->
 
     <!-- Header -->
-    <header class="">
-    <?php
-            session_start();
-            if(isset($_SESSION['email'])){
-            	if($_SESSION['userType'] == 1){
-					$basedir = realpath(__DIR__);
-            		include($basedir . '/navbars/navadmin.php');
-            	}
-            	else{
-					$basedir = realpath(__DIR__);
-            		include($basedir . '/navbars/navuser.php');
-            	}
-            }
-            else{
-				$basedir = realpath(__DIR__);
-				include($basedir . '/navbars/navbar.php');
-            }
-            
-            ?>
-</header>
+
 
 
     <!-- Page Content -->
@@ -77,11 +55,21 @@
 					Thank you for being an AllDay customer.<br>
 					We sincerely appreciate your business and hope you come back soon!<br>
 					Our workers will begin to prepare your order as soon as possible.
-					<br>
+          <br>
 					Kind Regards,<br>
 					AllDay Market Staff.
 					<br><br>
-					<small>Re-directing you to the main page in 10 seconds!</small>
+					
+					<br>
+          <hr>
+          <u>Would you like to save your cart for the next order?</u><small>(Inactive carts are deleted after 60 days.)</small>
+          <br>
+          <form action="updateOrder.php" method="POST">
+          <input type="submit" name="saveCart" class="btn btn-success" value="Save">
+          <input type="submit" name="deleteCart" class="btn btn-danger" value="Delete">
+          
+          </form>
+					
 	</div>
 
 

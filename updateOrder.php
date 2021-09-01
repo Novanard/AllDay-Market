@@ -1,9 +1,9 @@
 <?php 
-
 if ($_SERVER['REQUEST_METHOD'] === "POST" ) {   
+  include 'db.php';
+  session_start();
   if(isset($_POST['isDone'])){
-    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-      include 'db.php';
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);;
       $barcode = $_POST['barcode'];
       $orderID = $_POST['orderID'];
       $sql = "UPDATE order_details set isDone = 1 WHERE itemBarcode = ? AND order_id = ?; ";
@@ -77,6 +77,28 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" ) {
 
       
     }
+  else if(isset($_POST['saveCart'])){
+    $userID;
+    if(isset($_SESSION['id']))
+    $userID = $_SESSION['id'];
+    $sql = "UPDATE cart set checkedOut = 0 WHERE userID = ?;";
+    $stmt = mysqli_stmt_init($conn);
+    mysqli_stmt_prepare($stmt,$sql);
+    mysqli_stmt_bind_param($stmt,"i",$userID);
+    mysqli_stmt_execute($stmt);
+    header('Location:index.php');
+  }  
+  else if(isset($_POST['deleteCart'])){
+    $userID;
+    if(isset($_SESSION['id']))
+    $userID = $_SESSION['id'];
+    $sql = "DELETE FROM cart WHERE userID = ?;";
+    $stmt = mysqli_stmt_init($conn);
+    mysqli_stmt_prepare($stmt,$sql);
+    mysqli_stmt_bind_param($stmt,"i",$userID);
+    mysqli_stmt_execute($stmt);
+    header('Location:index.php');  
+  }
   else
   echo('Something else');
   } ?>

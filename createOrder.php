@@ -31,7 +31,6 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
         mysqli_stmt_execute($stmt);
 		$results=mysqli_stmt_get_result($stmt);
 		$totalItems = 0;	$totalMoney=0;
-
 		while ($row=mysqli_fetch_assoc($results))
 		{
 		$itemBarcode=$row['itemBarcode'];
@@ -41,6 +40,7 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 		$total = $quantity * $price;
 		$depNum =$row['depNum'];
 		$img = $row['img'];
+
 		// Checking the quantity of the product in the inventory
 		$sql = "SELECT quantity FROM items WHERE Barcode = ? LIMIT 1";
         $stmt= mysqli_stmt_init($conn);
@@ -50,7 +50,7 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 		$result = mysqli_stmt_get_result($stmt);
 		$row = mysqli_fetch_assoc($result);
 		$qnt = $row['quantity'];
-		// If the quantity is bigger than what the customer wants, then we add it to their order
+		// If the quantity is bigger than what the customer wants, then we add it to their order and 
 		if($qnt >= $quantity){
 			$totalItems++;
 			$totalMoney+=$total;
@@ -117,7 +117,13 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 		mysqli_stmt_bind_param($stmt,"ii",$sellCount,$itemBarcode);
 		mysqli_stmt_execute($stmt);
 
-        }    
+        }
+	    //Marking the item as checkedOut in the cart
+		$sql = "UPDATE cart SET checkedOut =1 WHERE userID = ? AND itemBarcode = ?;";
+		$stmt = mysqli_stmt_init($conn);
+		mysqli_stmt_prepare($stmt,$sql);
+		mysqli_stmt_bind_param($stmt,"ii",$userID,$itemBarcode);
+		mysqli_stmt_execute($stmt);
     }		
 		// Updating the totalItems and totalMoney in orders id
 				$sql = "UPDATE orders_id SET totalItems = ?,totalMoney=? WHERE id =?;";
