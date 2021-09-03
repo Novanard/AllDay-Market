@@ -44,8 +44,74 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stats=1;
     		session_start();
         $_SESSION['id']=$row['id'];
+        $userID = $row['id'];
     		$_SESSION['email']=$row['email'];
         $_SESSION['userType']=$row['userType'];
+        $sql="SELECT * FROM users WHERE id = ? LIMIT 1 ;";
+        $stmt = mysqli_stmt_init($conn);
+        mysqli_stmt_prepare($stmt,$sql);
+        mysqli_stmt_bind_param($stmt,"i",$userID);
+        mysqli_stmt_execute($stmt);
+        $res = mysqli_stmt_get_result($stmt);
+        $row = mysqli_fetch_assoc($res);
+        $registerDate = $row['registerDate'];
+        $totalOrders = $row['lifetimeOrders'];
+        $weeklyOrders = $row['weeklyOrders'];
+        $totalSpent = $row['lifetimeSpent'];
+        $weeklySpent=$row['weeklySpent'];
+        $registerMonth = date("m",strtotime($registerDate));
+        $currentDate = DATE("Y-m-d");
+        $currentMonth = date("m",strtotime($currentDate));
+        //Checking if the user has been registered for 2 months without any Orders
+        if($totalOrders ==0 && $currentMonth == $registerMonth +2){
+            $sale = 30; $useTime = 1; $reason = "Registered for +2Months Without Any Orders";
+            $sql = "INSERT INTO saleSystem(userID,saleValue,useTime,reason) VALUES(?,?,?,?);";
+            $stmt = mysqli_stmt_init($conn);
+            mysqli_stmt_prepare($stmt,$sql);
+            mysqli_stmt_bind_param($stmt,"iiis",$userID,$sale,$useTime,$reason);
+            mysqli_stmt_execute($stmt);
+        }
+        //If the user has most orders made lifetime 
+        $sql = "SELECT MAX(lifetimeOrders) as MaxOrders from users LIMIT 1;";
+        $stmt = mysqli_stmt_init($conn);
+        mysqli_stmt_prepare($stmt,$sql);
+        mysqli_stmt_execute($stmt);
+        $res = mysqli_stmt_get_result($stmt);
+        $row = mysqli_fetch_assoc($res);
+        $MaxOrders = $row['MaxOrders'];
+        if($MaxOrders == $totalOrders){
+        $sql = "INSERT INTO saleSystem(userID,saleValue,useTime) VALUES(?,?,?);";
+        $sale = 15; $useTime = 1;
+        $stmt = mysqli_stmt_init($conn);
+        mysqli_stmt_prepare($stmt,$sql);
+        mysqli_stmt_bind_param($stmt,"iii",$userID,$sale,$useTime);
+        mysqli_stmt_execute($stmt);
+        }
+        //If the user has most weekly orders
+        $sql = "SELECT MAX(weeklyOrders) as MaxWeekOrders from users LIMIT 1;";
+        $stmt = mysqli_stmt_init($conn);
+        mysqli_stmt_prepare($stmt,$sql);
+        mysqli_stmt_execute($stmt);
+        $res = mysqli_stmt_get_result($stmt);
+        $row = mysqli_fetch_assoc($res);
+        $MaxWeekOrders = $row['MaxWeekOrders'];
+        if($MaxWeekOrders == $weeklyOrders){
+            $sql = "SELECT * from saleSystem WHERE saleValue = ? AND reason = ? AND userID = ?LIMIT 1 ;";
+            $sale = 20; $useTime = 1; $reason ="Most Orders of the Week";
+            $stmt = mysqli_stmt_init($conn);
+            mysqli_stmt_prepare($stmt,$sql);
+            mysqli_stmt_bind_param($stmt,"isi",$sale,$reason,$userID);
+            mysqli_stmt_execute($stmt);
+            $res = mysqli_stmt_get_result($stmt);
+            if(mysqli_num_rows($res)>=1){
+            $sql = "INSERT INTO saleSystem(userID,saleValue,useTime,reason) VALUES(?,?,?,?);";
+            $sale = 20; $useTime = 1; $reason ="Most Orders of the Week";
+            $stmt = mysqli_stmt_init($conn);
+            mysqli_stmt_prepare($stmt,$sql);
+            mysqli_stmt_bind_param($stmt,"iiis",$userID,$sale,$useTime,$reason);
+            mysqli_stmt_execute($stmt);
+            }
+        }
     		 header('Location:index.php');
       }
       else

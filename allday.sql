@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.4
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 03, 2021 at 08:48 AM
--- Server version: 10.4.17-MariaDB
--- PHP Version: 7.3.26
+-- Generation Time: Sep 03, 2021 at 12:29 PM
+-- Server version: 10.4.19-MariaDB
+-- PHP Version: 7.3.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -287,6 +287,28 @@ INSERT INTO `payroll_ids` (`id`, `eID`, `payMonth`, `totalTime`, `totalMoney`, `
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `salesystem`
+--
+
+CREATE TABLE `salesystem` (
+  `id` int(11) NOT NULL,
+  `userID` int(11) NOT NULL,
+  `saleValue` int(11) NOT NULL,
+  `useTime` int(11) NOT NULL,
+  `reason` varchar(500) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `salesystem`
+--
+
+INSERT INTO `salesystem` (`id`, `userID`, `saleValue`, `useTime`, `reason`) VALUES
+(1, 5, 15, 1, ''),
+(7, 8, 20, 1, 'Most Orders of the Week');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `shift`
 --
 
@@ -316,17 +338,20 @@ CREATE TABLE `users` (
   `weeklyOrders` int(11) NOT NULL DEFAULT 0,
   `lifetimeOrders` int(11) NOT NULL DEFAULT 0,
   `weeklySpent` int(11) NOT NULL DEFAULT 0,
-  `lifetimeSpent` int(11) NOT NULL DEFAULT 0
+  `lifetimeSpent` int(11) NOT NULL DEFAULT 0,
+  `registerDate` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `password`, `userType`, `address`, `number`, `avatar`, `weeklyOrders`, `lifetimeOrders`, `weeklySpent`, `lifetimeSpent`) VALUES
-(1, 'Admin', 'admin@allday.com', '$2y$10$cPByNDa2Y9rRx.ZIUlsBjeKjb5f0jGHNxiqWsmT9c1hmViNOpn6/C', 1, 'N/A', 0, 'assets/images/users/noPic.jpg', 0, 0, 0, 0),
-(5, 'Ameen Ass', 'ameen@test.com', '$2y$10$xA1TMXUo2/jt2hDslGL2hudJmGplEdlvhp0.gd1yc0sMwaLuDgt0W', 0, 'Salah El ', 506663914, 'assets/images/users/hey, don\'t worry_.jpg', 17, 25, 65624, 69544),
-(6, 'Test', 'test@test.com', '$2y$10$/GMfYhPDIW0Ypt1merWEFuuAqmkFXqSv7UybifJiWPrFpf.XrtDG6', 0, 'Test', 123456, 'assets/images/users/noPic.jpg', 5, 5, 3000, 3000);
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `userType`, `address`, `number`, `avatar`, `weeklyOrders`, `lifetimeOrders`, `weeklySpent`, `lifetimeSpent`, `registerDate`) VALUES
+(1, 'Admin', 'admin@allday.com', '$2y$10$cPByNDa2Y9rRx.ZIUlsBjeKjb5f0jGHNxiqWsmT9c1hmViNOpn6/C', 1, 'N/A', 0, 'assets/images/users/noPic.jpg', 0, 0, 0, 0, '2021-09-03 07:33:07'),
+(5, 'Ameen Ass', 'ameen@test.com', '$2y$10$xA1TMXUo2/jt2hDslGL2hudJmGplEdlvhp0.gd1yc0sMwaLuDgt0W', 0, 'Salah El ', 506663914, 'assets/images/users/hey, don\'t worry_.jpg', 17, 25, 65624, 69544, '2021-09-03 07:33:07'),
+(6, 'Test', 'test@test.com', '$2y$10$/GMfYhPDIW0Ypt1merWEFuuAqmkFXqSv7UybifJiWPrFpf.XrtDG6', 0, 'Test', 123456, 'assets/images/users/noPic.jpg', 30, 5, 3000, 3000, '2021-09-03 07:33:07'),
+(7, 'Register Test', 'test1@test.com', '$2y$10$3L0D3MlneA1bURH7PEdDfu67E02vQXsS8Q745BLu2Ybs5rcOSGvOa', 0, 'asdasd', 2131231, 'assets/images/users/noPic.jpg', 22, 23, 0, 0, '2021-09-03 07:33:38'),
+(8, 'AE31W', 'ameen@ameen.com', '$2y$10$TfgZUdeyJaixfCqW5/YbM.SDWp4k6lELiiVf.VhMp1ZHibZQfzMi6', 0, 'AAAA', 12345, 'assets/images/users/noPic.jpg', 40, 0, 0, 0, '2021-09-03 09:43:45');
 
 --
 -- Indexes for dumped tables
@@ -425,6 +450,13 @@ ALTER TABLE `payroll_ids`
   ADD KEY `eID` (`eID`);
 
 --
+-- Indexes for table `salesystem`
+--
+ALTER TABLE `salesystem`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `userID` (`userID`);
+
+--
 -- Indexes for table `shift`
 --
 ALTER TABLE `shift`
@@ -484,6 +516,12 @@ ALTER TABLE `payroll_ids`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `salesystem`
+--
+ALTER TABLE `salesystem`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT for table `shift`
 --
 ALTER TABLE `shift`
@@ -493,7 +531,7 @@ ALTER TABLE `shift`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Constraints for dumped tables
@@ -571,6 +609,12 @@ ALTER TABLE `payroll_details`
 --
 ALTER TABLE `payroll_ids`
   ADD CONSTRAINT `payroll_ids_ibfk_1` FOREIGN KEY (`eID`) REFERENCES `employees` (`eID`);
+
+--
+-- Constraints for table `salesystem`
+--
+ALTER TABLE `salesystem`
+  ADD CONSTRAINT `salesystem_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `shift`
