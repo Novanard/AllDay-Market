@@ -226,6 +226,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             mysqli_stmt_execute($stmt);
             }
          }
+         //If the user has no favorite department, they get 10% only.
+         else {
+          $sale = 10; $isUsed = 0; $reason ="Made 3 Orders Above 150 ILS";
+          $sql = "INSERT INTO saleSystem(userID,saleValue,isUsed,reason) VALUES(?,?,?,?);";
+          $stmt = mysqli_stmt_init($conn);
+          mysqli_stmt_prepare($stmt,$sql);
+          mysqli_stmt_bind_param($stmt,"iiis",$userID,$sale,$isUsed,$reason);
+          mysqli_stmt_execute($stmt);
+         }
       }
       header('Location:index.php');
         }
