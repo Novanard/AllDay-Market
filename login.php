@@ -63,13 +63,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $currentDate = DATE("Y-m-d");
         $currentMonth = date("m",strtotime($currentDate));
         //Checking if the user has been registered for 2 months without any Orders
-        if($totalOrders ==0 && $currentMonth == $registerMonth +2){
-            $sale = 30; $useTime = 1; $reason = "Registered for +2Months Without Any Orders";
-            $sql = "INSERT INTO saleSystem(userID,saleValue,useTime,reason) VALUES(?,?,?,?);";
+        if($totalOrders ==0 && $currentMonth >= ($registerMonth +2)){
+          //Checking if user previously got this sale
+            $sale = 30; $isUsed = 0; $reason = "Registered for +2Months Without Any Orders";
+            $sql = "SELECT * from saleSystem WHERE saleValue = ? AND reason = ? AND userID = ? LIMIT 1 ;";
             $stmt = mysqli_stmt_init($conn);
             mysqli_stmt_prepare($stmt,$sql);
-            mysqli_stmt_bind_param($stmt,"iiis",$userID,$sale,$useTime,$reason);
+            mysqli_stmt_bind_param($stmt,"isi",$sale,$reason,$userID);
             mysqli_stmt_execute($stmt);
+            $res = mysqli_stmt_get_result($stmt);
+            if(mysqli_num_rows($res)==0){
+            $sql = "INSERT INTO saleSystem(userID,saleValue,isUsed,reason) VALUES(?,?,?,?);";
+            $stmt = mysqli_stmt_init($conn);
+            mysqli_stmt_prepare($stmt,$sql);
+            mysqli_stmt_bind_param($stmt,"iiis",$userID,$sale,$isUsed,$reason);
+            mysqli_stmt_execute($stmt);
+            }
         }
         //If the user has most orders made lifetime 
         $sql = "SELECT MAX(lifetimeOrders) as MaxOrders from users LIMIT 1;";
@@ -80,13 +89,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $row = mysqli_fetch_assoc($res);
         $MaxOrders = $row['MaxOrders'];
         if($MaxOrders == $totalOrders){
-        $sql = "INSERT INTO saleSystem(userID,saleValue,useTime) VALUES(?,?,?);";
-        $sale = 15; $useTime = 1;
+          //Checking if user already has this sale
+         $sale = 15; $isUsed = 0; $reason = "Most orders made of all time!";
+        $sql = "SELECT * from saleSystem WHERE saleValue = ? AND reason = ? AND userID = ? LIMIT 1 ;";
         $stmt = mysqli_stmt_init($conn);
         mysqli_stmt_prepare($stmt,$sql);
-        mysqli_stmt_bind_param($stmt,"iii",$userID,$sale,$useTime);
+        mysqli_stmt_bind_param($stmt,"isi",$sale,$reason,$userID);
+        mysqli_stmt_execute($stmt);
+        $res = mysqli_stmt_get_result($stmt);
+        if(mysqli_num_rows($res)==0){
+        $sql = "INSERT INTO saleSystem(userID,saleValue,isUsed,reason) VALUES(?,?,?,?);";
+        $stmt = mysqli_stmt_init($conn);
+        mysqli_stmt_prepare($stmt,$sql);
+        mysqli_stmt_bind_param($stmt,"iiis",$userID,$sale,$isUsed,$reason);
         mysqli_stmt_execute($stmt);
         }
+      }
         //If the user has most weekly orders
         $sql = "SELECT MAX(weeklyOrders) as MaxWeekOrders from users LIMIT 1;";
         $stmt = mysqli_stmt_init($conn);
@@ -96,27 +114,124 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $row = mysqli_fetch_assoc($res);
         $MaxWeekOrders = $row['MaxWeekOrders'];
         if($MaxWeekOrders == $weeklyOrders){
-            $sql = "SELECT * from saleSystem WHERE saleValue = ? AND reason = ? AND userID = ?LIMIT 1 ;";
-            $sale = 20; $useTime = 1; $reason ="Most Orders of the Week";
+            $sql = "SELECT * from saleSystem WHERE saleValue = ? AND reason = ? AND userID = ? LIMIT 1 ;";
+            $sale = 20; $isUsed = 0; $reason ="Most Orders of the Week";
             $stmt = mysqli_stmt_init($conn);
             mysqli_stmt_prepare($stmt,$sql);
             mysqli_stmt_bind_param($stmt,"isi",$sale,$reason,$userID);
             mysqli_stmt_execute($stmt);
             $res = mysqli_stmt_get_result($stmt);
-            if(mysqli_num_rows($res)>=1){
-            $sql = "INSERT INTO saleSystem(userID,saleValue,useTime,reason) VALUES(?,?,?,?);";
-            $sale = 20; $useTime = 1; $reason ="Most Orders of the Week";
+            if(mysqli_num_rows($res)==0){
+            $sql = "INSERT INTO saleSystem(userID,saleValue,isUsed,reason) VALUES(?,?,?,?);";
+            $sale = 20; $isUsed = 0; $reason ="Most Orders of the Week";
             $stmt = mysqli_stmt_init($conn);
             mysqli_stmt_prepare($stmt,$sql);
-            mysqli_stmt_bind_param($stmt,"iiis",$userID,$sale,$useTime,$reason);
+            mysqli_stmt_bind_param($stmt,"iiis",$userID,$sale,$isUsed,$reason);
             mysqli_stmt_execute($stmt);
             }
         }
-    		 header('Location:index.php');
+        //Checking if the user has 3 uncounted orders above 150ILS ( counted for sales )
+        $sql = "SELECT id,topDep FROM oldorders_id WHERE userID = ? AND countedSale=0 And totalMoney>150 LIMIT 3;";
+        $sql2 = "SELECT id,topDep FROM orders_id WHERE userID = ? AND countedSale=0 AND totalMoney>150 LIMIT 3;";
+        $stmt = mysqli_stmt_init($conn);
+        mysqli_stmt_prepare($stmt,$sql2);
+        mysqli_stmt_bind_param($stmt,"i",$userID);
+        mysqli_stmt_execute($stmt);
+        $res = mysqli_stmt_get_result($stmt);
+        if(mysqli_num_rows($res) == 3){
+          $dep1=0;$dep2=0;$dep3=0;$dep4=0;
+          while($row = mysqli_fetch_assoc($res))
+          {
+            $topDep = $row['topDep'];
+            if($topDep == 1)
+              $dep1++;
+            if($topDep == 2)
+              $dep2++;
+            if($topDep == 3)
+              $dep3++;
+            if($topDep == 4)
+              $dep4++;    
+         }
+         //If the user had the same favorite department for the last 3 orders they get
+         // A sale for that department
+         if($dep1 ==3)
+         {
+            $depNum=1;
+            $sql = "SELECT * FROM saleSystem WHERE userID = ? AND saleValue = ? AND reason = ? AND depNum = ? LIMIT 1;";
+            $sale = 20; $isUsed = 0; $reason ="Favorite Department Over The Last 3 Orders";
+            $stmt = mysqli_stmt_init($conn);
+            mysqli_stmt_prepare($stmt,$sql);
+            mysqli_stmt_bind_param($stmt,"isii",$userID,$sale,$reason,$depNum);
+            mysqli_stmt_execute($stmt);
+            $res = mysqli_stmt_get_result($stmt);
+            if(mysqli_num_rows($res)== 0){
+            $sql = "INSERT INTO saleSystem(userID,saleValue,isUsed,reason,depNum) VALUES(?,?,?,?,?);";
+            $stmt = mysqli_stmt_init($conn);
+            mysqli_stmt_prepare($stmt,$sql);
+            mysqli_stmt_bind_param($stmt,"iiisi",$userID,$sale,$isUsed,$reason,$depNum);
+            mysqli_stmt_execute($stmt);
+            }
+         }
+         if($dep2 == 3)
+         {
+            $depNum=2;
+            $sql = "SELECT * FROM saleSystem WHERE userID = ? AND saleValue = ? AND reason = ? AND depNum = ? LIMIT 1;";
+            $sale = 20; $isUsed = 0; $reason ="Favorite Department Over The Last 3 Orders";
+            $stmt = mysqli_stmt_init($conn);
+            mysqli_stmt_prepare($stmt,$sql);
+            mysqli_stmt_bind_param($stmt,"isii",$userID,$sale,$reason,$depNum);
+            mysqli_stmt_execute($stmt);
+            $res = mysqli_stmt_get_result($stmt);
+            if(mysqli_num_rows($res)== 0){
+            $sql = "INSERT INTO saleSystem(userID,saleValue,isUsed,reason,depNum) VALUES(?,?,?,?,?);";
+            $stmt = mysqli_stmt_init($conn);
+            mysqli_stmt_prepare($stmt,$sql);
+            mysqli_stmt_bind_param($stmt,"iiisi",$userID,$sale,$isUsed,$reason,$depNum);
+            mysqli_stmt_execute($stmt);
+            }
+         }
+         if($dep3 == 3)
+         {
+            $depNum=3;
+            $sql = "SELECT * FROM saleSystem WHERE userID = ? AND saleValue = ? AND reason = ? AND depNum = ? LIMIT 1;";
+            $sale = 20; $isUsed = 0; $reason ="Favorite Department Over The Last 3 Orders";
+            $stmt = mysqli_stmt_init($conn);
+            mysqli_stmt_prepare($stmt,$sql);
+            mysqli_stmt_bind_param($stmt,"isii",$userID,$sale,$reason,$depNum);
+            mysqli_stmt_execute($stmt);
+            $res = mysqli_stmt_get_result($stmt);
+            if(mysqli_num_rows($res)== 0){
+            $sql = "INSERT INTO saleSystem(userID,saleValue,isUsed,reason,depNum) VALUES(?,?,?,?,?);";
+            $stmt = mysqli_stmt_init($conn);
+            mysqli_stmt_prepare($stmt,$sql);
+            mysqli_stmt_bind_param($stmt,"iiisi",$userID,$sale,$isUsed,$reason,$depNum);
+            mysqli_stmt_execute($stmt);
+            }
+         }
+         if($dep4 == 3 )
+         {
+            $depNum=4;
+            $sql = "SELECT * FROM saleSystem WHERE userID = ? AND saleValue = ? AND reason = ? AND depNum = ? LIMIT 1;";
+            $sale = 20; $isUsed = 0; $reason ="Favorite Department Over The Last 3 Orders";
+            $stmt = mysqli_stmt_init($conn);
+            mysqli_stmt_prepare($stmt,$sql);
+            mysqli_stmt_bind_param($stmt,"isii",$userID,$sale,$reason,$depNum);
+            mysqli_stmt_execute($stmt);
+            $res = mysqli_stmt_get_result($stmt);
+            if(mysqli_num_rows($res)== 0){
+            $sql = "INSERT INTO saleSystem(userID,saleValue,isUsed,reason,depNum) VALUES(?,?,?,?,?);";
+            $stmt = mysqli_stmt_init($conn);
+            mysqli_stmt_prepare($stmt,$sql);
+            mysqli_stmt_bind_param($stmt,"iiisi",$userID,$sale,$isUsed,$reason,$depNum);
+            mysqli_stmt_execute($stmt);
+            }
+         }
       }
-      else
-      $stats =2;
-    }
+      header('Location:index.php');
+        }
+        else
+        $stats =2;
+      }
     else 
     	$uEmail = 2;
     }
@@ -133,7 +248,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Header -->
     <header class="">
     <?php
-            session_start();
             if(isset($_SESSION['email'])){
             	if($_SESSION['userType'] == 1){
 					$basedir = realpath(__DIR__);

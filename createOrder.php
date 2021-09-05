@@ -124,13 +124,13 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 		mysqli_stmt_prepare($stmt,$sql);
 		mysqli_stmt_bind_param($stmt,"ii",$userID,$itemBarcode);
 		mysqli_stmt_execute($stmt);
-    }		
+    }
 		// Updating the totalItems and totalMoney in orders id
-				$sql = "UPDATE orders_id SET totalItems = ?,totalMoney=? WHERE id =?;";
-				$stmt = mysqli_stmt_init($conn);
-				mysqli_stmt_prepare($stmt,$sql);
-				mysqli_stmt_bind_param($stmt,"iii",$totalItems,$totalMoney,$order_id);
-				mysqli_stmt_execute($stmt);
+		$sql = "UPDATE orders_id SET totalItems = ?,totalMoney=? WHERE id =?;";
+		$stmt = mysqli_stmt_init($conn);
+		mysqli_stmt_prepare($stmt,$sql);
+		mysqli_stmt_bind_param($stmt,"iii",$totalItems,$totalMoney,$order_id);
+		mysqli_stmt_execute($stmt);
 		//Getting the current weeklyOrders,lifeTimeOrders of the user and increasing it.	
 		$sql = "SELECT weeklyOrders,lifetimeOrders FROM users WHERE id=? LIMIT 1;";
 		$stmt = mysqli_stmt_init($conn);
@@ -165,13 +165,37 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 		mysqli_stmt_prepare($stmt,$sql);
 		mysqli_stmt_bind_param($stmt,"iii",$totalWeekly,$totalLife,$userID);
 		mysqli_stmt_execute($stmt);
+			//Counting how many items per department are in the order to see the user's preference
+	$sql = "SELECT depNum,COUNT(depNum) AS sumDepItems FROM order_details WHERE order_id = ? GROUP BY depNum;";	
+	$stmt = mysqli_stmt_init($conn);
+	mysqli_stmt_prepare($stmt,$sql);
+	mysqli_stmt_bind_param($stmt,"i",$order_id);
+	mysqli_stmt_execute($stmt);
+	$results = mysqli_stmt_get_result($stmt);
+	$favDep =0;$mostItems = 0;
+	while($row = mysqli_fetch_assoc($results)){
+		$depNum = $row['depNum'];
+		$numItems = $row['sumDepItems'];
+		if($numItems > $mostItems){
+			$mostItems = $numItems;
+			$favDep = $depNum;
+		}
+	}
+		//Updating topDepartment in the order id
+		$sql = "UPDATE orders_id SET topDep = ? WHERE id = ?;";
+		$stmt = mysqli_stmt_init($conn);
+		mysqli_stmt_prepare($stmt,$sql);
+		mysqli_stmt_bind_param($stmt,"ii",$favDep,$order_id);
+		mysqli_stmt_execute($stmt);
 
+
+			}	
 
 				header('Location:finishOrder.php');
 		}
 	else
 		header('Location:login.php');
-	}
+	
 	
 ?>
 
