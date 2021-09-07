@@ -15,9 +15,9 @@
       <link rel="stylesheet" href="assets/css/owl.css">
       <style>
          img {
-          border: 5px solid #555;
-            }
-      </style>      
+  border: 5px solid #555;
+}
+         </style>
    </head>
    <body>
       <!-- ***** Preloader Start ***** -->
@@ -30,35 +30,34 @@
       </div>
       <!-- ***** Preloader End ***** -->
       <!-- Header -->
-      <!-- Header -->
       <header class="">
          <?php
             session_start();
             if(isset($_SESSION['email'])){
             	if($_SESSION['userType'] == 1){
-            		$target_dir = 'navbars/navadmin.php';
-            		include ($target_dir);
+            $basedir = realpath(__DIR__);
+            		include($basedir . '/navbars/navadmin.php');
             	}
             	else{
-            		$target_dir = 'navbars/navuser.php';
-            		include ($target_dir);
+            $basedir = realpath(__DIR__);
+            		include($basedir . '/navbars/navuser.php');
             	}
             }
             else{
-            		$target_dir = 'navbars/navbar.php';
-            		include ($target_dir);
+            $basedir = realpath(__DIR__);
+            include($basedir . '/navbars/navbar.php');
             }
             
             ?>
       </header>
       <!-- Page Content -->
-      <div class="page-heading about-heading header-text" style="background-image: url(assets/images/items/me5baz.jpg);">
+      <div class="page-heading about-heading header-text" style="background-image: url(assets/images/items/veghs.png);">
          <div class="container">
             <div class="row">
                <div class="col-md-12">
                   <div class="text-content">
                      <h4>AllDay Market</h4>
-                     <h2>Bakery</h2>
+                     <h2>Vegehtables</h2>
                   </div>
                </div>
             </div>
@@ -66,31 +65,30 @@
       </div>
       <div class="col-md-12">
          <div class="row">
-            <?php 
+         <?php 
                include 'db.php';
-               $sql = "SELECT * FROM items WHERE Department = 3";
-               $stmt= mysqli_stmt_init($conn);
-               mysqli_stmt_prepare($stmt,$sql);
-               mysqli_stmt_execute($stmt);
-               $results=mysqli_stmt_get_result($stmt);
                if(isset($_SESSION['userType'])){
                   if($_SESSION['userType'] == 1){
+                     $sql = "SELECT * FROM items WHERE Department = 1";
+                     $stmt= mysqli_stmt_init($conn);
+                     mysqli_stmt_prepare($stmt,$sql);
+                     mysqli_stmt_execute($stmt);
+                     $results=mysqli_stmt_get_result($stmt);
                while ($row=mysqli_fetch_assoc($results))
                {
                $ID = $row['Barcode'];
                $name = $row['Name'];
                $price = $row['Price'];
-               $img = $row['img'];
                $qnt = $row['quantity'];
-
+               $img = $row['img'];
                echo '
                <div class="col-md-4">
                <div class="product-item">
-               <a href="#"><img src="'.$img.'" height="350px" width="250px" alt=""></a>
+               <a href="#"><img src="'.$img.'" style="width:470px;height:370px;" alt=""></a>
                <div class="down-content">
                <a href="#"><h4>'.$name.'</h4></a>
                
-               ₪'.$price.' ~ <small>('.$qnt.')Pcs available</small>
+               <h6> ₪'.$price.' ~ <small>('.$qnt.')KGs available</small>
                <br><br>
                
                <a href="editItemForm.php?id='.$ID.'">
@@ -110,7 +108,64 @@
                ';
                }
                }
-               else{
+               else{ 
+               //Selecting the sales available for the user, and making sum of them in case there are more than 1   
+               $sql = "SELECT * FROM saleSystem WHERE userID = ? AND isUsed = 0;";
+               $sumSales =0;
+               $stmt= mysqli_stmt_init($conn);
+               mysqli_stmt_prepare($stmt,$sql);
+               mysqli_stmt_bind_param($stmt,"i",$_SESSION['id']);
+               mysqli_stmt_execute($stmt);
+               $res=mysqli_stmt_get_result($stmt);
+               while($row = mysqli_fetch_assoc($res)){
+               $sale = $row['saleValue'];
+               $depNum = $row['depNum'];
+               if($depNum == 3 || $depNum == NULL)
+                $sumSales += $sale;
+               }
+               $sql = "SELECT * FROM items WHERE Department = 3;";
+               $stmt= mysqli_stmt_init($conn);
+               mysqli_stmt_prepare($stmt,$sql);
+               mysqli_stmt_execute($stmt);
+               $results=mysqli_stmt_get_result($stmt);
+               if(isset($sale)){
+                  if(isset($sumSales)&&$sumSales>0)
+                  echo'<hr><div class="alert alert-warning col-md-12" role="alert">
+                  <p class="text-center" font-weight:bold>You have %'.$sale.' off for <b>"'.$reason .'"</b> Only For You! </p>
+                 </div><hr>';
+               while ($row=mysqli_fetch_assoc($results))
+               {
+               $ID = $row['Barcode'];
+               $name = $row['Name'];
+               $price = $row['Price'];
+               $newPrice = $price/100  * (100-$sumSales);
+               $img = $row['img'];
+               $qnt = $row['quantity'];
+               echo '
+               <div class="col-md-4">
+               <div class="product-item">
+               <a href="#"><img src="'.$img.'" style="width:470px;height:370px;" alt=""></a>
+               <div class="down-content">
+               <a href="#"><h4>'.$name.'</h4></a>';
+               
+               if(isset($sumSales)&& $sumSales >0)
+                echo' <h6><del>₪'.$price.'</del> ₪'.$newPrice;
+               else echo' <h6>₪'.$price;
+               echo'
+               <br><br>
+               <form id="qnt'.$ID.'">
+               <input type="text" placeholder="Enter Quantity in Kilo" name="qty" required>
+               <button class="btn btn-danger" type="button" onclick= add('.$ID.') class="filled-button" class="add2cart">Add To Cart</button></h6>
+               </form>
+               
+               <p>Fresh Day to Day &nbsp;/&nbsp; Naturally Raised</p>
+               </div>
+               </div>
+               </div>
+               ';
+               }
+            }
+            else {
                while ($row=mysqli_fetch_assoc($results))
                {
                $ID = $row['Barcode'];
@@ -125,7 +180,7 @@
                <div class="down-content">
                <a href="#"><h4>'.$name.'</h4></a>
                
-               ₪'.$price.' ~ <small>('.$qnt.')Pcs available</small>
+               <h6> ₪'.$price.'  ~ <small>('.$qnt.')KGs available</small>
                <br><br>
                <form id="qnt'.$ID.'">
                <input type="text" placeholder="Enter Quantity in Kilo" name="qty" required>
@@ -138,9 +193,15 @@
                </div>
                ';
                }
+            }
                }
                }
                else{
+                  $sql = "SELECT * FROM items WHERE Department = 3;";
+                  $stmt= mysqli_stmt_init($conn);
+                  mysqli_stmt_prepare($stmt,$sql);
+                  mysqli_stmt_execute($stmt);
+                  $results=mysqli_stmt_get_result($stmt);      
                while ($row=mysqli_fetch_assoc($results))
                {
                $id = $row['Barcode'];
@@ -151,12 +212,13 @@
                echo '
                <div class="col-md-4">
                <div class="product-item">
-               <a href="#"><img src="'.$img.'" height="350px" width="250px" alt=""></a>
+               <a href="#"><img src="'.$img.'" style="width:470px;height:370px;" border="5px"; alt=""></a>
                <div class="down-content">
                <a href="#"><h4>'.$name.'</h4></a>
                
-               ₪'.$price.' ~ <small>('.$qnt.')Pcs available</small>
+               ₪'.$price.' ~ <small>('.$qnt.')KGs available</small>
                <br><br>
+               
                <p>Fresh Day to Day &nbsp;/&nbsp; Naturally Raised</p>
                </div>
                </div>

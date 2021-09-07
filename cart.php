@@ -80,7 +80,7 @@
 	        mysqli_stmt_bind_param($stmt,"i",$userID);
 	        mysqli_stmt_execute($stmt);
 	        $results=mysqli_stmt_get_result($stmt);
-	    	$totalPrice = 0;
+	    	$totalPrice = 0.0;
 		  while ($row=mysqli_fetch_assoc($results)) 
 	        {
 			
@@ -119,7 +119,6 @@
 							<input class="btn btn-danger" value="Delete" type="submit" name="deleteCart" />
 						</form>
 				
-
                           <br><br>                                                 
                         </div>
                     </div>
@@ -178,3 +177,4 @@
     <script src="assets/js/owl.js"></script>
   </body>
 </html>
+

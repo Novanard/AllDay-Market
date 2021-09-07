@@ -37,10 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" ) {
         $totalItems = $row['totalItems'];
         $totalMoney = $row['totalMoney'];
         $isDone = $row['isDone'];
-        $sql = "INSERT into oldOrders_id(id,userID,date,totalItems,totalMoney,isDone) VALUES(?,?,?,?,?,?);";
+        $countedSale = $row['countedSale'];
+        $topDep = $row['topDep'];
+        $sql = "INSERT into oldOrders_id(id,userID,date,totalItems,totalMoney,isDone,countedSale,topDep) VALUES(?,?,?,?,?,?,?,?);";
         $stmt = mysqli_stmt_init($conn);
         mysqli_stmt_prepare($stmt,$sql);
-        mysqli_stmt_bind_param($stmt,"iisiii",$orderID,$userID,$date,$totalItems,$totalMoney,$isDone);
+        mysqli_stmt_bind_param($stmt,"iisiiiii",$orderID,$userID,$date,$totalItems,$totalMoney,$isDone,$countedSale,$topDep);
         mysqli_stmt_execute($stmt); 
         //Selecting the order details and archieving them in oldOrder details table.    
         $sql = "SELECT * FROM order_details WHERE order_id = ?";
