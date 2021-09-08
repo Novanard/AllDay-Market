@@ -147,12 +147,9 @@
                <div class="product-item">
                <a href="#"><img src="'.$img.'" style="width:470px;height:370px;" alt=""></a>
                <div class="down-content">
-               <a href="#"><h4>'.$name.'</h4></a>';
+               <a href="#"><h4>'.$name.'</h4></a>
                
-               if(isset($sumSales)&& $sumSales >0)
-                echo' <h6><del>₪'.$price.'</del> ₪'.$newPrice;
-               else echo' <h6>₪'.$price;
-               echo'
+               <h6><del> ₪'.$price.'</del> ₪'.$newPrice.'  ~ <small>('.$qnt.')Pcs available</small>
                <br><br>
                <form id="qnt'.$ID.'">
                <input type="text" placeholder="Enter Quantity in Kilo" name="qty" required>

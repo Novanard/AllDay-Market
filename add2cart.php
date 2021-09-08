@@ -15,7 +15,7 @@
 		$results=mysqli_stmt_get_result($stmt);
 		$row=mysqli_fetch_assoc($results);
 		$name = $row['Name'];
-		$price = $row['Price'];
+		$price = $row['Price']; 
 		$price =number_format($price,2);
 		$img = $row['img'];
 		$depNum = $row['Department'];

@@ -57,7 +57,7 @@
                <div class="col-md-12">
                   <div class="text-content">
                      <h4>AllDay Market</h4>
-                     <h2>Vegehtables</h2>
+                     <h2>Bakery</h2>
                   </div>
                </div>
             </div>
@@ -88,7 +88,7 @@
                <div class="down-content">
                <a href="#"><h4>'.$name.'</h4></a>
                
-               <h6> ₪'.$price.' ~ <small>('.$qnt.')KGs available</small>
+               <h6><del> ₪'.$price.'</del> ₪'.$newPrice.'  ~ <small>('.$qnt.')Pcs available</small>
                <br><br>
                
                <a href="editItemForm.php?id='.$ID.'">
@@ -120,6 +120,7 @@
                while($row = mysqli_fetch_assoc($res)){
                $sale = $row['saleValue'];
                $depNum = $row['depNum'];
+               $reason = $row['reason'];
                if($depNum == 3 || $depNum == NULL)
                 $sumSales += $sale;
                }
@@ -146,15 +147,12 @@
                <div class="product-item">
                <a href="#"><img src="'.$img.'" style="width:470px;height:370px;" alt=""></a>
                <div class="down-content">
-               <a href="#"><h4>'.$name.'</h4></a>';
+               <a href="#"><h4>'.$name.'</h4></a>
                
-               if(isset($sumSales)&& $sumSales >0)
-                echo' <h6><del>₪'.$price.'</del> ₪'.$newPrice;
-               else echo' <h6>₪'.$price;
-               echo'
+               <h6><del> ₪'.$price.'</del> ₪'.$newPrice.'  ~ <small>('.$qnt.')Pcs available</small>
                <br><br>
                <form id="qnt'.$ID.'">
-               <input type="text" placeholder="Enter Quantity in Kilo" name="qty" required>
+               <input type="text" placeholder="Enter Quantity in Pieces" name="qty" required>
                <button class="btn btn-danger" type="button" onclick= add('.$ID.') class="filled-button" class="add2cart">Add To Cart</button></h6>
                </form>
                
