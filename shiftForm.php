@@ -20,6 +20,7 @@
          if (isset($_POST['submit']) && isset($_POST['checkIn'])) {
           include 'db.php';
          	$eID = $_POST['eID'];
+            // If employee is checking-in, first thing is to check if they exist
            $sql = "SELECT * FROM employees WHERE eID = ? LIMIT 1";
            $stmt= mysqli_stmt_init($conn);
            mysqli_stmt_prepare($stmt,$sql);
@@ -29,6 +30,7 @@
           $row=mysqli_fetch_assoc($results);
            if(isset($row['eID'])){
            $startTime = date("Y-m-d H:i:s");
+           // If the employee exists , check if they are in their shift
            $sql = "SELECT * FROM shift WHERE eID = ? LIMIT 1";
            $stmt= mysqli_stmt_init($conn);
            mysqli_stmt_prepare($stmt,$sql);
@@ -39,6 +41,7 @@
           if (isset($row['eID']))
             echo('Employee Already in their shift');
            else{
+              //If the employee isnt in their shift, they start a new shift
             $sql = "INSERT INTO shift (eID,startTime) VALUES (?,?);";
          		$stmt= mysqli_stmt_init($conn);
          	    mysqli_stmt_prepare($stmt,$sql);
@@ -51,6 +54,7 @@
          else if (isset($_POST['submit']) && isset($_POST['checkOut'])) {
           include 'db.php';
          	$eID = $_POST['eID'];
+            // If the employee is checking out, first to check if they exist
            $sql = "SELECT * FROM employees WHERE eID = ? LIMIT 1";
            $stmt= mysqli_stmt_init($conn);
            mysqli_stmt_prepare($stmt,$sql);
@@ -59,6 +63,7 @@
            $results=mysqli_stmt_get_result($stmt);
            $row =mysqli_fetch_assoc($results);
            if(isset($row['eID'])){
+              // If they employee exists, check if they are in a shift
            $sql = "SELECT * FROM shift WHERE eID = ? LIMIT 1";
            $stmt= mysqli_stmt_init($conn);
            mysqli_stmt_prepare($stmt,$sql);
@@ -71,12 +76,14 @@
            else{
             $startTime=$row['startTime'];
           $endTime = date("Y-m-d H:i:s"); 
+          // If the employee is in a shift, update their checkout time
            $sql = "UPDATE shift SET endtime = ? WHERE eID = ?";
            $stmt= mysqli_stmt_init($conn);
            mysqli_stmt_prepare($stmt,$sql);
            mysqli_stmt_bind_param($stmt,"si",$endTime,$eID);
            mysqli_stmt_execute($stmt);
            echo('Successfully check-out of your shift!');
+           // Deleting the shift after it ends
            $sql = "DELETE FROM shift WHERE eID = ?";
            $stmt= mysqli_stmt_init($conn);
            mysqli_stmt_prepare($stmt,$sql);
@@ -84,16 +91,49 @@
            mysqli_stmt_execute($stmt);
            echo('Shift Deleted');
          }
-         //Creating a payroll id NOTE: NEED TO MAKE THIS EVERY MONTH
+         //Checking if the employee has previous payroll_id
+         $sql="SELECT payMonth,isFinished FROM payroll_ids WHERE eID = ?";
+         $stmt= mysqli_stmt_init($conn);
+         mysqli_stmt_prepare($stmt,$sql);
+         mysqli_stmt_bind_param($stmt,"i",$eID);
+         mysqli_stmt_execute($stmt);
+         $results = mysqli_stmt_get_result($stmt);
+         $row = mysqli_fetch_assoc($results);
+         //If there are no previous records, a new one is created
+         if(!isset($row['payMonth'])){
          $sql = "INSERT INTO payroll_ids (eID,payMonth) VALUES (?,?);";
          $month = DATE("Y-m-d");
          $stmt= mysqli_stmt_init($conn);
           mysqli_stmt_prepare($stmt,$sql);
           mysqli_stmt_bind_param($stmt,"is",$eID,$month);
           mysqli_stmt_execute($stmt);
-          echo('Payroll ID Executed');
+          echo('Payroll ID Executed');}
+          // If there are previous records, check if the month is finished
+          // If it is not finished, then no need to create another record
+          else if(isset($row['payMonth'])&& $row['isFinished']!= 1){
+             $onlyMoth = date("m",strtotime($row['payMonth']));
+             $currentDate = DATE("Y-m-d");
+             $currentMonth = date("m",strtotime($currentDate));
+             if($onlyMoth == $currentMonth)
+               echo('No need for another payroll id');
+           // If the current month does not match the payroll_id month, then we create a new one 
+           // and update the previous isFinished to 1.
+               else {
+                  $sql = "UPDATE payroll_ids set isFinished = 1 WHERE eID = ?;";
+                  $stmt= mysqli_stmt_init($conn);
+                   mysqli_stmt_prepare($stmt,$sql);
+                   mysqli_stmt_bind_param($stmt,"i",$eID);
+                   mysqli_stmt_execute($stmt);
+                  $sql = "INSERT INTO payroll_ids (eID,payMonth) VALUES (?,?);";
+                  $stmt= mysqli_stmt_init($conn);
+                   mysqli_stmt_prepare($stmt,$sql);
+                   mysqli_stmt_bind_param($stmt,"is",$eID,$currentDate);
+                   mysqli_stmt_execute($stmt);
+               }
+               
+          }
           //Getting the payroll id in order to insert it as the foreign key
-          $sql="SELECT id FROM payroll_ids WHERE eID = ?";
+          $sql="SELECT id FROM payroll_ids WHERE eID = ? AND isFinished =0";
           $stmt= mysqli_stmt_init($conn);
           mysqli_stmt_prepare($stmt,$sql);
           mysqli_stmt_bind_param($stmt,"i",$eID);
@@ -123,14 +163,26 @@
            $row = mysqli_fetch_assoc($results);
            $perhour = $row['perhour'];
            $payday = $perhour * $totalHours ;
-           // UPDATING the payday column in the payroll_details
-           $sql="UPDATE payroll_details SET payday = ? WHERE payroll_id = ?";
+           //Getting the payroll_details primary key in order to update it's payday
+           $sql="SELECT id FROM payroll_details WHERE startTime = ? AND endTime = ? LIMIT 1";
            $stmt= mysqli_stmt_init($conn);
            mysqli_stmt_prepare($stmt,$sql);
-           mysqli_stmt_bind_param($stmt,"ii",$payday,$payroll_id);
+           mysqli_stmt_bind_param($stmt,"ss",$startTime,$endTime);
            mysqli_stmt_execute($stmt);
-
-      }
+           $results = mysqli_stmt_get_result($stmt);
+           $row = mysqli_fetch_assoc($results);
+           $pay_detailsID = $row['id'];
+           echo('Pay roll details PK GET Success');
+           // UPDATING the payday column in the payroll_details
+           $sql="UPDATE payroll_details SET payday = ? WHERE id = ?";
+           $stmt= mysqli_stmt_init($conn);
+           mysqli_stmt_prepare($stmt,$sql);
+           mysqli_stmt_bind_param($stmt,"ii",$payday,$pay_detailsID);
+           mysqli_stmt_execute($stmt);
+           echo('Payday updated');
+         
+         
+         }
          }
          ?>
       <!-- ***** Preloader Start ***** -->
