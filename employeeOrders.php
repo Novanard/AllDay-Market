@@ -13,6 +13,11 @@
       <link rel="stylesheet" href="assets/css/fontawesome.css">
       <link rel="stylesheet" href="assets/css/style.css">
       <link rel="stylesheet" href="assets/css/owl.css">
+      <style>
+         img {
+  border: 5px solid #555;
+}
+         </style>
    </head>
    <body>
       <!-- ***** Preloader Start ***** -->
@@ -76,14 +81,15 @@
                            $results=mysqli_stmt_get_result($stmt);
                             $row = mysqli_fetch_assoc($results);
                             $depNum = $row['depNum'];
-                            //Getting all records where depNum matches the employee Dep
-                            //And the state of the order item is not finished
-                            $sql = "SELECT * FROM order_details WHERE depNum = ? AND isDone =0 ";
+                           
+                            //Getting all records where the employee started making them
+                            $sql = "SELECT * FROM order_details WHERE depNum= ? AND isDone = 0 AND eID = ? ;";
                             $stmt= mysqli_stmt_init($conn);
                             mysqli_stmt_prepare($stmt,$sql);
-                            mysqli_stmt_bind_param($stmt,"i",$depNum);
+                            mysqli_stmt_bind_param($stmt,"ii",$depNum,$eID);
                             mysqli_stmt_execute($stmt);
                             $results=mysqli_stmt_get_result($stmt);
+                            if(mysqli_num_rows($results) > 0){
                             while($row = mysqli_fetch_assoc($results))
                             {
                                $orderID = $row['order_id'];
@@ -91,9 +97,9 @@
                                $quantity = $row['quantity'];
                                $img = $row['img'];
                                echo '
-                               <div class="col-md-6">
+                               <div class="col-md-4">
                                <div class="product-item">
-                               <a href="#"><img src="'.$img.'" alt=""></a>
+                               <a href="#"><img src="'.$img.'" style="width:470px;height:370px;" alt=""></a>
                                <div class="down-content">
                                <a href="#"><h4>OrderID ~'.$orderID.'</h4></a>
                                
@@ -102,8 +108,9 @@
                                <br><br>
                                <form action="updateOrder.php" method="post">
                                <input type="hidden" name="barcode" value="'.$itemBarcode.'">
-                               <fieldset>
                                <input type="hidden" name="orderID" value="'.$orderID.'">
+                               <input type="hidden" name="eID" value="'.$eID.'">
+                               <fieldset>
                                <button type="submit" name="isDone" id="form-submit" class="btn btn-success">isDone</button>
                                </fieldset>
                                </form>
@@ -112,8 +119,53 @@
                                </div>
                                ';
                                }
-
-                              }
+                           }
+                            //Getting all records where depNum matches the employee Dep
+                            //And the state of the order item is not finished
+                            $sql = "SELECT * FROM order_details WHERE depNum= ? AND isDone = 0 AND eID IS NULL ;";
+                            $stmt= mysqli_stmt_init($conn);
+                            mysqli_stmt_prepare($stmt,$sql);
+                            mysqli_stmt_bind_param($stmt,"i",$depNum);
+                            mysqli_stmt_execute($stmt);
+                            $results=mysqli_stmt_get_result($stmt);
+                            if(mysqli_num_rows($results) > 0){
+                            while($row = mysqli_fetch_assoc($results))
+                            {
+                               $orderID = $row['order_id'];
+                               $itemBarcode = $row['itemBarcode'];
+                               $quantity = $row['quantity'];
+                               $img = $row['img'];
+                               echo '
+                               <div class="col-md-4">
+                               <div class="product-item">
+                               <a href="#"><img src="'.$img.'" style="width:470px;height:370px;" alt=""></a>
+                               <div class="down-content">
+                               <a href="#"><h4>OrderID ~'.$orderID.'</h4></a>
+                               
+                               <h6><small>ItemBarcode: '.$itemBarcode.'<br></small>
+                               <h6><small> Quantity:'.$quantity.'</small>
+                               <br><br>
+                               <form action="updateOrder.php" method="post">
+                               <input type="hidden" name="barcode" value="'.$itemBarcode.'">
+                               <input type="hidden" name="orderID" value="'.$orderID.'">
+                               <input type="hidden" name="eID" value="'.$eID.'">
+                               <fieldset>
+                               <button type"submit" name="startMaking" class="btn btn-warning">Start Making</button>
+                               </fieldset>
+                               <br>
+                               </form>
+                               </div>
+                               </div>
+                               </div>
+                               ';
+                               }
+                           }
+                           else{
+                              echo '<div class="alert alert-warning col-md-12" role="alert">
+                              <p style="text-align:center;">You have no wating orders for the time being!</p>
+                            </div> ';
+                        }
+                        }
                               else{
                                  echo '<div class="alert alert-warning col-md-12" role="alert">
                                  <p style="text-align:center;">You must check-in your shift before accessing Orders!</p>
