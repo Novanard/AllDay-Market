@@ -117,6 +117,7 @@
                mysqli_stmt_bind_param($stmt,"i",$_SESSION['id']);
                mysqli_stmt_execute($stmt);
                $res=mysqli_stmt_get_result($stmt);
+               $arrayLen = mysqli_num_rows($res);
                while($row = mysqli_fetch_assoc($res)){
                $sale = $row['saleValue'];
                $depNum = $row['depNum'];

@@ -187,6 +187,13 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 		mysqli_stmt_prepare($stmt,$sql);
 		mysqli_stmt_bind_param($stmt,"ii",$favDep,$order_id);
 		mysqli_stmt_execute($stmt);
+		
+		//Updating the sale to used
+		$sql = "UPDATE saleSystem SET isUsed = 1 WHERE userID = ?";
+		$stmt = mysqli_stmt_init($conn);
+		mysqli_stmt_prepare($stmt,$sql);
+		mysqli_stmt_bind_param($stmt,"i",$userID);
+		mysqli_stmt_execute($stmt);
 
 
 			}	
