@@ -13,6 +13,11 @@
       <link rel="stylesheet" href="assets/css/fontawesome.css">
       <link rel="stylesheet" href="assets/css/style.css">
       <link rel="stylesheet" href="assets/css/owl.css">
+      <style>
+         img {
+          border: 5px solid #555;
+            }
+      </style>  
    </head>
    <body>
       <!-- ***** Preloader Start ***** -->
@@ -58,7 +63,7 @@
             </div>
          </div>
       </div>
-      <div class="col-md-9">
+      <div class="col-md-10">
          <div class="row">
             <?php 
                include 'db.php';

@@ -112,19 +112,21 @@
           // If there are previous records, check if the month is finished
           // If it is not finished, then no need to create another record
           else if(isset($row['payMonth'])&& $row['isFinished']!= 1){
-             $onlyMoth = date("m",strtotime($row['payMonth']));
+             $onlyMonth = date("m",strtotime($row['payMonth']));
              $currentDate = DATE("Y-m-d");
              $currentMonth = date("m",strtotime($currentDate));
-             if($onlyMoth == $currentMonth)
+             if($onlyMonth == $currentMonth)
                echo('No need for another payroll id');
            // If the current month does not match the payroll_id month, then we create a new one 
            // and update the previous isFinished to 1.
+           //In addition we archieve the payroll_id and details.
                else {
                   $sql = "UPDATE payroll_ids set isFinished = 1 WHERE eID = ?;";
                   $stmt= mysqli_stmt_init($conn);
                    mysqli_stmt_prepare($stmt,$sql);
                    mysqli_stmt_bind_param($stmt,"i",$eID);
                    mysqli_stmt_execute($stmt);
+                  
                   $sql = "INSERT INTO payroll_ids (eID,payMonth) VALUES (?,?);";
                   $stmt= mysqli_stmt_init($conn);
                    mysqli_stmt_prepare($stmt,$sql);
@@ -147,7 +149,7 @@
           $sql = "INSERT INTO payroll_details (startTime,endTime,totalTime,payroll_id,eID) VALUES (?,?,?,?,?);";
           $datetime1 = strtotime($startTime);
           $datetime2 = strtotime($endTime);
-          $interval  = abs($datetime1 - $datetime2);
+          $interval  = abs($datetime1 - $datetime2)/30; // 0.5 minute equals 1 hour in real life for simulation purposes
           $totalHours = $interval;
           $stmt= mysqli_stmt_init($conn);
            mysqli_stmt_prepare($stmt,$sql);
@@ -193,7 +195,7 @@
             $totalMoney = $row['totalMoney'];
             $totalMoney += $payday;
             // Updating totalMoney with the new amount
-            $sql ="UPDATE payroll_ids SET totalMoney = ? Where id = ?";
+            $sql ="UPDATE payroll_ids SET totalMoney = ? WHERE id = ?";
             $stmt = mysqli_stmt_init($conn);
             mysqli_stmt_prepare($stmt,$sql);
             mysqli_stmt_bind_param($stmt,"ii",$totalMoney,$payroll_id);
