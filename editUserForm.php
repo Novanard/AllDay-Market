@@ -77,27 +77,27 @@
                 <div class="row">
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="name" type="text" class="form-control" id="name" placeholder="New Name" required="">
+                      <input name="name" type="text" class="form-control" id="name" placeholder="New Name" >
                     </fieldset>
                   </div>
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="email" type="text" class="form-control" id="email" placeholder="New Email Address" required="">
+                      <input name="email" type="text" class="form-control" id="email" placeholder="New Email Address" >
                     </fieldset>
                   </div>
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="password" type="password" class="form-control" id="password" placeholder="New Password" pattern="(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"  required="">
+                      <input name="password" type="password" class="form-control" id="password" placeholder="New Password" pattern="(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" >
                     </fieldset>
                   </div>
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="address" type="text" class="form-control" id="address" placeholder="New Address"   required="">
+                      <input name="address" type="text" class="form-control" id="address" placeholder="New Address" >
                     </fieldset>
                   </div>
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="phone" type="number" class="form-control" id="number" placeholder="New Phone Number"   required="">
+                      <input name="phone" type="number" class="form-control" id="number" placeholder="New Phone Number" >
                     </fieldset>
                   </div>
                   <div class="col-lg-12">

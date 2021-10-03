@@ -57,7 +57,7 @@
                <div class="col-md-12">
                   <div class="text-content">
                      <h4>AllDay Market</h4>
-                     <h2>Bakery</h2>
+                     <h2>Vegehtables</h2>
                   </div>
                </div>
             </div>
@@ -69,7 +69,7 @@
                include 'db.php';
                if(isset($_SESSION['userType'])){
                   if($_SESSION['userType'] == 1){
-                     $sql = "SELECT * FROM items WHERE Department = 1";
+                     $sql = "SELECT * FROM items WHERE Department = 3";
                      $stmt= mysqli_stmt_init($conn);
                      mysqli_stmt_prepare($stmt,$sql);
                      mysqli_stmt_execute($stmt);
@@ -88,7 +88,7 @@
                <div class="down-content">
                <a href="#"><h4>'.$name.'</h4></a>
                
-               <h6><del> ₪'.$price.'</del> ₪'.$newPrice.'  ~ <small>('.$qnt.')Pcs available</small>
+               <h6> ₪'.$price.' ~ <small>('.$qnt.')KGs available</small>
                <br><br>
                
                <a href="editItemForm.php?id='.$ID.'">
@@ -117,14 +117,15 @@
                mysqli_stmt_bind_param($stmt,"i",$_SESSION['id']);
                mysqli_stmt_execute($stmt);
                $res=mysqli_stmt_get_result($stmt);
+               $arrayLen = mysqli_num_rows($res);
                while($row = mysqli_fetch_assoc($res)){
                $sale = $row['saleValue'];
                $depNum = $row['depNum'];
-               $reason = $row['reason'];
-               if($depNum == 3 || $depNum == NULL)
+               $reason=$row['reason'];
+               if($depNum ==1 || $depNum == NULL)
                 $sumSales += $sale;
                }
-               $sql = "SELECT * FROM items WHERE Department = 3;";
+               $sql = "SELECT * FROM items WHERE Department = 3";
                $stmt= mysqli_stmt_init($conn);
                mysqli_stmt_prepare($stmt,$sql);
                mysqli_stmt_execute($stmt);
@@ -149,10 +150,10 @@
                <div class="down-content">
                <a href="#"><h4>'.$name.'</h4></a>
                
-               <h6><del> ₪'.$price.'</del> ₪'.$newPrice.'  ~ <small>('.$qnt.')Pcs available</small>
+               <h6><del> ₪'.$price.'</del> ₪'.$newPrice.'  ~ <small>('.$qnt.')KGs available</small>
                <br><br>
                <form id="qnt'.$ID.'">
-               <input type="text" placeholder="Enter Quantity in Pieces" name="qty" required>
+               <input type="text" placeholder="Enter Quantity in Kilo" name="qty" required>
                <button class="btn btn-danger" type="button" onclick= add('.$ID.') class="filled-button" class="add2cart">Add To Cart</button></h6>
                </form>
                
@@ -176,9 +177,12 @@
                <div class="product-item">
                <a href="#"><img src="'.$img.'" style="width:470px;height:370px;" alt=""></a>
                <div class="down-content">
-               <a href="#"><h4>'.$name.'</h4></a>
+               <a href="#"><h4>'.$name.'</h4></a>';
                
-               <h6> ₪'.$price.'  ~ <small>('.$qnt.')KGs available</small>
+               if(isset($sumSales)&& $sumSales >0)
+                echo' <h6><del>₪'.$price.'</del> ₪'.$newPrice;
+               else echo' <h6>₪'.$price;
+               echo'
                <br><br>
                <form id="qnt'.$ID.'">
                <input type="text" placeholder="Enter Quantity in Kilo" name="qty" required>
@@ -195,7 +199,7 @@
                }
                }
                else{
-                  $sql = "SELECT * FROM items WHERE Department = 3;";
+                  $sql = "SELECT * FROM items WHERE Department = 3";
                   $stmt= mysqli_stmt_init($conn);
                   mysqli_stmt_prepare($stmt,$sql);
                   mysqli_stmt_execute($stmt);

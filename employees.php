@@ -57,7 +57,7 @@
             </div>
          </div>
       </div>
-      <div class="col-md-10">
+      <div class="col-md-12">
          <div class="row">
             <?php 
                mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
@@ -81,9 +81,9 @@
                			  $img = $row['avatar'];
                			  
                			  echo '
-               				<div class="col-md-6">
+               				<div class="col-md-4">
                				  <div class="product-item">
-               					<a href="#"><img src="'.$img.'" height="370px" width="270px" alt=""></a>
+               				   <a href="#"><img src="'.$img.'" height="370px" width="270px" alt=""></a>
                				   <div class="down-content">
                					<center><strong>'.$firstname.' &nbsp '.$lastname.'</strong><small>('.$ID.')</small></center>
                					 </div>
@@ -93,6 +93,7 @@
                					  <li><strong>PerHour:</strong>₪'.$perhour.'</li>
                					  <li><strong>Residence:</strong>'.$residence.'</li>
                					  <li><strong>PIN:</strong>'.$pin.'</li>
+                                </ul>
                					  </div>
                					  <div>
                	          	<a href="editEmployeeForm.php?id='.$ID.'">

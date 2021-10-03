@@ -109,43 +109,39 @@
                                ';
                                $day+=1;
                             }
-                               // Making sum of all current working days
-                               $sql = "SELECT SUM(payday) as totalPayday FROM payroll_details WHERE payroll_id = ? ";
-                               $stmt= mysqli_stmt_init($conn);
-                               mysqli_stmt_prepare($stmt,$sql);
-                               mysqli_stmt_bind_param($stmt,"i",$payroll_id);
-                               mysqli_stmt_execute($stmt);
-                               $results=mysqli_stmt_get_result($stmt);
-                               $row = mysqli_fetch_assoc($results);
-                               $totalPayday = $row['totalPayday'];
-                               // Making count of all working days
-                               $sql = "SELECT COUNT(payday) as totalDays FROM payroll_details WHERE payroll_id = ? ";
-                               $stmt= mysqli_stmt_init($conn);
-                               mysqli_stmt_prepare($stmt,$sql);
-                               mysqli_stmt_bind_param($stmt,"i",$payroll_id);
-                               mysqli_stmt_execute($stmt);
-                               $results=mysqli_stmt_get_result($stmt);
-                               $row = mysqli_fetch_assoc($results);
-                               $totalDays = $row['totalDays'];
+                              //Getting the summary of the payroll id in order to calculate statics
+                              $sql ="SELECT totalMoney,totalTime FROM payroll_ids WHERE eID = ? LIMIT 1;";
+                              $stmt = mysqli_stmt_init($conn);
+                              mysqli_stmt_prepare($stmt,$sql);
+                              mysqli_stmt_bind_param($stmt,"i",$eID);
+                              mysqli_stmt_execute($stmt);
+                              $results=mysqli_stmt_get_result($stmt);
+                              if(mysqli_num_rows($results)==1){
+                              $row = mysqli_fetch_assoc($results);
+                               $totalTime = $row['totalTime'];
+                               $totalPayday = $row['totalMoney'];
                                //Getting the summary of the lastpayroll id in order to calculate statics
-                               $sql ="SELECT TotalMoney,TotalTime FROM oldpayroll_ids ORDER BY id DESC LIMIT 1;";
+                               $sql ="SELECT TotalMoney,TotalTime FROM oldpayroll_ids WHERE eID = ? ORDER BY id DESC LIMIT 1;";
                                $stmt = mysqli_stmt_init($conn);
                                mysqli_stmt_prepare($stmt,$sql);
+                               mysqli_stmt_bind_param($stmt,"i",$eID);
                                mysqli_stmt_execute($stmt);
                                $results=mysqli_stmt_get_result($stmt);
                                $row = mysqli_fetch_assoc($results);
-                               $prevTotalDays = $row['TotalTime'];
+                               $prevTotalTime = $row['TotalTime'];
                                $prevTotalPayday = $row['TotalMoney'];
-                              $paydayAvg = ($totalPayday/$prevTotalPayday)*100;
-                              $timeAvg = ($totalTime/$prevTotalDays)*100;
                                echo '
                                <div class="col-md-6">
                                <div class="product-item">
                                <div class="down-content">
                                <a href="#"><h4>Summary:</h4></a>
                                <br>
-                               Total Work Days: '.$totalDays.'<br>
+                               Total Work Time: '.$totalTime.'<br>
                                Total Money: ₪'.$totalPayday.'<br>';
+                               // Checking if there is a previous payroll so we calculate statics
+                              if(mysqli_num_rows($results)==1){ 
+                                 $paydayAvg = ($totalPayday/$prevTotalPayday)*100;
+                                 $timeAvg = ($totalTime/$prevTotalTime)*100;
                             if($totalPayday>$prevTotalPayday){  
                                $paydayDiff = $totalPayday - $prevTotalPayday;
                             echo'You have <b>%<font color="GREEN">'.$paydayAvg.'</font>growth rate</b> in your salary, good job!(Total of₪'.$paydayDiff.' Increase)</small>';
@@ -156,15 +152,16 @@
                               }
                            else echo'You have <b>%<font color="Orange">0</font></b>changes in your salary, neutral status.';
                            echo'<br>';
-                           if($totalPayday>$prevTotalPayday){  
-                              $timeDiff = $totalTime - $prevTotalDays;
+                           if($totalTime>$prevTotalTime){  
+                              $timeDiff = $totalTime - $prevTotalTime;
                               echo'You have <b>%<font color="GREEN">'.$timeAvg.'</font>growth rate</b> in your precense at work(Total of '.$timeDiff.'Hours Increase)</small>';
                               }
-                             else if($totalPayday<$prevTotalPayday){  
-                                $timeDiff = $prevTotalDays - $totalTime;
+                             else if($totalTime<$prevTotalTime){  
+                                $timeDiff = $prevTotalTime - $totalTime;
                                 echo'You have <b>%<font color="RED">'.$timeAvg.'</font>decline rate </b>in your presence at work(Total of '.$timeDiff.' Hours Decline)</small>';
                                 }
                              else echo'You have <b>%<font color="Orange">0</font></b>changes in your precense, neutral status.';
+                              }
                            echo'
                                </div>
                                </div>
@@ -173,7 +170,8 @@
 
                			}
                         echo '</div></div>';
-                   // Checking old orders of the user
+                     }
+                   // Checking old payrolls of the user
                    $sql = "SELECT * from oldPayroll_ids WHERE eID = ?;";
                    $stmt = mysqli_stmt_init($conn);
                    mysqli_stmt_prepare($stmt,$sql);

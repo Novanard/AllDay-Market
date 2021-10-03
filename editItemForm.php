@@ -36,7 +36,7 @@
   <!-- Header -->
       <header class="">
       <?php
-      $supplierID=$_GET['id'];
+      $barcode=$_GET['id'];
       session_start();
       if(isset($_SESSION['email'])&& $_SESSION['userType']== 1){
         $target_dir = 'navbars/navadmin.php';
@@ -50,7 +50,7 @@
 </header>
 
     <!-- Page Content -->
-    <div class="page-heading contact-heading header-text" style="background-image: url(assets/images/heading-4-1920x500.jpg);">
+    <div class="page-heading contact-heading header-text" style="background-image: url(assets/images/items/heading-4-1920x500.jpg);">
       <div class="container">
         <div class="row">
           <div class="col-md-12">
@@ -67,27 +67,27 @@
         <div class="row">
           <div class="col-md-12">
             <div class="section-heading">
-              <h2>Edit Supplier</h2>
+              <h2>Edit Item</h2>
             </div>
           </div>
           <div class="col-md-8">
             <div class="contact-form">
               <form action="updateItem.php" method="POST">
-                <input type="hidden" name="id" value="<?php echo $supplierID ?>">
+                <input type="hidden" name="id" value="<?php echo $barcode ?>">
                 <div class="row">
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="Name" type="text" class="form-control" id="name" placeholder="New Name" required="">
+                      <input name="Name" type="text" class="form-control" id="name" placeholder="New Name">
                     </fieldset>
                   </div>
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="Price" type="number" class="form-control" id="email" placeholder="New Price" required="">
+                      <input name="Price" type="number" class="form-control" id="email" placeholder="New Price">
                     </fieldset>
                   </div>
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="Department" type="number" class="form-control" id="subject" placeholder="Department" required="">
+                      <input name="Department" type="number" class="form-control" id="subject" placeholder="Department">
                     </fieldset>
                   </div>
                   <div class="col-lg-12">

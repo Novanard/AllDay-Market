@@ -57,7 +57,7 @@
                <div class="col-md-12">
                   <div class="text-content">
                      <h4>AllDay Market</h4>
-                     <h2>Vegehtables</h2>
+                     <h2>HomeTools</h2>
                   </div>
                </div>
             </div>
@@ -88,7 +88,7 @@
                <div class="down-content">
                <a href="#"><h4>'.$name.'</h4></a>
                
-               <h6> ₪'.$price.' ~ <small>('.$qnt.')KGs available</small>
+               <h6> ₪'.$price.' ~ <small>('.$qnt.')Units available</small>
                <br><br>
                
                <a href="editItemForm.php?id='.$ID.'">
@@ -101,7 +101,6 @@
                <button type="submit" name="itemDel" id="form-submit" class="btn btn-danger">Delete</button>
                </fieldset>
                </form>
-               <p>Fresh Day to Day &nbsp;/&nbsp; Naturally Raised</p>
                </div>
                </div>
                </div>
@@ -156,7 +155,7 @@
                <button class="btn btn-danger" type="button" onclick= add('.$ID.') class="filled-button" class="add2cart">Add To Cart</button></h6>
                </form>
                
-               <p>Fresh Day to Day &nbsp;/&nbsp; Naturally Raised</p>
+               <p>3 Years Warranty</p>
                </div>
                </div>
                </div>
@@ -178,14 +177,14 @@
                <div class="down-content">
                <a href="#"><h4>'.$name.'</h4></a>
                
-               <h6> ₪'.$price.'  ~ <small>('.$qnt.')KGs available</small>
+               <h6> ₪'.$price.'  ~ <small>('.$qnt.')Units available</small>
                <br><br>
                <form id="qnt'.$ID.'">
-               <input type="text" placeholder="Enter Quantity in Kilo" name="qty" required>
+               <input type="text" placeholder="Enter Quantity in Units" name="qty" required>
                <button class="btn btn-danger" type="button" onclick= add('.$ID.') class="filled-button" class="add2cart">Add To Cart</button></h6>
                </form>
                
-               <p>Fresh Day to Day &nbsp;/&nbsp; Naturally Raised</p>
+               <p>3 Years Warranty</p>
                </div>
                </div>
                </div>
@@ -214,10 +213,10 @@
                <div class="down-content">
                <a href="#"><h4>'.$name.'</h4></a>
                
-               ₪'.$price.' ~ <small>('.$qnt.')KGs available</small>
+               ₪'.$price.' ~ <small>('.$qnt.')Units available</small>
                <br><br>
                
-               <p>Fresh Day to Day &nbsp;/&nbsp; Naturally Raised</p>
+               <p>3 Years Warranty</p>
                </div>
                </div>
                </div>

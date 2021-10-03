@@ -313,7 +313,7 @@
                <div class="col-md-6">
                <div class="product-item">
                <center> <h4> Most selling in <strong>Butchery</strong></h4><br>
-               <img src="'.$img.'" height="370px" width="270px" alt="">
+               <img src="'.$img.'" style="width:470px;height:370px;" alt="">
                <div class="down-content">
                <center><strong>'.$name.'</strong><small>('.$barcode.')</small></center>
                </div>
@@ -351,7 +351,7 @@
                                     <div class="col-md-6">
                             <div class="product-item">
                              <center> <h4> Lowest selling in <strong>Butchery</strong></h4><br>
-                             <img src="'.$img.'" height="370px" width="270px" alt="">
+                             <img src="'.$img.'" style="width:470px;height:370px;" alt="">
                              <div class="down-content">
                               <center><strong>'.$name.'</strong><small>('.$barcode.')</small></center>
                                </div>

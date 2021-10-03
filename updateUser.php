@@ -6,32 +6,98 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" ) {
       $name=$_POST['name'];
       $email=$_POST['email'];
       $password = $_POST['password'];
-      $hashedpwd=password_hash($password, PASSWORD_DEFAULT);
       $number=$_POST['phone'];
       $address=$_POST['address'];
-      $sql = "UPDATE users SET name = ?,email = ?, password = ?,number = ?,address = ? WHERE id=? ; ";
-      $stmt= mysqli_stmt_init($conn);
-      mysqli_stmt_prepare($stmt,$sql);
-      mysqli_stmt_bind_param($stmt,"sssisi",$name,$email,$hashedpwd,$number,$address,$id);
-      mysqli_stmt_execute($stmt);
-      header('Location:users.php');
-    }
+      if(isset($name) && !empty($name)){
+        $sql = "UPDATE users SET name = ? WHERE id=? ;";
+        $stmt= mysqli_stmt_init($conn);
+        mysqli_stmt_prepare($stmt,$sql);
+        mysqli_stmt_bind_param($stmt,"si",$name,$id);
+        mysqli_stmt_execute($stmt);
+        }
+        if(isset($email) && !empty($email)){
+          $sql = "UPDATE users SET email = ? WHERE id=? ;";
+          $stmt= mysqli_stmt_init($conn);
+          mysqli_stmt_prepare($stmt,$sql);
+          mysqli_stmt_bind_param($stmt,"si",$email,$id);
+          mysqli_stmt_execute($stmt);
+          $_SESSION['email'] === $email;
+          }
+
+      if(isset($number) && $number >0){
+          $sql = "UPDATE users SET number = ? WHERE id=? ;";
+          $stmt= mysqli_stmt_init($conn);
+          mysqli_stmt_prepare($stmt,$sql);
+          mysqli_stmt_bind_param($stmt,"ii",$number,$id);
+          mysqli_stmt_execute($stmt);
+          }
+      if(isset($password) && !empty($password)){
+          $hashedpwd=password_hash($password, PASSWORD_DEFAULT);
+            $sql = "UPDATE users SET  password = ? WHERE id=? ;";
+            $stmt= mysqli_stmt_init($conn);
+            mysqli_stmt_prepare($stmt,$sql);
+            mysqli_stmt_bind_param($stmt,"si",$hashedpwd,$id);
+            mysqli_stmt_execute($stmt);
+         }  
+      if(isset($address) && !empty($address)){
+            $sql = "UPDATE users SET  address = ? WHERE id=? ;";
+            $stmt= mysqli_stmt_init($conn);
+            mysqli_stmt_prepare($stmt,$sql);
+            mysqli_stmt_bind_param($stmt,"si",$address,$id);
+            mysqli_stmt_execute($stmt);
+         }  
+            header('Location:users.php');
+      }
    else if(isset($_POST['profileEdit'])){
       include 'db.php';
       $id = $_POST['id'];
       $name=$_POST['name'];
-      $email=$_POST['email'];
       $password = $_POST['password'];
-      $hashedpwd=password_hash($password, PASSWORD_DEFAULT);
+      $email = $_POST['email'];
       $number=$_POST['phone'];
       $address=$_POST['address'];
-      $sql = "UPDATE users SET name = ?,email = ?, password = ?,number = ?,address = ? WHERE id=? ; ";
-      $stmt= mysqli_stmt_init($conn);
-      mysqli_stmt_prepare($stmt,$sql);
-      mysqli_stmt_bind_param($stmt,"sssisi",$name,$email,$hashedpwd,$number,$address,$id);
-      mysqli_stmt_execute($stmt);
-      header('Location:profile.php');
-    }
+      if(isset($name) && !empty($name)){
+        $sql = "UPDATE users SET name = ? WHERE id=? ;";
+        $stmt= mysqli_stmt_init($conn);
+        mysqli_stmt_prepare($stmt,$sql);
+        mysqli_stmt_bind_param($stmt,"si",$name,$id);
+        mysqli_stmt_execute($stmt);
+        }
+        if(isset($email) && !empty($email)){
+          $sql = "UPDATE users SET email = ? WHERE id=? ;";
+          $stmt= mysqli_stmt_init($conn);
+          mysqli_stmt_prepare($stmt,$sql);
+          mysqli_stmt_bind_param($stmt,"si",$email,$id);
+          mysqli_stmt_execute($stmt);
+          $_SESSION['email'] === $email;
+          }
+
+      if(isset($number) && $number >0){
+          $sql = "UPDATE users SET number = ? WHERE id=? ;";
+          $stmt= mysqli_stmt_init($conn);
+          mysqli_stmt_prepare($stmt,$sql);
+          mysqli_stmt_bind_param($stmt,"ii",$number,$id);
+          mysqli_stmt_execute($stmt);
+          }
+      if(isset($password) && !empty($password)){
+          $hashedpwd=password_hash($password, PASSWORD_DEFAULT);
+            $sql = "UPDATE users SET  password = ? WHERE id=? ;";
+            $stmt= mysqli_stmt_init($conn);
+            mysqli_stmt_prepare($stmt,$sql);
+            mysqli_stmt_bind_param($stmt,"si",$hashedpwd,$id);
+            mysqli_stmt_execute($stmt);
+         }  
+      if(isset($address) && !empty($address)){
+            $sql = "UPDATE users SET  address = ? WHERE id=? ;";
+            $stmt= mysqli_stmt_init($conn);
+            mysqli_stmt_prepare($stmt,$sql);
+            mysqli_stmt_bind_param($stmt,"si",$address,$id);
+            mysqli_stmt_execute($stmt);
+         }  
+            header('Location:profile.php');
+      }
+   
+    
   elseif(isset($_POST['userDel'])){
     include 'db.php';
     $id =$_POST['id'];

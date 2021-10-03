@@ -73,6 +73,7 @@
                   <br><br><br>
                   <a href="addEmployeeForm.php"><input  class="btn btn-danger"type="submit" value="Add Employee"></a>
                   <a href="employeeStatics.php"><input  class="btn btn-danger"type="submit" value="Employee Statics"></a>
+                  <a href="shiftStatus.php"><input  class="btn btn-danger"type="submit" value="Shift Status"></a>
                </div>
                <div class="col-md-4">
 

@@ -105,12 +105,12 @@
 		<div class="container">
 				<?php 
 		include 'db.php';
-		if(isset($_SESSION['email'])){
-			$email = $_SESSION['email'];
-			$sql = "SELECT * FROM users WHERE email = ?";
+		if(isset($_SESSION['id'])){
+			$id = $_SESSION['id'];
+			$sql = "SELECT * FROM users WHERE id = ?";
 	        $stmt= mysqli_stmt_init($conn);
 	        mysqli_stmt_prepare($stmt,$sql);
-	        mysqli_stmt_bind_param($stmt,"s",$email);
+	        mysqli_stmt_bind_param($stmt,"i",$id);
 	        mysqli_stmt_execute($stmt);
 	        $results=mysqli_stmt_get_result($stmt);
 		  while ($row=mysqli_fetch_assoc($results))

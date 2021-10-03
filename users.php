@@ -17,6 +17,7 @@
          img {
           border: 5px solid #555;
             }
+
       </style>  
    </head>
    <body>
@@ -63,7 +64,7 @@
             </div>
          </div>
       </div>
-      <div class="col-md-10">
+      <div class="col-md-12">
          <div class="row">
             <?php 
                mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
@@ -87,7 +88,7 @@
                			  $img = $row['avatar'];
                           if($userType==0){
                			  echo '
-               				<div class="col-md-6">
+               				<div class="col-md-4">
                				  <div class="product-item">
                					<a href="#"><img src="'.$img.'" height="350px" width="250px" alt=""></a>
                				   <div class="down-content">
@@ -119,7 +120,7 @@
                			}
                         else{
                            echo '
-               				<div class="col-md-6">
+               				<div class="col-md-4">
                				  <div class="product-item">
                					<a href="#"><img src="'.$img.'" height="350px" width="250px" alt=""></a>
                				   <div class="down-content">

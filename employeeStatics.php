@@ -58,7 +58,7 @@
          </div>
       </div>
       <br>
-      <div class="col-md-9">
+      <div class="col-md-12">
          <div class="row">
             <?php 
                mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
@@ -94,7 +94,7 @@
                      $depNum = $row['depNum'];
                      $avatar = $row['avatar'];
                      echo'              		
-                     <div class="col-md-6">
+                     <div class="col-md-4">
                      <div class="product-item">
                      <center>  Employee with <strong> MOST time </strong> at work<br>
                      <img src="'.$avatar.'" height="370px" width="270px" alt="">
@@ -145,7 +145,7 @@
                      $depNum = $row['depNum'];
                      $avatar = $row['avatar'];
                      echo'               		
-                     <div class="col-md-6">
+                     <div class="col-md-4">
                      <div class="product-item">
                      <center>  Employee with <strong> LEAST time </strong> at work<br>
                      <img src="'.$avatar.'" height="370px" width="270px" alt="">
@@ -196,7 +196,7 @@
                                     $depNum = $row['depNum'];
                                     $avatar = $row['avatar'];
                                     echo'               		
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                     <div class="product-item">
                                     <center> Employee with <strong> HIGHEST payroll </strong> at work<br>
                                     <img src="'.$avatar.'" height="370px" width="270px" alt="">
@@ -247,7 +247,7 @@
                                     $depNum = $row['depNum'];
                                     $avatar = $row['avatar'];
                                     echo'               		
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                     <div class="product-item">
                                     <center> Employee with <strong> LOWEST payroll </strong> at work<br>
                                     <img src="'.$avatar.'" height="370px" width="270px" alt="">

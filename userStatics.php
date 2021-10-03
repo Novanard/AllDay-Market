@@ -86,7 +86,7 @@
                   $email = $row['email'];
                   $avatar = $row['avatar'];
                   echo'
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                   <div class="product-item">
                   <center> <h4> Most Orders Lifetime</h4><br>
                   <img src="'.$avatar.'" height="370px" width="270px" alt="">
@@ -113,7 +113,7 @@
                   $email = $row['email'];
                   $avatar = $row['avatar'];
                   echo'
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                   <div class="product-item">
                   <center> <h4> Most Orders This Week</h4><br>
                   <img src="'.$avatar.'" height="370px" width="270px" alt="">
@@ -140,7 +140,7 @@
                   $email = $row['email'];
                   $avatar = $row['avatar'];
                   echo'
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                   <div class="product-item">
                   <center> <h4> Biggest Spender This Week</h4><br>
                   <img src="'.$avatar.'" height="370px" width="270px" alt="">
@@ -167,7 +167,7 @@
                   $email = $row['email'];
                   $avatar = $row['avatar'];
                   echo'
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                   <div class="product-item">
                   <center> <h4> Biggest Spender of AllTime</h4><br>
                   <img src="'.$avatar.'" height="370px" width="270px" alt="">

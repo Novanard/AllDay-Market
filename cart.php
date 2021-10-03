@@ -72,6 +72,8 @@
   <div class="row">
 	<?php 
 		include 'db.php';
+    if(!isset($_SESSION['userType']) || $_SESSION['userType'] != 0)
+    header('Location:index.php');
 		if(isset($_SESSION['email'])){
 			$userID = $_SESSION['id'];
 			$sql = "SELECT * FROM cart WHERE userID = ?";
@@ -102,7 +104,7 @@
           $res = mysqli_stmt_get_result($stmt);
           $row=mysqli_fetch_assoc($res);
           $quantity=$row['quantity'];
-				echo '      <a href="#"><img src="'.$img.'" height="370px" width="270px" alt=""></a>
+				echo '      <a href="#"><img src="'.$img.'" style="width:470px;height:370px;" alt=""></a>
                        <div class="down-content">
                           <a href="#"><h4>'.$name.'</h4></a>
                           <h6>₪'.$price.'

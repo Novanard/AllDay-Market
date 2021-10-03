@@ -8,11 +8,27 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" ) {
       $Name=$_POST['Name'];
       $Price=$_POST['Price'];
       $Department=$_POST['Department'];
-      $sql = "UPDATE items set Name = ?, Price = ?,Department = ? WHERE Barcode = ?; ";
-      $stmt= mysqli_stmt_init($conn);
-      mysqli_stmt_prepare($stmt,$sql);
-      mysqli_stmt_bind_param($stmt,"siii",$Name,$Price,$Department,$Barcode);
-      mysqli_stmt_execute($stmt);
+      if(isset($Name) && !empty($Name)){
+        $sql = "UPDATE items SET Name = ? WHERE Barcode =? ;";
+        $stmt= mysqli_stmt_init($conn);
+        mysqli_stmt_prepare($stmt,$sql);
+        mysqli_stmt_bind_param($stmt,"si",$Name,$Barcode);
+        mysqli_stmt_execute($stmt);
+        }
+        if(isset($Price) && !empty($Price)){
+          $sql = "UPDATE items SET Price = ? WHERE Barcode =? ;";
+          $stmt= mysqli_stmt_init($conn);
+          mysqli_stmt_prepare($stmt,$sql);
+          mysqli_stmt_bind_param($stmt,"ii",$Price,$Barcode);
+          mysqli_stmt_execute($stmt);
+          }  
+          if(isset($Department) && !empty($Department)){
+            $sql = "UPDATE items SET Department = ? WHERE Barcode =? ;";
+            $stmt= mysqli_stmt_init($conn);
+            mysqli_stmt_prepare($stmt,$sql);
+            mysqli_stmt_bind_param($stmt,"ii",$Department,$Barcode);
+            mysqli_stmt_execute($stmt);
+            }                              
       header('Location:index.php');
     }
   elseif(isset($_POST['itemDel'])){

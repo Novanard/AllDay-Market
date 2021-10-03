@@ -50,7 +50,7 @@
 </header>
 
     <!-- Page Content -->
-    <div class="page-heading contact-heading header-text" style="background-image: url(assets/images/heading-4-1920x500.jpg);">
+    <div class="page-heading contact-heading header-text" style="background-image: url(assets/images/items/heading-4-1920x500.jpg);">
       <div class="container">
         <div class="row">
           <div class="col-md-12">
@@ -77,42 +77,42 @@
                 <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="eID" type="text" class="form-control" id="eId" placeholder=" New Employee ID" required="">
+                      <input name="eID" type="text" class="form-control" id="eId" placeholder=" New Employee ID">
                     </fieldset>
                   </div>
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="firstname" type="text" class="form-control" id="name" placeholder="New FirstName" required="">
+                      <input name="firstname" type="text" class="form-control" id="name" placeholder="New FirstName">
                     </fieldset>
                   </div>
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="lastname" type="text" class="form-control" id="email" placeholder="New Lastname" required="">
+                      <input name="lastname" type="text" class="form-control" id="email" placeholder="New Lastname">
                     </fieldset>
                   </div>
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="depNum" type="number" class="form-control" id="subject" placeholder="New Department Number" required="">
+                      <input name="depNum" type="number" class="form-control" id="subject" placeholder="New Department Number" >
                     </fieldset>
                   </div>
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="perhour" type="number" class="form-control" id="subject" placeholder="New PerHour" required="">
+                      <input name="perhour" type="number" class="form-control" id="subject" placeholder="New PerHour">
                     </fieldset>
                   </div>
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="residence" type="text" class="form-control" id="subject" placeholder="New Residence" required="">
+                      <input name="residence" type="text" class="form-control" id="subject" placeholder="New Residence">
                     </fieldset>
                   </div>
                   <div class="col-lg-12 col-md-12 col-sm-12">
                     <fieldset>
-                      <input name="PIN" type="text" class="form-control" id="subject" placeholder="New PIN" required="">
+                      <input name="PIN" type="text" class="form-control" id="subject" placeholder="New PIN" >
                     </fieldset>
                   </div>
                   <div class="col-lg-12">
                     <fieldset>
-                      <button name="employeeEdit" type="submit" id="form-submit" class="filled-button">Edit Item</button>
+                      <button name="employeeEdit" type="submit" id="form-submit" class="filled-button">Edit Employee</button>
                     </fieldset>
                   </div>
                 </div>
