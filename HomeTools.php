@@ -51,7 +51,7 @@
             ?>
       </header>
       <!-- Page Content -->
-      <div class="page-heading about-heading header-text" style="background-image: url(assets/images/items/veghs.png);">
+      <div class="page-heading about-heading header-text" style="background-image: url(assets/images/items/hometools.jpg);">
          <div class="container">
             <div class="row">
                <div class="col-md-12">

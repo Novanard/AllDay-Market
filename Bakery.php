@@ -51,7 +51,7 @@
             ?>
       </header>
       <!-- Page Content -->
-      <div class="page-heading about-heading header-text" style="background-image: url(assets/images/items/veghs.png);">
+      <div class="page-heading about-heading header-text" style="background-image: url(assets/images/items/me5baz.jpg);">
          <div class="container">
             <div class="row">
                <div class="col-md-12">
@@ -101,7 +101,7 @@
                <button type="submit" name="itemDel" id="form-submit" class="btn btn-danger">Delete</button>
                </fieldset>
                </form>
-               <p>Fresh Day to Day &nbsp;/&nbsp; Naturally Raised</p>
+               <p>Fresh Day to Day</p>
                </div>
                </div>
                </div>
@@ -150,14 +150,14 @@
                <div class="down-content">
                <a href="#"><h4>'.$name.'</h4></a>
                
-               <h6><del> ₪'.$price.'</del> ₪'.$newPrice.'  ~ <small>('.$qnt.')KGs available</small>
+               <h6><del> ₪'.$price.'</del> ₪'.$newPrice.'  ~ <small>('.$qnt.')PCs available</small>
                <br><br>
                <form id="qnt'.$ID.'">
                <input type="text" placeholder="Enter Quantity in Kilo" name="qty" required>
                <button class="btn btn-danger" type="button" onclick= add('.$ID.') class="filled-button" class="add2cart">Add To Cart</button></h6>
                </form>
                
-               <p>Fresh Day to Day &nbsp;/&nbsp; Naturally Raised</p>
+               <p>Fresh Day to Day</p>
                </div>
                </div>
                </div>
@@ -180,8 +180,8 @@
                <a href="#"><h4>'.$name.'</h4></a>';
                
                if(isset($sumSales)&& $sumSales >0)
-                echo' <h6><del>₪'.$price.'</del> ₪'.$newPrice;
-               else echo' <h6>₪'.$price;
+                echo' <h6><del>₪'.$price.'</del> ₪'.$newPrice.'  ~ <small>('.$qnt.')PCs available</small>';
+               else echo' <h6>₪'.$price.'  ~ <small>('.$qnt.')PCs available</small>';
                echo'
                <br><br>
                <form id="qnt'.$ID.'">
@@ -189,7 +189,7 @@
                <button class="btn btn-danger" type="button" onclick= add('.$ID.') class="filled-button" class="add2cart">Add To Cart</button></h6>
                </form>
                
-               <p>Fresh Day to Day &nbsp;/&nbsp; Naturally Raised</p>
+               <p>Fresh Day to Day</p>
                </div>
                </div>
                </div>
@@ -199,6 +199,7 @@
                }
                }
                else{
+                  //User not logged in
                   $sql = "SELECT * FROM items WHERE Department = 3";
                   $stmt= mysqli_stmt_init($conn);
                   mysqli_stmt_prepare($stmt,$sql);
@@ -218,10 +219,10 @@
                <div class="down-content">
                <a href="#"><h4>'.$name.'</h4></a>
                
-               ₪'.$price.' ~ <small>('.$qnt.')KGs available</small>
+               ₪'.$price.' ~ <small>('.$qnt.')PCs available</small>
                <br><br>
                
-               <p>Fresh Day to Day &nbsp;/&nbsp; Naturally Raised</p>
+               <p>Fresh Day to Day </p>
                </div>
                </div>
                </div>

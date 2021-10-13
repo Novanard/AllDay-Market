@@ -180,8 +180,8 @@
                <a href="#"><h4>'.$name.'</h4></a>';
                
                if(isset($sumSales)&& $sumSales >0)
-                echo' <h6><del>₪'.$price.'</del> ₪'.$newPrice;
-               else echo' <h6>₪'.$price;
+                echo' <h6><del>₪'.$price.'</del> ₪'.$newPrice.'  ~ <small>('.$qnt.')KGs available</small>';
+               else echo' <h6>₪'.$price.'  ~ <small>('.$qnt.')KGs available</small>';
                echo'
                <br><br>
                <form id="qnt'.$ID.'">
@@ -199,6 +199,7 @@
                }
                }
                else{
+                  //User not logged in
                   $sql = "SELECT * FROM items WHERE Department = 1";
                   $stmt= mysqli_stmt_init($conn);
                   mysqli_stmt_prepare($stmt,$sql);

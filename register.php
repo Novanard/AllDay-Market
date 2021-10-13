@@ -104,7 +104,7 @@ include 'db.php';
 </header>
    
     <!-- Page Content -->
-    <div class="page-heading contact-heading header-text" style="background-image: url(assets/images/heading-4-1920x500.jpg);">
+    <div class="page-heading contact-heading header-text" style="background-image: url(assets/images/items/heading-4-1920x500.jpg);">
       <div class="container">
         <div class="row">
           <div class="col-md-12">
