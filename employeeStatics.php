@@ -275,38 +275,49 @@
                $result=mysqli_stmt_get_result($stmt);
                $row = mysqli_fetch_assoc($result);
                $maxPerhour = $row['MaxPerHour'];
-               // Selecting eID of the records who have their totalTime = MaxTime, in case there is more than 1 record
-               $sql = "SELECT * FROM employees WHERE perhour = $maxPerhour";
-               $stmt = mysqli_stmt_init($conn);
-               mysqli_stmt_prepare($stmt,$sql);
-               mysqli_stmt_execute($stmt);
-               $results = mysqli_stmt_get_result($stmt);
-               while($row = mysqli_fetch_assoc($results))
-               {
-                     $firstname = $row['firstname'];
-                     $lastname = $row['lastname'];
-                     $depNum = $row['depNum'];
-                     $avatar = $row['avatar'];
-                     echo'              		
-                     <div class="col-md-4">
-                     <div class="product-item">
-                     <center>  Employee with <strong> HIGHRST PerHour </strong><br>
-                     <img src="'.$avatar.'" height="370px" width="270px" alt="">
-                     <div class="down-content">
-                     <center>'.$firstname.' '.$lastname.'<small>('.$eID.')</small></center>
-                     </div>
-                     <br>
-                     <div>
-                     <h6>The Employee with most hours at work with a total of:<br>  <strong>'.$maxPerhour.' Hours.</strong></h6>
-                     <br>
-                     <small>(Department Number: '.$depNum.')</small>
-                     </div>
-                     <div>
-                     </div>
-                     </div>
-                     </div>
-                     ';  
-                  }        
+                              // Selecting eID of the records who have their perhour = MaxPerHour, in case there is more than 1 record
+                              $sql = "SELECT eID from employees WHERE perhour = $maxPerhour";
+                              $stmt = mysqli_stmt_init($conn);
+                              mysqli_stmt_prepare($stmt,$sql);
+                              mysqli_stmt_execute($stmt);
+                              $results = mysqli_stmt_get_result($stmt);
+                              while($row = mysqli_fetch_assoc($results))
+                              {
+                                 $eID = $row['eID'];
+                                 //Getting information about the records with the MinMoney
+                                 $sql = "SELECT * FROM employees WHERE eID = ?";
+                                 mysqli_stmt_init($conn);
+                                 mysqli_stmt_prepare($stmt,$sql);
+                                 mysqli_stmt_bind_param($stmt,"i",$eID);
+                                 mysqli_stmt_execute($stmt);
+                                 $res = mysqli_stmt_get_result($stmt);
+                                 while($row = mysqli_fetch_assoc($res))
+                                 {
+                                    $firstname = $row['firstname'];
+                                    $lastname = $row['lastname'];
+                                    $depNum = $row['depNum'];
+                                    $avatar = $row['avatar'];
+                                    echo'               		
+                                    <div class="col-md-4">
+                                    <div class="product-item">
+                                    <center> Employee with highert  <strong> PerHour </strong> at work<br>
+                                    <img src="'.$avatar.'" height="370px" width="270px" alt="">
+                                    <div class="down-content">
+                                    <center>'.$firstname.' '.$lastname.'<small>('.$eID.')</small></center>
+                                    </div>
+                                    <br>
+                                    <div>
+                                    The Employee with highest perhour with a total of:<br>  <strong>₪ '.$maxPerhour.'</strong>
+                                    <br>
+                                    <small>(Department Number: '.$depNum.')</small>
+                                    </div>
+                                    <div>
+                                    </div>
+                                    </div>
+                                    </div>
+                                    ';  
+                                 }
+                              }       
                
                        ?>
          </div>
