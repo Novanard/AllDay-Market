@@ -267,7 +267,46 @@
                                     ';  
                                  }
                               }
-                              
+                 // Getting the highest perhour
+               $sql = "SELECT MAX(perhour) as MaxPerHour FROM employees ";
+               $stmt= mysqli_stmt_init($conn);
+               mysqli_stmt_prepare($stmt,$sql);
+               mysqli_stmt_execute($stmt);
+               $result=mysqli_stmt_get_result($stmt);
+               $row = mysqli_fetch_assoc($result);
+               $maxPerhour = $row['MaxPerHour'];
+               // Selecting eID of the records who have their totalTime = MaxTime, in case there is more than 1 record
+               $sql = "SELECT * FROM employees WHERE perhour = $maxPerhour";
+               $stmt = mysqli_stmt_init($conn);
+               mysqli_stmt_prepare($stmt,$sql);
+               mysqli_stmt_execute($stmt);
+               $results = mysqli_stmt_get_result($stmt);
+               while($row = mysqli_fetch_assoc($results))
+               {
+                     $firstname = $row['firstname'];
+                     $lastname = $row['lastname'];
+                     $depNum = $row['depNum'];
+                     $avatar = $row['avatar'];
+                     echo'              		
+                     <div class="col-md-4">
+                     <div class="product-item">
+                     <center>  Employee with <strong> HIGHRST PerHour </strong><br>
+                     <img src="'.$avatar.'" height="370px" width="270px" alt="">
+                     <div class="down-content">
+                     <center>'.$firstname.' '.$lastname.'<small>('.$eID.')</small></center>
+                     </div>
+                     <br>
+                     <div>
+                     <h6>The Employee with most hours at work with a total of:<br>  <strong>'.$maxPerhour.' Hours.</strong></h6>
+                     <br>
+                     <small>(Department Number: '.$depNum.')</small>
+                     </div>
+                     <div>
+                     </div>
+                     </div>
+                     </div>
+                     ';  
+                  }        
                
                        ?>
          </div>

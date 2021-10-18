@@ -30,7 +30,7 @@
 			$pname = $_POST['name'];
 			$price = $_POST['price'];
 			$department = $_POST['department'];
-
+      $quantity=200;
 			$type = (explode('.', $_FILES['iPhoto']['name']));
 			$tmp_name = $_FILES['iPhoto']['tmp_name'];
 			$name = $_FILES['iPhoto']['name'];
@@ -41,10 +41,10 @@
 			if(in_array($type, $allowed)){
 				$target_file = $target_dir . basename($_FILES["iPhoto"]["name"]);
 				move_uploaded_file($tmp_name, $target_file);
-				$sql = "INSERT INTO items (Name,Price,Department,img) VALUES (?,?,?,?);";
+				$sql = "INSERT INTO items (Name,Price,Department,quantity,img) VALUES (?,?,?,?,?);";
 				$stmt= mysqli_stmt_init($conn);
 			    mysqli_stmt_prepare($stmt,$sql);
-			    mysqli_stmt_bind_param($stmt,"ssss",$pname,$price,$department,$target_file);
+			    mysqli_stmt_bind_param($stmt,"siiis",$pname,$price,$department,$quantity,$target_file);
 			    mysqli_stmt_execute($stmt);
 
 			}

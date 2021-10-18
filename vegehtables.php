@@ -81,6 +81,7 @@
                $price = $row['Price'];
                $qnt = $row['quantity'];
                $img = $row['img'];
+               if($qnt>0)
                echo '
                <div class="col-md-4">
                <div class="product-item">
@@ -101,7 +102,31 @@
                <button type="submit" name="itemDel" id="form-submit" class="btn btn-danger">Delete</button>
                </fieldset>
                </form>
-               <p>Fresh Day to Day &nbsp;/&nbsp; Naturally Raised</p>
+               </div>
+               </div>
+               </div>
+               ';
+               else
+               echo '
+               <div class="col-md-4">
+               <div class="product-item">
+               <a href="#"><img src="'.$img.'" style="width:470px;height:370px;" alt=""></a>
+               <div class="down-content">
+               <a href="#"><h4>'.$name.'</h4></a>
+               
+               <h6> ₪'.$price.' ~ <small><font color="RED">(OUT OF STOCK)</font></small>
+               <br><br>
+               
+               <a href="editItemForm.php?id='.$ID.'">
+               <button class="btn btn-secondary" type="button" class="filled-button" class="editBtn">
+               Edit</button>
+               </a>
+               <form action="updateItem.php" method="post">
+               <input type="hidden" name="id" value="'.$ID.'">
+               <fieldset>
+               <button type="submit" name="itemDel" id="form-submit" class="btn btn-danger">Delete</button>
+               </fieldset>
+               </form>
                </div>
                </div>
                </div>
@@ -117,15 +142,14 @@
                mysqli_stmt_bind_param($stmt,"i",$_SESSION['id']);
                mysqli_stmt_execute($stmt);
                $res=mysqli_stmt_get_result($stmt);
-               $arrayLen = mysqli_num_rows($res);
                while($row = mysqli_fetch_assoc($res)){
                $sale = $row['saleValue'];
                $depNum = $row['depNum'];
-               $reason=$row['reason'];
-               if($depNum ==1 || $depNum == NULL)
+               $reason = $row['reason'];
+               if($depNum == 2 || $depNum == NULL)
                 $sumSales += $sale;
                }
-               $sql = "SELECT * FROM items WHERE Department = 1";
+               $sql = "SELECT * FROM items WHERE Department = 1;";
                $stmt= mysqli_stmt_init($conn);
                mysqli_stmt_prepare($stmt,$sql);
                mysqli_stmt_execute($stmt);
@@ -135,34 +159,49 @@
                   echo'<hr><div class="alert alert-warning col-md-12" role="alert">
                   <p class="text-center" font-weight:bold>You have %'.$sale.' off for <b>"'.$reason .'"</b> Only For You! </p>
                  </div><hr>';
-               while ($row=mysqli_fetch_assoc($results))
-               {
-               $ID = $row['Barcode'];
-               $name = $row['Name'];
-               $price = $row['Price'];
-               $newPrice = $price/100  * (100-$sumSales);
-               $img = $row['img'];
-               $qnt = $row['quantity'];
-               echo '
-               <div class="col-md-4">
-               <div class="product-item">
-               <a href="#"><img src="'.$img.'" style="width:470px;height:370px;" alt=""></a>
-               <div class="down-content">
-               <a href="#"><h4>'.$name.'</h4></a>
-               
-               <h6><del> ₪'.$price.'</del> ₪'.$newPrice.'  ~ <small>('.$qnt.')KGs available</small>
-               <br><br>
-               <form id="qnt'.$ID.'">
-               <input type="text" placeholder="Enter Quantity in Kilo" name="qty" required>
-               <button class="btn btn-danger" type="button" onclick= add('.$ID.') class="filled-button" class="add2cart">Add To Cart</button></h6>
-               </form>
-               
-               <p>Fresh Day to Day &nbsp;/&nbsp; Naturally Raised</p>
-               </div>
-               </div>
-               </div>
-               ';
-               }
+                 while ($row=mysqli_fetch_assoc($results))
+                 {
+                 $ID = $row['Barcode'];
+                 $name = $row['Name'];
+                 $price = $row['Price'];
+                 $newPrice = $price/100  * (100-$sumSales);
+                 $qnt = $row['quantity'];
+                 $img = $row['img'];
+                 if($qnt>0)
+                 echo '
+                 <div class="col-md-4">
+                 <div class="product-item">
+                 <a href="#"><img src="'.$img.'" style="width:470px;height:370px;" alt=""></a>
+                 <div class="down-content">
+                 <a href="#"><h4>'.$name.'</h4></a>
+                 
+                 <h6><del> ₪'.$price.'</del> ₪'.$newPrice.'  ~  <small>('.$qnt.')KGs available</small>
+                 <br><br>
+                 
+                 <form id="qnt'.$ID.'">
+                 <input type="text" placeholder="Enter Quantity in Units" name="qty" required>
+                 <button class="btn btn-danger" type="button" onclick= add('.$ID.') class="filled-button" class="add2cart">Add To Cart</button></h6>
+                 </form>
+                 </div>
+                 </div>
+                 </div>
+                 ';
+                 else
+                 echo '
+                 <div class="col-md-4">
+                 <div class="product-item">
+                 <a href="#"><img src="'.$img.'" style="width:470px;height:370px;" alt=""></a>
+                 <div class="down-content">
+                 <a href="#"><h4>'.$name.'</h4></a>
+                 
+                 <h6> ₪'.$price.' ~ <small><font color="RED">(OUT OF STOCK)</font></small>
+                 <br><br>
+                 
+                 </div>
+                 </div>
+                 </div>
+                 ';
+                 }
             }
             else {
                while ($row=mysqli_fetch_assoc($results))
@@ -170,26 +209,38 @@
                $ID = $row['Barcode'];
                $name = $row['Name'];
                $price = $row['Price'];
-               $img = $row['img'];
                $qnt = $row['quantity'];
+               $img = $row['img'];
+               if($qnt>0)
                echo '
                <div class="col-md-4">
                <div class="product-item">
                <a href="#"><img src="'.$img.'" style="width:470px;height:370px;" alt=""></a>
                <div class="down-content">
-               <a href="#"><h4>'.$name.'</h4></a>';
+               <a href="#"><h4>'.$name.'</h4></a>
                
-               if(isset($sumSales)&& $sumSales >0)
-                echo' <h6><del>₪'.$price.'</del> ₪'.$newPrice.'  ~ <small>('.$qnt.')KGs available</small>';
-               else echo' <h6>₪'.$price.'  ~ <small>('.$qnt.')KGs available</small>';
-               echo'
+               <h6>₪'.$price.'  ~  <small>('.$qnt.')KGs available</small>
                <br><br>
+               
                <form id="qnt'.$ID.'">
-               <input type="text" placeholder="Enter Quantity in Kilo" name="qty" required>
+               <input type="text" placeholder="Enter Quantity in Units" name="qty" required>
                <button class="btn btn-danger" type="button" onclick= add('.$ID.') class="filled-button" class="add2cart">Add To Cart</button></h6>
                </form>
+               </div>
+               </div>
+               </div>
+               ';
+               else
+               echo '
+               <div class="col-md-4">
+               <div class="product-item">
+               <a href="#"><img src="'.$img.'" style="width:470px;height:370px;" alt=""></a>
+               <div class="down-content">
+               <a href="#"><h4>'.$name.'</h4></a>
                
-               <p>Fresh Day to Day &nbsp;/&nbsp; Naturally Raised</p>
+               <h6> ₪'.$price.' ~ <small><font color="RED">(OUT OF STOCK)</font></small>
+               <br><br>
+               
                </div>
                </div>
                </div>
@@ -199,8 +250,7 @@
                }
                }
                else{
-                  //User not logged in
-                  $sql = "SELECT * FROM items WHERE Department = 1";
+                  $sql = "SELECT * FROM items WHERE Department = 1;";
                   $stmt= mysqli_stmt_init($conn);
                   mysqli_stmt_prepare($stmt,$sql);
                   mysqli_stmt_execute($stmt);
@@ -212,6 +262,7 @@
                $price = $row['Price'];
                $img = $row['img'];
                $qnt = $row['quantity'];
+               if($qnt>0)
                echo '
                <div class="col-md-4">
                <div class="product-item">
@@ -222,11 +273,28 @@
                ₪'.$price.' ~ <small>('.$qnt.')KGs available</small>
                <br><br>
                
-               <p>Fresh Day to Day &nbsp;/&nbsp; Naturally Raised</p>
+               <p>3 Years Warranty</p>
                </div>
                </div>
                </div>
                ';
+               else
+               echo '
+               <div class="col-md-4">
+               <div class="product-item">
+               <a href="#"><img src="'.$img.'" style="width:470px;height:370px;" border="5px"; alt=""></a>
+               <div class="down-content">
+               <a href="#"><h4>'.$name.'</h4></a>
+               
+               ₪'.$price.' ~ <small><font color="RED">(OUT OF STOCK)</font></small>
+               <br><br>
+               
+               <p>3 Years Warranty</p>
+               </div>
+               </div>
+               </div>
+               ';
+
                }
                }
                ?>
