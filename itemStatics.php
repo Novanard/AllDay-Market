@@ -82,7 +82,7 @@
                <div class="col-md-6">
                <div class="product-item">
                <center> <h4> Most selling in <strong>Vegehtables</strong></h4><br>
-               <img src="'.$img.'" alt="">
+               <img src="'.$img.'" height="370px" width="270px" alt="">
                <div class="down-content">
                <center><strong>'.$name.'</strong><small>('.$barcode.')</small></center>
                </div>
@@ -120,7 +120,7 @@
                <div class="col-md-6">
                <div class="product-item">
                <center> <h4> Lowest selling in <strong>Vegehtables</strong></h4><br>
-               <img src="'.$img.'" alt="">
+               <img src="'.$img.'" height="370px" width="270px" alt="">
                <div class="down-content">
                <center><strong>'.$name.'</strong><small>('.$barcode.')</small></center>
                </div>
@@ -158,7 +158,7 @@
                      <div class="col-md-6">
                <div class="product-item">
                <center> <h4> Most selling in <strong>Home Tools</strong></h4><br>
-               <img src="'.$img.'" alt="">
+               <img src="'.$img.'"height="370px" width="270px" alt="">
                <div class="down-content">
                <center><strong>'.$name.'</strong><small>('.$barcode.')</small></center>
                 </div>
@@ -195,7 +195,7 @@
                      <div class="col-md-6">
                <div class="product-item">
                <center> <h4> Lowest selling in <strong>Home Tools</strong></h4><br>
-               <img src="'.$img.'" alt="">
+               <img src="'.$img.'" height="370px" width="270px" alt="">
                <div class="down-content">
                <center><strong>'.$name.'</strong><small>('.$barcode.')</small></center>
                 </div>
@@ -233,7 +233,7 @@
                      <div class="col-md-6">
                <div class="product-item">
                <center> <h4> Most selling in <strong>Bakerys</strong></h4><br>
-               <img src="'.$img.'" alt="">
+               <img src="'.$img.'"height="370px" width="270px" alt="">
                <div class="down-content">
                <center><strong>'.$name.'</strong><small>('.$barcode.')</small></center>
                 </div>
@@ -271,7 +271,7 @@
                      <div class="col-md-6">
                <div class="product-item">
                <center> <h4> Lowest selling in <strong>Bakery</strong></h4><br>
-               <img src="'.$img.'" alt="">
+               <img src="'.$img.'" height="370px" width="270px" alt="">
                <div class="down-content">
                <center><strong>'.$name.'</strong><small>('.$barcode.')</small></center>
                 </div>
@@ -309,7 +309,7 @@
                <div class="col-md-6">
                <div class="product-item">
                <center> <h4> Most selling in <strong>Butchery</strong></h4><br>
-               <img src="'.$img.'" alt="">
+               <img src="'.$img.'" height="370px" width="270px" alt="">
                <div class="down-content">
                <center><strong>'.$name.'</strong><small>('.$barcode.')</small></center>
                </div>
@@ -347,7 +347,7 @@
                                     <div class="col-md-6">
                             <div class="product-item">
                              <center> <h4> Lowest selling in <strong>Butchery</strong></h4><br>
-                             <img src="'.$img.'" alt="">
+                             <img src="'.$img.'" height="370px" width="270px" alt="">
                              <div class="down-content">
                               <center><strong>'.$name.'</strong><small>('.$barcode.')</small></center>
                                </div>

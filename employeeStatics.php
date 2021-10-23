@@ -93,7 +93,7 @@
                      <div class="col-md-6">
                      <div class="product-item">
                      <center>  Employee with <strong> MOST time </strong> at work<br>
-                     <img src="'.$avatar.'" alt="">
+                     <img src="'.$avatar.'" height="370px" width="270px" alt="">
                      <div class="down-content">
                      <center>'.$firstname.' '.$lastname.'<small>('.$eID.')</small></center>
                      </div>
@@ -144,7 +144,7 @@
                      <div class="col-md-6">
                      <div class="product-item">
                      <center>  Employee with <strong> LEAST time </strong> at work<br>
-                     <img src="'.$avatar.'" alt="">
+                     <img src="'.$avatar.'" height="370px" width="270px" alt="">
                      <div class="down-content">
                      <center>'.$firstname.' '.$lastname.'<small>('.$eID.')</small></center>
                      </div>
@@ -195,7 +195,7 @@
                                     <div class="col-md-6">
                                     <div class="product-item">
                                     <center> Employee with <strong> HIGHEST payroll </strong> at work<br>
-                                    <img src="'.$avatar.'" alt="">
+                                    <img src="'.$avatar.'" height="370px" width="270px" alt="">
                                     <div class="down-content">
                                     <center>'.$firstname.' '.$lastname.'<small>('.$eID.')</small></center>
                                     </div>
@@ -246,7 +246,7 @@
                                     <div class="col-md-6">
                                     <div class="product-item">
                                     <center> Employee with <strong> LOWEST payroll </strong> at work<br>
-                                    <img src="'.$avatar.'" alt="">
+                                    <img src="'.$avatar.'" height="370px" width="270px" alt="">
                                     <div class="down-content">
                                     <center>'.$firstname.' '.$lastname.'<small>('.$eID.')</small></center>
                                     </div>

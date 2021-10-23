@@ -45,7 +45,7 @@
             }
             else{
 				$basedir = realpath(__DIR__);
-				include($basedir . '/navbars/nav.php');
+				include($basedir . '/navbars/navbar.php');
             }
             
             ?>
@@ -90,7 +90,7 @@
                   $img = $row['img'];
           echo '<div style="display: flex;align-items:center;">
 
-                  <a href="#"><img src="'.$img.'" alt=""></a>
+                  <a href="#"><img src="'.$img.'" height="370px" width="270px" alt=""></a>
                  <div class="down-content">
                     <a href="#"><h4>'.$itemName.'<small>('.$itemBarcode.')</small></h4></a>
                     <h6>₪'.$price.'
@@ -142,7 +142,7 @@
                   $isDone = $row['isDone'];
           echo '<div style="display: flex;align-items:center;">
 
-                  <a href="#"><img src="'.$img.'" alt=""></a>
+                  <a href="#"><img src="'.$img.'" height="370px" width="270px" alt=""></a>
                  <div class="down-content">
                     <a href="#"><h4>'.$itemName.'<small>('.$itemBarcode.')</small></h4></a>
                     <h6>₪'.$price.'

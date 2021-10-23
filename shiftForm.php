@@ -72,8 +72,10 @@
            mysqli_stmt_execute($stmt);
            $results =mysqli_stmt_get_result($stmt);
            $row = mysqli_fetch_assoc($results);
-           if(!isset($row['eID']))
+           if(!isset($row['eID'])){
             echo('You cant check-out before you check-in!');
+            exit();
+           }
            else{
             $startTime=$row['startTime'];
           $endTime = date("Y-m-d H:i:s"); 

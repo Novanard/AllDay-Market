@@ -145,7 +145,6 @@
 
                			}
                         echo '</div></div>';
-                     }
                    // Checking old orders of the user
                    $sql = "SELECT * from oldPayroll_ids WHERE eID = ?;";
                    $stmt = mysqli_stmt_init($conn);
@@ -184,6 +183,7 @@
 
                    }
                   }
+               }
                else
                			  echo 'Incorrect Session Details ';
                		  ?>

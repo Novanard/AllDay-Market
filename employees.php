@@ -45,13 +45,13 @@
             ?>
       </header>
       <!-- Page Content -->
-      <div class="page-heading about-heading header-text" style="background-image: url(assets/images/veghs.png);">
+      <div class="page-heading about-heading header-text" style="background-image: url(assets/images/items/heading-4-1920x500.jpg);">
          <div class="container">
             <div class="row">
                <div class="col-md-12">
                   <div class="text-content">
                      <h4>AllDay Market</h4>
-                     <h2>Employees ~ MAKE SETPIN btn</h2>
+                     <h2>Employees </h2>
                   </div>
                </div>
             </div>
@@ -83,7 +83,7 @@
                			  echo '
                				<div class="col-md-6">
                				  <div class="product-item">
-               					<a href="#"><img src="'.$img.'" height="350px" width="250px" alt=""></a>
+               					<a href="#"><img src="'.$img.'" height="370px" width="270px" alt=""></a>
                				   <div class="down-content">
                					<center><strong>'.$firstname.' &nbsp '.$lastname.'</strong><small>('.$ID.')</small></center>
                					 </div>
