@@ -1,0 +1,1 @@
+My final project "AllDay Market" as a Practical Software Engineer in Ort Braude College, The project was coded by me only over a course of 2 months using HTML,PHP and SQL. In addition the project got a grade of 100/100.
